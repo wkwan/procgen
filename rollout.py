@@ -449,6 +449,7 @@ def rollout(agent,
             else:
                 reward_total += reward
             if not no_render:
+                print("ok render")
                 env.render()
             saver.append_step(obs, action, next_obs, reward, done, info)
             steps += 1
