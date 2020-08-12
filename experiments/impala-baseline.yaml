@@ -16,7 +16,8 @@ procgen-ppo:
     # === Stop Conditions ===
     ################################################
     stop:
-        timesteps_total: 8000000
+        timesteps_total: 8000
+        #timesteps_total: 8000000
 
     ################################################
     # === Settings for Checkpoints ===
