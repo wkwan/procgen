@@ -34,7 +34,7 @@ Note : This script has been adapted from :
 EXAMPLE_USAGE = """
 Example Usage:
 
-python ./rollout.py \
+python3 ./rollout.py \
     /tmp/ray/checkpoint_dir/checkpoint-0 \
     --env procgen_env_wrapper \
     --run PPO \
