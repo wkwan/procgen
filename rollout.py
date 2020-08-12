@@ -256,6 +256,7 @@ def run(args, parser):
     config = {}
     # Load configuration from checkpoint file.
     config_dir = os.path.dirname(args.checkpoint)
+    print("config dir is", config_dir)
     config_path = os.path.join(config_dir, "params.pkl")
     # Try parent directory.
     if not os.path.exists(config_path):
