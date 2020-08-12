@@ -16,6 +16,7 @@ if [[ -z $AICROWD_IS_GRADING ]]; then
   # variable is set, due to which this block will be skipped.              #
   ##########################################################################
 
+#will: https://discourse.aicrowd.com/t/aws-instance-setup/3380
   export OUTPUTS_DIR=./outputs
   export RAY_MEMORY_LIMIT=60129542144
   export RAY_CPUS=8

@@ -198,7 +198,7 @@ def create_parser(parser_creator=None):
         "--env", type=str, help="The gym environment to use.")
     parser.add_argument(
         "--no-render",
-        default=False,
+        default=True,
         action="store_const",
         const=True,
         help="Suppress rendering of the environment.")
