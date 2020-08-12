@@ -349,7 +349,7 @@ def rollout(agent,
             num_steps,
             num_episodes=0,
             saver=None,
-            no_render=True,
+            no_render=False,
             video_dir=None):
     policy_agent_mapping = default_policy_agent_mapping
 
