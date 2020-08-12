@@ -20,6 +20,8 @@ if [[ -z $AICROWD_IS_GRADING ]]; then
   export RAY_CPUS=8
   export RAY_STORE_MEMORY=30000000000
 
+  export CHECKPOINT="~/ray_results/procgen-ppo/PPO_procgen_env_wrapper_0_2020-08-12_19-05-528qgspbn4/checkpoint_1/checkpoint-1"
+
   # Cleaning output directory between multiple runs
   rm -rf ${OUTPUTS_DIR}
   mkdir ${OUTPUTS_DIR}
