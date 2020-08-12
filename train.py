@@ -27,10 +27,10 @@ Note : This script has been adapted from :
 
 EXAMPLE_USAGE = """
 Training example:
-    python ./train.py --run DQN --env CartPole-v0
+    python3 ./train.py --run DQN --env CartPole-v0
 
 Training with Config:
-    python ./train.py -f experiments/simple-corridor-0.yaml
+    python3 ./train.py -f experiments/simple-corridor-0.yaml
 
 
 Note that -f overrides all other trial-specific command-line options.
