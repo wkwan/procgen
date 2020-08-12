@@ -1,3 +1,15 @@
+# Will's notes
+
+I had trouble with pip packages and Python versions on AWS. Make sure to use "python3" instead of "python" when running scripts, and use ```python3 -m pip <whatever command>``` when installing packages. Don't use venv or conda, also don't use pip3 or run pip without the ```python3 -m``` part, also don't use sudo when installing packages.
+
+When ssh'ing into the AWS server, activate this conda env:
+
+```source activate tensorflow2_latest_p37```
+
+Most important variables to set are EXPERIMENT_DEFAULT in run.sh when training and CHECKPOINT in run.sh when evaluating.
+
+I made some changes so that a video is saved when evaluating. Make a directory to store the videos and run ```./run.sh --rollout --video-dir /yourdir``` to save the videos when evaluating. Don't commit the videos to GitHub, I download them via SFTP using Cyberduck.
+
 # NeurIPS 2020 - Procgen Starter Kit
 ![AIcrowd-Logo](https://raw.githubusercontent.com/AIcrowd/AIcrowd/master/app/assets/images/misc/aicrowd-horizontal.png)
 
