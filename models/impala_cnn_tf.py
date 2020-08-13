@@ -25,7 +25,7 @@ def residual_block(x, depth, prefix):
 
 def conv_sequence(x, depth, prefix):
     print("conv seq", x.shape)
-    tf.reshape(x, (4, 64, 64, 3))
+    x = tf.reshape(x, (4, 64, 64, 3))
     print("after reshape", x.shape),
     x = conv_layer(depth, prefix + "_conv")(x)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
