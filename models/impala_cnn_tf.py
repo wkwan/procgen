@@ -64,6 +64,8 @@ class ImpalaCNN(TFModelV2):
         # explicit cast to float32 needed in eager
         print("input dict shape", input_dict["obs"].shape)
         input_dict["obs"] = tf.squeeze(input_dict["obs"], 0)
+        print("input dict shape after squeeze", input_dict["obs"].shape)
+
         obs = tf.cast(input_dict["obs"], tf.float32)
         logits, self._value = self.base_model(obs)
         return logits, state
