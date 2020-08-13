@@ -14,8 +14,6 @@ def conv_layer(x, depth, name):
     print("don't reshape")
     return tf.keras.layers.Conv2D( 
         filters=depth, kernel_size=3, strides=1, padding="same", name=name)
-    )
-
 
 def residual_block(x, depth, prefix):
     print("make the residual block")
