@@ -46,7 +46,7 @@ class ImpalaCNN(TFModelV2):
         inputs = tf.keras.layers.Input(shape=obs_space.shape, name="observations")
         print("inputs shape ", inputs.shape)
         scaled_inputs = tf.cast(inputs, tf.float32) / 255.0
-        print("scaled inputs shape ", scale_inputs.shape)
+        print("scaled inputs shape ", scaled_inputs.shape)
 
         x = scaled_inputs
         for i, depth in enumerate(depths):
