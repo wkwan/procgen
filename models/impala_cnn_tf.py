@@ -23,7 +23,7 @@ def conv_sequence(x, depth, prefix):
     print("x shape", x.shape)
     if "seq0" in prefix:
         print("do seq 0")
-        x = tf.reshape(x, (None, 256, 64, 3))
+        x = tf.reshape(x, (x.shape[0], 256, 64, 3))
         print("reshaped", x.shape)
         x = conv_layer(depth, prefix + "_conv")(x)
     else:
@@ -50,7 +50,7 @@ class ImpalaCNN(TFModelV2):
 
         depths = [16, 32, 32]
         print("the shape is ", obs_space.shape)
-        inputs = tf.keras.layers.Input(shape=(4, 64, 64, 3), name="observations")
+        inputs = tf.keras.layers.Input(shape=(obs_space.shape, name="observations")
         print("inputs shape", inputs.shape)
 
         scaled_inputs = tf.cast(inputs, tf.float32) / 255.0
