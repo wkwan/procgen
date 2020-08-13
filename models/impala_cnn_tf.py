@@ -62,7 +62,7 @@ class ImpalaCNN(TFModelV2):
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
         print("input dict shape", input_dict["obs"].shape)
-        input_dict["obs"] = tf.squeeze(input_dict["obs"], 0)
+        input_dict["obs"] = tf.squeeze(input_dict["obs"], 1)
         print("input keys", input_dict.keys())
 
         print("input dict shape after squeeze", input_dict["obs"].shape)
