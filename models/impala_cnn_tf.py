@@ -10,7 +10,7 @@ def conv_layer(x, depth, name):
     if "seq0" in name:
         print("reshape the first conv layer")
         return tf.keras.layers.Conv2D(
-            filters=depth, kernel_size=3, strides=1, padding="same", name=name, input_shape=x.shape)
+            filters=depth, kernel_size=3, strides=1, padding="same", name=name, input_shape=(1, 4, 64, 64, 3))
     print("don't reshape")
     return tf.keras.layers.Conv2D( 
         filters=depth, kernel_size=3, strides=1, padding="same", name=name)
