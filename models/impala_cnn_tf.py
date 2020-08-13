@@ -4,27 +4,27 @@ from ray.rllib.models import ModelCatalog
 
 tf = try_import_tf()
 
-def conv_layer(depth, name):
+def conv_layer(depth, name, shape):
     return tf.keras.layers.Conv2D( 
-        filters=depth, kernel_size=3, strides=1, padding="same", name=name)
+        filters=depth, kernel_size=3, strides=1, padding="same", name=name, input_shape=shape)
 
 def residual_block(x, depth, prefix):
     inputs = x
     assert inputs.get_shape()[-1].value == depth
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(depth, name=prefix + "_conv0")(x)
+    x = conv_layer(depth, name=prefix + "_conv0", x.shape)(x)
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(depth, name=prefix + "_conv1")(x)
+    x = conv_layer(depth, name=prefix + "_conv1", x.shape)(x)
     return x + inputs
 
 
 def conv_sequence(x, depth, prefix):
     if "seq0" in prefix:
         print("do seq 0")
-        x = conv_layer(depth, prefix + "_conv")(x[0])
+        x = conv_layer(depth, prefix + "_conv", x.shape)(x)
     else:
         print("do ", prefix)
-        x = conv_layer(depth, prefix + "_conv")(x)
+        x = conv_layer(depth, prefix + "_conv", x.shape)(x)
     print("conv layer shaper init", x.shape)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
     x = residual_block(x, depth, prefix=prefix + "_block0")
