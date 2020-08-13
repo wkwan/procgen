@@ -8,7 +8,7 @@ tf = try_import_tf()
 def conv_layer(depth, name):
     print("make the conv layer")
     return tf.keras.layers.Conv2D(
-        filters=depth, kernel_size=3, strides=1, padding="same", name=name
+        filters=depth, kernel_size=3, strides=1, padding="same", name=name, groups=4
     )
 
 
