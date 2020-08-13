@@ -22,7 +22,7 @@ def residual_block(x, depth, prefix):
 
 
 def conv_sequence(x, depth, prefix):
-    # print("conv seq", x, depth, prefix)
+    print("conv seq", x, depth, prefix)
     x = conv_layer(depth, prefix + "_conv")(x)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
     x = residual_block(x, depth, prefix=prefix + "_block0")
@@ -42,11 +42,11 @@ class ImpalaCNN(TFModelV2):
         super().__init__(obs_space, action_space, num_outputs, model_config, name)
 
         depths = [16, 32, 32]
-        # print("the shape is ", obs_space.shape)
+        print("the shape is ", obs_space.shape)
         inputs = tf.keras.layers.Input(shape=obs_space.shape, name="observations")
-        # print("inputs shape ", inputs.shape)
+        print("inputs shape ", inputs.shape)
         scaled_inputs = tf.cast(inputs, tf.float32) / 255.0
-        # print("scaled inputs shape ", scaled_inputs.shape)
+        print("scaled inputs shape ", scaled_inputs.shape)
 
         x = scaled_inputs
         for i, depth in enumerate(depths):
