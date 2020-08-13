@@ -42,16 +42,12 @@ class ImpalaCNN(TFModelV2):
         print("the shape is ", obs_space.shape)
         inputs = tf.keras.layers.Input(shape=(64, 64, 3), name="observations")
         print("inputs shape", inputs.shape)
-        # inputs = tf.reshape(inputs, (-1,64,64,3))
-        print("made the input thing", inputs.shape)
 
-        # print("inputs shape ", inputs.shape)
         scaled_inputs = tf.cast(inputs, tf.float32) / 255.0
         print("scaled inputs shape ", scaled_inputs.shape)
 
         # scaled_inputs = tf.reshape(scaled_inputs, (4, 64, 64, 3))
 
-        # print("scaled inputs after reshape", scaled_inputs.shape)
         x = scaled_inputs
         for i, depth in enumerate(depths):
             x = conv_sequence(x, depth, prefix=f"seq{i}")
