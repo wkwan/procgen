@@ -7,7 +7,7 @@ tf = try_import_tf()
 def conv_layer(depth, name, shape):
     layer = tf.keras.layers.Conv2D( 
         filters=depth, kernel_size=3, strides=1, padding="same", name=name, input_shape=shape)
-    print("conv layer shape", layer.shape)
+    print("conv layer shape", layer.input_shape)
     return layer
 
 def residual_block(x, depth, prefix):
