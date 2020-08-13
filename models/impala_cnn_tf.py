@@ -5,34 +5,22 @@ from ray.rllib.models import ModelCatalog
 tf = try_import_tf()
 
 
-def conv_layer(x, depth, name):
-    print("make the conv layer", name, x.shape)
-    # if "seq0" in name:
-    #     print("reshape the first conv layer")
-    #     return tf.keras.layers.Conv2D(
-    #         filters=depth, kernel_size=3, strides=1, padding="same", name=name, input_shape=(4, 64, 64, 3))
-    # print("don't reshape")
-    layer = tf.keras.layers.Conv2D( 
+def conv_layer(depth, name):
+    return tf.keras.layers.Conv2D( 
         filters=depth, kernel_size=3, strides=1, padding="same", name=name)
-    # print("layer shaper is", layer.shape)
-    return layer
 
 def residual_block(x, depth, prefix):
-    print("make the residual block")
     inputs = x
     assert inputs.get_shape()[-1].value == depth
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(x, depth, name=prefix + "_conv0")(x)
+    x = conv_layer(depth, name=prefix + "_conv0")(x)
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(x, depth, name=prefix + "_conv1")(x)
+    x = conv_layer(depth, name=prefix + "_conv1")(x)
     return x + inputs
 
 
 def conv_sequence(x, depth, prefix):
-    print("conv seq", x.shape)
-    # x = tf.reshape(x, (4, 64, 64, 3))
-    # print("after reshape", x.shape),
-    x = conv_layer(x, depth, prefix + "_conv")(x)
+    x = conv_layer(depth, prefix + "_conv")(x)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
     x = residual_block(x, depth, prefix=prefix + "_block0")
     x = residual_block(x, depth, prefix=prefix + "_block1")
@@ -66,9 +54,7 @@ class ImpalaCNN(TFModelV2):
         # print("scaled inputs after reshape", scaled_inputs.shape)
         x = scaled_inputs
         for i, depth in enumerate(depths):
-            print("before make conv seq")
             x = conv_sequence(x, depth, prefix=f"seq{i}")
-            print("after make conv seq")
 
         x = tf.keras.layers.Flatten()(x)
         x = tf.keras.layers.ReLU()(x)
@@ -81,7 +67,6 @@ class ImpalaCNN(TFModelV2):
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
         print("input dict shape", input_dict["obs"].shape)
-        # input_dict["obs"].reshape(4, 64, 64, 3)
         obs = tf.cast(input_dict["obs"], tf.float32)
         logits, self._value = self.base_model(obs)
         return logits, state
