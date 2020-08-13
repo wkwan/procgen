@@ -21,13 +21,15 @@ def residual_block(x, depth, prefix):
 def conv_sequence(x, depth, prefix):
     if "seq0" in prefix:
         print("do seq 0")
-        x = conv_layer(depth, prefix + "_conv")(x)
+        x = conv_layer(depth, prefix + "_conv")(x[0])
     else:
         print("do ", prefix)
         x = conv_layer(depth, prefix + "_conv")(x)
+    print("conv layer shaper init", x.shape)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
     x = residual_block(x, depth, prefix=prefix + "_block0")
     x = residual_block(x, depth, prefix=prefix + "_block1")
+    print("conv layer shape after resid", x.shape)
     return x
 
 
