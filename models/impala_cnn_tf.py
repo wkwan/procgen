@@ -23,7 +23,9 @@ def conv_sequence(x, depth, prefix):
     print("x shape", x.shape)
     if "seq0" in prefix:
         print("do seq 0")
-        x = conv_layer(depth, prefix + "_conv")(tf.reshape(tensor=x, shape=(x.shape[0], x.shape[1] * x.shape[2], x.shape[3], x.shape[4])))
+        x = tf.reshape(x, shape=(x.shape[0], x.shape[1] * x.shape[2], x.shape[3], x.shape[4]))
+        print("reshaped", x.shape)
+        x = conv_layer(depth, prefix + "_conv")(x)
     else:
         print("do ", prefix)
         x = conv_layer(depth, prefix + "_conv")(x)
