@@ -29,11 +29,9 @@ def conv_sequence(x, depth, prefix):
     else:
         print("do ", prefix)
         x = conv_layer(depth, prefix + "_conv")(x)
-    print("conv layer shaper init", x.shape)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
     x = residual_block(x, depth, prefix=prefix + "_block0")
     x = residual_block(x, depth, prefix=prefix + "_block1")
-    print("conv layer shape after resid", x.shape)
     return x
 
 
@@ -49,14 +47,8 @@ class ImpalaCNN(TFModelV2):
         super().__init__(obs_space, action_space, num_outputs, model_config, name)
 
         depths = [16, 32, 32]
-        print("the shape is ", obs_space.shape)
         inputs = tf.keras.layers.Input(shape=obs_space.shape, name="observations")
-        print("inputs shape", inputs.shape)
-
         scaled_inputs = tf.cast(inputs, tf.float32) / 255.0
-        print("scaled inputs shape ", scaled_inputs.shape)
-
-        # scaled_inputs = tf.reshape(scaled_inputs, (4, 64, 64, 3))
 
         x = scaled_inputs
         for i, depth in enumerate(depths):
@@ -72,18 +64,11 @@ class ImpalaCNN(TFModelV2):
 
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
-        print("input dict shape", input_dict["obs"].shape)
-        # input_dict["obs"] = tf.squeeze(input_dict["obs"], 1)
-        # print("input keys", input_dict.keys())
-
-        # print("input dict shape after squeeze", input_dict["obs"].shape)
-
         obs = tf.cast(input_dict["obs"], tf.float32)
         logits, self._value = self.base_model(obs)
         return logits, state
 
     def value_function(self):
-        print("value function")
         return tf.reshape(self._value, [-1])
 
 
