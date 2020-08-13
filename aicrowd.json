@@ -1,8 +1,8 @@
 {
     "challenge_id" : "evaluations-api-neurips-2020-procgen",
     "grader_id": "evaluations-api-neurips-2020-procgen",
-    "authors" : ["Sharada Mohanty <mohanty@aicrowd.com>"],
-    "description": "Procgen test submission",
+    "authors" : ["Will Kwan, <wkwan94@gmail.com>, Andrew Pelegris <andrew.pelegris@gmail.com>"],
+    "description": "Procgen Submission 1",
     "docker_build": false,
     "debug" : false
 }
