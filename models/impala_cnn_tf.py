@@ -23,7 +23,7 @@ def conv_sequence(x, depth, prefix):
     print("x shape", x.shape)
     if "seq0" in prefix:
         print("do seq 0")
-        x = tf.reshape(x, tf.stack([tf.shape(x)[0], 256, 64, 3]))
+        x = tf.reshape(x, tf.stack([tf.shape(x)[0], 128, 64, 3]))
         print("reshaped", x.shape)
         x = conv_layer(depth, prefix + "_conv")(x)
     else:
