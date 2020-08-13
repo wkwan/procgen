@@ -59,20 +59,27 @@ class ImpalaCNN(TFModelV2):
             x = conv_sequence(x, depth, prefix=f"seq{i}")
 
         x = tf.keras.layers.Flatten()(x)
+        print("flattened")
         x = tf.keras.layers.ReLU()(x)
+        print("relued")
         x = tf.keras.layers.Dense(units=256, activation="relu", name="hidden")(x)
+        print("densed")
         logits = tf.keras.layers.Dense(units=num_outputs, name="pi")(x)
+        print("logited")
         value = tf.keras.layers.Dense(units=1, name="vf")(x)
+        print("valued")
         self.base_model = tf.keras.Model(inputs, [logits, value])
+        print("base modelled")
         self.register_variables(self.base_model.variables)
+        print("registered")
 
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
         print("input dict shape", input_dict["obs"].shape)
         # input_dict["obs"] = tf.squeeze(input_dict["obs"], 1)
-        print("input keys", input_dict.keys())
+        # print("input keys", input_dict.keys())
 
-        print("input dict shape after squeeze", input_dict["obs"].shape)
+        # print("input dict shape after squeeze", input_dict["obs"].shape)
 
         obs = tf.cast(input_dict["obs"], tf.float32)
         logits, self._value = self.base_model(obs)
