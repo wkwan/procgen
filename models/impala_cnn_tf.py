@@ -13,6 +13,7 @@ def conv_layer(depth, name):
 
 
 def residual_block(x, depth, prefix):
+    print("make the residual block")
     inputs = x
     assert inputs.get_shape()[-1].value == depth
     x = tf.keras.layers.ReLU()(x)
@@ -74,6 +75,7 @@ class ImpalaCNN(TFModelV2):
         return logits, state
 
     def value_function(self):
+        print("value function")
         return tf.reshape(self._value, [-1])
 
 
