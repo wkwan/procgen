@@ -14,7 +14,7 @@ def conv_layer(x, depth, name):
     # print("don't reshape")
     layer = tf.keras.layers.Conv2D( 
         filters=depth, kernel_size=3, strides=1, padding="same", name=name)
-    print("layer shaper is", layer.shape)
+    # print("layer shaper is", layer.shape)
     return layer
 
 def residual_block(x, depth, prefix):
@@ -53,7 +53,7 @@ class ImpalaCNN(TFModelV2):
         depths = [16, 32, 32]
         print("the shape is ", obs_space.shape)
         inputs = tf.keras.layers.Input(shape=obs_space.shape, name="observations")
-        # inputs = inputs.reshape(4,64,64,3)
+        inputs = inputs.reshape(-1,64,64,3)
         print("made the input thing")
 
         # print("inputs shape ", inputs.shape)
