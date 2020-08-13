@@ -12,9 +12,9 @@ def residual_block(x, depth, prefix):
     inputs = x
     assert inputs.get_shape()[-1].value == depth
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(depth, name=prefix + "_conv0", x.shape)(x)
+    x = conv_layer(depth, name=prefix + "_conv0", shape=x.shape)(x)
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(depth, name=prefix + "_conv1", x.shape)(x)
+    x = conv_layer(depth, name=prefix + "_conv1", shape=x.shape)(x)
     return x + inputs
 
 
