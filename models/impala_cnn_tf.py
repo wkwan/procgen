@@ -5,7 +5,7 @@ from ray.rllib.models import ModelCatalog
 tf = try_import_tf()
 
 
-def conv_layer(depth, name):
+def conv_layer(x, depth, name):
     print("make the conv layer")
     return tf.keras.layers.Conv2D(
         filters=depth, kernel_size=3, strides=1, padding="same", name=name, input_shape=x.shape
@@ -17,9 +17,9 @@ def residual_block(x, depth, prefix):
     inputs = x
     assert inputs.get_shape()[-1].value == depth
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(depth, name=prefix + "_conv0")(x)
+    x = conv_layer(x, depth, name=prefix + "_conv0")(x)
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(depth, name=prefix + "_conv1")(x)
+    x = conv_layer(x, depth, name=prefix + "_conv1")(x)
     return x + inputs
 
 
