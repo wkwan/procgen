@@ -16,6 +16,7 @@ from callbacks import CustomCallbacks
 
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
+tf.executing_eagerly()
 torch, _ = try_import_torch()
 
 """
