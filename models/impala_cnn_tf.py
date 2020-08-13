@@ -27,7 +27,7 @@ def conv_sequence(x, depth, prefix):
     print("conv seq", x.shape)
     # x = tf.reshape(x, (4, 64, 64, 3))
     # print("after reshape", x.shape),
-    x = conv_layer(depth, prefix + "_conv")(x)
+    x = conv_layer(x, depth, prefix + "_conv")(x)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
     x = residual_block(x, depth, prefix=prefix + "_block0")
     x = residual_block(x, depth, prefix=prefix + "_block1")
