@@ -7,13 +7,15 @@ tf = try_import_tf()
 
 def conv_layer(x, depth, name):
     print("make the conv layer", name, x.shape)
-    if "seq0" in name:
-        print("reshape the first conv layer")
-        return tf.keras.layers.Conv2D(
-            filters=depth, kernel_size=3, strides=1, padding="same", name=name, input_shape=(1, 4, 64, 64, 3))
-    print("don't reshape")
-    return tf.keras.layers.Conv2D( 
+    # if "seq0" in name:
+    #     print("reshape the first conv layer")
+    #     return tf.keras.layers.Conv2D(
+    #         filters=depth, kernel_size=3, strides=1, padding="same", name=name, input_shape=(4, 64, 64, 3))
+    # print("don't reshape")
+    layer = tf.keras.layers.Conv2D( 
         filters=depth, kernel_size=3, strides=1, padding="same", name=name)
+    print("layer shaper is", layer.shape)
+    return layer
 
 def residual_block(x, depth, prefix):
     print("make the residual block")
