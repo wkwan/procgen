@@ -19,7 +19,10 @@ def residual_block(x, depth, prefix):
 
 
 def conv_sequence(x, depth, prefix):
-    x = conv_layer(depth, prefix + "_conv")(x[0])
+    if "seq0" in prefix:
+        x = conv_layer(depth, prefix + "_conv")(x[0])
+    else:
+        x = conv_layer(depth, prefix + "_conv")(x)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
     x = residual_block(x, depth, prefix=prefix + "_block0")
     x = residual_block(x, depth, prefix=prefix + "_block1")
