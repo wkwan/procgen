@@ -15,9 +15,9 @@ def residual_block(x, depth, prefix):
     inputs = x
     assert inputs.get_shape()[-1].value == depth
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(depth + 1, name=prefix + "_conv0")(x)
+    x = conv_layer(depth, name=prefix + "_conv0")(x)
     x = tf.keras.layers.ReLU()(x)
-    x = conv_layer(depth + 1, name=prefix + "_conv1")(x)
+    x = conv_layer(depth, name=prefix + "_conv1")(x)
     return x + inputs
 
 
@@ -25,8 +25,8 @@ def conv_sequence(x, depth, prefix):
     print("conv seq", x, depth, prefix)
     x = conv_layer(depth, prefix + "_conv")(x)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
-    x = residual_block(x, depth + 1, prefix=prefix + "_block0")
-    x = residual_block(x, depth + 1, prefix=prefix + "_block1")
+    x = residual_block(x, depth, prefix=prefix + "_block0")
+    x = residual_block(x, depth, prefix=prefix + "_block1")
     return x
 
 
