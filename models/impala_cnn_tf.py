@@ -42,8 +42,8 @@ class ImpalaCNN(TFModelV2):
         super().__init__(obs_space, action_space, num_outputs, model_config, name)
 
         depths = [16, 32, 32]
-        # print("the shape is ", obs_space.shape)
-        inputs = tf.keras.layers.Input(shape=(64, 64, 3), name="observations")
+        print("the shape is ", obs_space.shape)
+        inputs = tf.keras.layers.Input(shape=obs_space.shape, name="observations")
         # print("inputs shape ", inputs.shape)
         scaled_inputs = tf.cast(inputs, tf.float32) / 255.0
         # print("scaled inputs shape ", scaled_inputs.shape)
@@ -62,6 +62,7 @@ class ImpalaCNN(TFModelV2):
 
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
+        print("input dict shape", input_dict["obs"].shape)
         obs = tf.cast(input_dict["obs"], tf.float32)
         logits, self._value = self.base_model(obs)
         return logits, state
