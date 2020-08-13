@@ -3,8 +3,6 @@ from ray.rllib.utils.framework import try_import_tf
 from ray.rllib.models import ModelCatalog
 
 tf = try_import_tf()
-tf.executing_eagerly()
-
 
 def conv_layer(depth, name):
     return tf.keras.layers.Conv2D( 
@@ -65,6 +63,8 @@ class ImpalaCNN(TFModelV2):
         # explicit cast to float32 needed in eager
         print("input dict shape", input_dict["obs"].shape)
         input_dict["obs"] = tf.squeeze(input_dict["obs"], 0)
+        input_dict["new_obs"] = tf.squeeze(input_dict["new_obs"], 0)
+
         print("input dict shape after squeeze", input_dict["obs"].shape)
 
         obs = tf.cast(input_dict["obs"], tf.float32)
