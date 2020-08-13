@@ -63,7 +63,7 @@ class ImpalaCNN(TFModelV2):
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
         print("input dict shape", input_dict["obs"].shape)
-        input_dict["obs"] = tf.reshape(input_dict["obs"], (4, 64, 64, 3))
+        input_dict["obs"] = tf.squeeze(input_dict["obs"], 0)
         obs = tf.cast(input_dict["obs"], tf.float32)
         logits, self._value = self.base_model(obs)
         return logits, state
