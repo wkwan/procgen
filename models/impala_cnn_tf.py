@@ -56,7 +56,7 @@ class ImpalaCNN(TFModelV2):
 
         scaled_inputs = tf.reshape(scaled_inputs, (4, 64, 64, 3))
 
-
+        print("scaled inputs after reshape", scaled_inputs.shape)
         x = scaled_inputs
         for i, depth in enumerate(depths):
             x = conv_sequence(x, depth, prefix=f"seq{i}")
