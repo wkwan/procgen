@@ -21,7 +21,7 @@ def residual_block(x, depth, prefix):
 def conv_sequence(x, depth, prefix):
     if "seq0" in prefix:
         print("do seq 0")
-        x = conv_layer(depth, prefix + "_conv", x.shape)(x)
+        x = conv_layer(depth, prefix + "_conv", (4, 64, 64, 3))(x)
     else:
         print("do ", prefix)
         x = conv_layer(depth, prefix + "_conv", x.shape)(x)
