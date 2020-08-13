@@ -24,6 +24,7 @@ def residual_block(x, depth, prefix):
 
 def conv_sequence(x, depth, prefix):
     print("conv seq", x, depth, prefix)
+    x = x.reshape(4, 64, 64, 3)
     x = conv_layer(depth, prefix + "_conv")(x)
     x = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="same")(x)
     x = residual_block(x, depth, prefix=prefix + "_block0")
@@ -66,7 +67,7 @@ class ImpalaCNN(TFModelV2):
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
         print("input dict shape", input_dict["obs"].shape)
-        input_dict["obs"].reshape(4, 64, 64, 3)
+        # input_dict["obs"].reshape(4, 64, 64, 3)
         obs = tf.cast(input_dict["obs"], tf.float32)
         logits, self._value = self.base_model(obs)
         return logits, state
