@@ -52,6 +52,7 @@ class ImpalaCNN(TFModelV2):
         print("the shape is ", obs_space.shape)
         inputs = tf.keras.layers.Input(shape=obs_space.shape, name="observations")
         # inputs = inputs.reshape(4,64,64,3)
+        print("made the input thing")
 
         # print("inputs shape ", inputs.shape)
         scaled_inputs = tf.cast(inputs, tf.float32) / 255.0
@@ -62,7 +63,9 @@ class ImpalaCNN(TFModelV2):
         # print("scaled inputs after reshape", scaled_inputs.shape)
         x = scaled_inputs
         for i, depth in enumerate(depths):
+            print("before make conv seq")
             x = conv_sequence(x, depth, prefix=f"seq{i}")
+            print("after make conv seq")
 
         x = tf.keras.layers.Flatten()(x)
         x = tf.keras.layers.ReLU()(x)
