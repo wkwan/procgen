@@ -3,6 +3,7 @@ from ray.rllib.utils.framework import try_import_tf
 from ray.rllib.models import ModelCatalog
 
 tf = try_import_tf()
+tf.executing_eagerly()
 
 
 def conv_layer(depth, name):
