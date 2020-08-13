@@ -48,7 +48,7 @@ class ImpalaCNN(TFModelV2):
         depths = [16, 32, 32]
         print("the shape is ", obs_space.shape)
         inputs = tf.keras.layers.Input(shape=obs_space.shape, name="observations")
-        inputs = tf.reshape((4, 64, 64, 3), inputs)
+        inputs = tf.reshape(inputs, (4, 64, 64, 3))
         # inputs = inputs.reshape(4,64,64,3)
 
         # print("inputs shape ", inputs.shape)
