@@ -6,7 +6,7 @@ tf = try_import_tf()
 
 
 def conv_layer(x, depth, name):
-    print("make the conv layer", x.shape)
+    print("make the conv layer", name, x.shape)
     if "_conv0" in name:
         print("reshape the first conv layer")
         return tf.keras.layers.Conv2D(
