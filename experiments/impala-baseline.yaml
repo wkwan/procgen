@@ -40,7 +40,7 @@ procgen-ppo:
             # The lowest seed that will be used to generated levels. 'start_level' and 'num_levels' fully specify the set of possible levels
             start_level: 0
             # Paint player velocity info in the top left corner. Only supported by certain games.
-            paint_vel_info: True
+            paint_vel_info: False
             # Use randomly generated assets in place of human designed assets
             use_generated_assets: False
             # center_agent : Determines whether observations are centered on the agent or display the full level. Override at your own risk.
@@ -199,7 +199,7 @@ procgen-ppo:
         ################################################
         # Number of rollout worker actors to create for parallel sampling. Setting
         # this to 0 will force rollouts to be done in the trainer actor.
-        num_workers: 6
+        num_workers: 9
 
         # Number of environments to evaluate vectorwise per worker. This enables
         # model inference batching, which can improve performance for inference
