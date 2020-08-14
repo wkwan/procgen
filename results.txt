@@ -1,0 +1,61 @@
+impala baseline coinrun
+10 000 timesteps
+
+Episode #0: reward: 0.0 steps: 1000
+Episode #1: reward: 0.0 steps: 361
+Episode #2: reward: 0.0 steps: 1000
+Episode #3: reward: 0.0 steps: 1000
+Episode #4: reward: 0.0 steps: 1000
+
+impala baseline coinrun
+160 000 timesteps
+Episode #0: reward: 0.0 steps: 104
+Episode #1: reward: 10.0 steps: 72
+Episode #2: reward: 0.0 steps: 76
+Episode #3: reward: 10.0 steps: 65
+Episode #4: reward: 10.0 steps: 65
+
+impala baseline bigfish 
+procgen-ppo/PPO_procgen_env_wrapper_0_2020-08-13_13-46-059yvp_ow2
+160 000 timesteps
+Episode #0: reward: 5.0 steps: 239
+Episode #1: reward: 0.0 steps: 288
+Episode #2: reward: 1.0 steps: 77
+Episode #3: reward: 0.0 steps: 38
+Episode #4: reward: 3.0 steps: 206
+
+impala baseline paint velocity bigfish
+PPO_procgen_env_wrapper_0_2020-08-13_14-08-12yv_95mzh
+160 000 timesteps
+Episode #0: reward: 0.0 steps: 213
+Episode #1: reward: 0.0 steps: 67
+Episode #2: reward: 1.0 steps: 136
+Episode #3: reward: 0.0 steps: 59
+Episode #4: reward: 1.0 steps: 138
+
+Episode #0: reward: 0.0 steps: 252
+Episode #1: reward: 0.0 steps: 24
+Episode #2: reward: 0.0 steps: 11
+Episode #3: reward: 4.0 steps: 315
+Episode #4: reward: 1.0 steps: 90
+
+Episode #0: reward: 1.0 steps: 89
+Episode #1: reward: 2.0 steps: 175
+Episode #2: reward: 0.0 steps: 54
+Episode #3: reward: 1.0 steps: 100
+Episode #4: reward: 0.0 steps: 235
+
+
+impala baseline, framestack, paint velocity, bigfish
+
+2020-08-14 00:31:01,218	INFO trainable.py:430 -- Current state after restoring: {'_iteration': 70, '_timesteps_total': 161280, '_time_total': 358.83074045181274, '_episodes_total': 1172}
+Episode #0: reward: 0.0 steps: 97
+Episode #1: reward: 1.0 steps: 113
+Episode #2: reward: 1.0 steps: 52
+Episode #3: reward: 0.0 steps: 91
+Episode #4: reward: 1.0 steps: 73
+Episode #5: reward: 1.0 steps: 105
+Episode #6: reward: 1.0 steps: 128
+Episode #7: reward: 7.0 steps: 274
+Episode #8: reward: 2.0 steps: 200
+Episode #9: reward: 0.0 steps: 57
