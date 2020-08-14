@@ -66,7 +66,7 @@ procgen-ppo:
         num_sgd_iter: 3
         # Total SGD batch size across all devices for SGD. This defines the
         # minibatch size within each epoch.
-        sgd_minibatch_size: 128 
+        sgd_minibatch_size: 64
         # Training batch size, if applicable. Should be >= rollout_fragment_length.
         # Samples batches will be concatenated together to a batch of this size,
         # which is then passed to SGD.
@@ -221,7 +221,7 @@ procgen-ppo:
         #
         # The dataflow here can vary per algorithm. For example, PPO further
         # divides the train batch into minibatches for multi-epoch SGD.
-        rollout_fragment_length: 128
+        rollout_fragment_length: 256
 
         # Whether to rollout "complete_episodes" or "truncate_episodes" to
         # `rollout_fragment_length` length unrolls. Episode truncation guarantees
