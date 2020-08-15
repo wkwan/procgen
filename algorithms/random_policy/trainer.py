@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 from ray.rllib.agents.trainer_template import build_trainer
-from .policy import RandomPolicy
+# from .policy import RandomPolicy
+from ray.rllib.agents import ppo
 
 DEFAULT_CONFIG = (
     {}
@@ -9,6 +10,6 @@ DEFAULT_CONFIG = (
 
 RandomPolicyTrainer = build_trainer(
     name="RandomPolicyTrainer",
-    default_policy=RandomPolicy,
+    default_policy=ppo.Policy,
     default_config=DEFAULT_CONFIG,
 )
