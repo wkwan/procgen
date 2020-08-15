@@ -24,26 +24,22 @@ class CustomRandomAgent(Trainer):
 
     @override(Trainer)
     def _train(self):
+        rewards = []
+        steps = 0
+        for _ in range(self.config["rollouts_per_iteration"]):
+            obs = self.env.reset()
+            done = False
+            reward = 0.0
+            while not done:
+                action = self.env.action_space.sample()
+                obs, r, done, info = self.env.step(action)
+                reward += r
+                steps += 1
+            rewards.append(reward)
         return {
-            "episode_reward_mean": 0,
-            "timesteps_this_iter": 0,
+            "episode_reward_mean": np.mean(rewards),
+            "timesteps_this_iter": steps,
         }
-        # rewards = []
-        # steps = 0
-        # for _ in range(self.config["rollouts_per_iteration"]):
-        #     obs = self.env.reset()
-        #     done = False
-        #     reward = 0.0
-        #     while not done:
-        #         action = self.env.action_space.sample()
-        #         obs, r, done, info = self.env.step(action)
-        #         reward += r
-        #         steps += 1
-        #     rewards.append(reward)
-        # return {
-        #     "episode_reward_mean": np.mean(rewards),
-        #     "timesteps_this_iter": steps,
-        # }
 # __sphinx_doc_end__
 # don't enable yapf after, it's buggy here
 
