@@ -34,7 +34,7 @@ procgen-ppo:
         ################################################
         env_config:
             # Name of the procgen environment to train on # Note, that this parameter will be overriden during the evaluation by the AIcrowd evaluators.
-            env_name: coinrun
+            env_name: bigfish
             # The number of unique levels that can be generated. Set to 0 to use unlimited levels
             num_levels: 0
             # The lowest seed that will be used to generated levels. 'start_level' and 'num_levels' fully specify the set of possible levels
