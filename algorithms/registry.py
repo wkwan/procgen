@@ -23,6 +23,7 @@ def _import_random_policy():
 
 
 CUSTOM_ALGORITHMS = {
-    "custom/CustomRandomAgent": _import_custom_random_agent,
+    # "custom/CustomRandomAgent": _import_custom_random_agent,
+    "Custom": _import_custom_random_agent,
     "RandomPolicy": _import_random_policy
 }
