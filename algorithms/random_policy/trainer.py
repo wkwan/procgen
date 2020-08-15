@@ -10,6 +10,6 @@ DEFAULT_CONFIG = (
 
 RandomPolicyTrainer = build_trainer(
     name="RandomPolicyTrainer",
-    default_policy=ppo.ppo_tf_policy,
+    default_policy=ppo.policy,
     default_config=DEFAULT_CONFIG,
 )
