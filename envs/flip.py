@@ -11,8 +11,8 @@ class Flip(ObservationWrapper):
         return self.observation(obs), reward, done, info
 
     def observation(self, obs):
-        print("do the flip")
-        return np.flip(obs, 2)
+        # print("do the flip")
+        return np.flip(obs, 1)
 
 # Register Env in Ray
 registry.register_env(
