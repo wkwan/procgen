@@ -3,7 +3,7 @@ import logging
 from ray.rllib.agents import with_common_config
 from ray.rllib.agents.ppo.ppo_tf_policy import PPOTFPolicy
 from .custom_train_template import build_trainer
-from ray.rllib.optimizers import SyncSamplesOptimizer, LocalMultiGPUOptimizer
+from .custom_optimizer import SyncSamplesOptimizer
 from ray.rllib.utils import try_import_tf
 from ray.rllib.agents.trainer import Trainer
 
@@ -79,26 +79,12 @@ DEFAULT_CONFIG = with_common_config({
 
 
 def choose_policy_optimizer(workers, config):
-    if config["simple_optimizer"]:
-        print("USE THE SYNC SAMPLES OPTIMIZER")
-        return SyncSamplesOptimizer(
-            workers,
-            num_sgd_iter=config["num_sgd_iter"],
-            train_batch_size=config["train_batch_size"],
-            sgd_minibatch_size=config["sgd_minibatch_size"],
-            standardize_fields=["advantages"])
-
-    return LocalMultiGPUOptimizer(
+    return SyncSamplesOptimizer(
         workers,
-        sgd_batch_size=config["sgd_minibatch_size"],
         num_sgd_iter=config["num_sgd_iter"],
-        num_gpus=config["num_gpus"],
-        rollout_fragment_length=config["rollout_fragment_length"],
-        num_envs_per_worker=config["num_envs_per_worker"],
         train_batch_size=config["train_batch_size"],
-        standardize_fields=["advantages"],
-        shuffle_sequences=config["shuffle_sequences"],
-        _fake_gpus=config["_fake_gpus"])
+        sgd_minibatch_size=config["sgd_minibatch_size"],
+        standardize_fields=["advantages"])
 
 
 def update_kl(trainer, fetches):
