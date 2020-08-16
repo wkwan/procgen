@@ -7,11 +7,11 @@ from gym import ObservationWrapper
 
 class Flip(ObservationWrapper):
     def step(self, action):
-        observation, reward, done, info = self.env.step(action)
+        obs, reward, done, obs = self.env.step(action)
         return observation(observation), reward, done, info
 
-    def observation(self, observation):
-        return np.flip(observation, 2)
+    def observation(self, obs):
+        return np.flip(obs, 2)
 
 # Register Env in Ray
 registry.register_env(
