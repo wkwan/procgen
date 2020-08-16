@@ -27,7 +27,7 @@ class ProcgenEnvWrapper(gym.Env):
 
         assert self.env_name in VALID_ENV_NAMES
 
-        env = gym.make(f"procgen:procgen-{self.env_name}-v0", **self.config, render_mode="rgb_array")
+        env = gym.make(f"procgen:procgen-{self.env_name}-v0", **self.config)
         self.env = env
         # Enable video recording features
         self.metadata = self.env.metadata
