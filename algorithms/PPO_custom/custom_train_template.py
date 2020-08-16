@@ -144,12 +144,14 @@ def build_trainer(name,
             if before_train_step:
                 before_train_step(self)
             prev_steps = self.optimizer.num_steps_sampled
-            print("num steps saples", self.optimizer.num_steps_sampled)
+            print("num steps samples", self.optimizer.num_steps_sampled)
 
             start = time.time()
             optimizer_steps_this_iter = 0
             while True:
                 fetches = self.optimizer.step()
+                print("fetches", fetches)
+
                 optimizer_steps_this_iter += 1
                 if after_optimizer_step:
                     after_optimizer_step(self, fetches)
