@@ -12,7 +12,10 @@ class Flip(ObservationWrapper):
 
     def observation(self, obs):
         # print("do the flip")
-        return np.flipud(obs)
+        print("before flip", obs)
+        flipped = np.flipud(obs)
+        print("after flip", flipped)
+        return flipped
 
 # Register Env in Ray
 registry.register_env(
