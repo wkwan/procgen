@@ -144,6 +144,7 @@ def build_trainer(name,
             if before_train_step:
                 before_train_step(self)
             prev_steps = self.optimizer.num_steps_sampled
+            print("num steps saples", self.optimizer.num_steps_sampled)
 
             start = time.time()
             optimizer_steps_this_iter = 0
