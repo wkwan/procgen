@@ -1,5 +1,5 @@
-procgen-ppo:
-    env: flip_procgen_env  # Change this at your own risk :D
+procgen-dqn:
+    env: procgen_env_wrapper  # Change this at your own risk :D
     run: DQN
     # Can be replaced by any of the available agents as described at : 
     # https://github.com/ray-project/ray/blob/master/rllib/agents/registry.py#L103
@@ -58,7 +58,7 @@ procgen-ppo:
         # Discount factor of the MDP.
         gamma: 0.999
         # The GAE(lambda) parameter.
-        lambda: 0.95
+        # lambda: 0.95
         # The default learning rate.
         lr: 5.0e-4
         # Number of SGD iterations in each outer loop (i.e., number of epochs to
