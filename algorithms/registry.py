@@ -18,8 +18,8 @@ def _import_custom_random_agent():
     return CustomRandomAgent
 
 def _import_custom_ppo():
-    from .PPO_custom.trainer import PPO_Custom_Trainer
-    return PPO_Custom_Trainer
+    from .PPO_custom.trainer import PPOCustomTrainer
+    return PPOCustomTrainer
 
 
 CUSTOM_ALGORITHMS = {
