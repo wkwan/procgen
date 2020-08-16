@@ -138,7 +138,6 @@ def build_trainer(name,
 
         @override(Trainer)
         def _train(self):
-            print("DO THE TRAINING YO")
             if self.train_exec_impl:
                 return self._train_exec_impl()
 
