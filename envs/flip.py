@@ -8,7 +8,7 @@ from gym import ObservationWrapper
 class Flip(ObservationWrapper):
     def step(self, action):
         obs, reward, done, obs = self.env.step(action)
-        return observation(observation), reward, done, info
+        return observation(obs), reward, done, info
 
     def observation(self, obs):
         return np.flip(obs, 2)
