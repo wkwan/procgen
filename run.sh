@@ -17,10 +17,10 @@ if [[ -z $AICROWD_IS_GRADING ]]; then
   ##########################################################################
 
 #will: https://discourse.aicrowd.com/t/aws-instance-setup/3380
-  # export OUTPUTS_DIR=./outputs
-  # export RAY_MEMORY_LIMIT=60129542144
-  # export RAY_CPUS=8
-  # export RAY_STORE_MEMORY=30000000000
+  export OUTPUTS_DIR=./outputs
+  export RAY_MEMORY_LIMIT=60129542144
+  export RAY_CPUS=8
+  export RAY_STORE_MEMORY=30000000000
 
   # export OUTPUTS_DIR=./outputs
   # export RAY_MEMORY_LIMIT=6012954214
