@@ -91,7 +91,7 @@ procgen-dqn:
         observation_filter: NoFilter
         # Share layers for value function. If you set this to True, it's important
         # to tune vf_loss_coeff.
-        vf_share_layers: True
+        # vf_share_layers: True
         # Number of steps after which the episode is forced to terminate. Defaults
         # to `env.spec.max_episode_steps` (if present) for Gym envs.
         horizon: null
