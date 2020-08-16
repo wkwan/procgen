@@ -3,7 +3,7 @@ import os
 import time
 
 from ray.rllib.agents.trainer import Trainer, COMMON_CONFIG
-from ray.rllib.optimizers import SyncSamplesOptimizer
+from .custom_optimizer import SyncSamplesOptimizer
 from ray.rllib.utils import add_mixins
 from ray.rllib.utils.annotations import override, DeveloperAPI
 
