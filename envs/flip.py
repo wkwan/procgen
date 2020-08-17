@@ -6,13 +6,32 @@ import numpy as np
 from gym import ObservationWrapper
 
 class Flip(ObservationWrapper):
+
+    prev_obs = None
+    prev_reward = None
+    prev_done = None
+    prev_info = None
+
     def step(self, action):
+        if prev_obs is not None:
+            obs = np.flipud(obs)
+            reward = prev_reward
+            done = prev_done
+            info = prev_info
+            prev_obs = None
+            prev_reward = None
+            prev_done = None
+            prev_info = None
+            return obs, reward, done, info
         obs, reward, done, info = self.env.step(action)
-        return self.observation(obs), reward, done, info
+        prev_obs = obs
+        prev_reward = reward
+        prev_done = done
+        prev_info = info
+        return obs, reward, done, info
 
     def observation(self, obs):
-        # print("do the flip")
-        return np.flipud(obs)
+        return obs
 
 # Register Env in Ray
 registry.register_env(
