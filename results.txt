@@ -126,4 +126,133 @@ Number of trials: 1 (1 RUNNING)
 +---------------------------------------+----------+--------------------+--------+------------------+--------+----------+
 
 
-WITHOUT USING FLIPS
+WITHOUT USING FLIPS, PPO
+
+== Status ==
+Memory usage on this node: 42.6/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |    ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |      1 |          61.0119 | 18432 |  1.42857 |
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+
+
+== Status ==
+Memory usage on this node: 42.7/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |    ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |      2 |          104.778 | 36864 |  4.21053 |
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+
+
+== Status ==
+Memory usage on this node: 42.7/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |    ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |      3 |          147.224 | 55296 |  4.09091 |
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+
+
+== Status ==
+Memory usage on this node: 42.7/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |    ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |      4 |          189.363 | 73728 |      4.4 |
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+
+
+== Status ==
+Memory usage on this node: 42.7/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |    ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |      5 |          231.603 | 92160 |      4.2 |
++------------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+
+
+== Status ==
+Memory usage on this node: 42.7/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |     ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+--------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |      6 |          272.985 | 110592 |        5 |
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+
+
+== Status ==
+Memory usage on this node: 42.7/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |     ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+--------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |      7 |          313.981 | 129024 |  4.49153 |
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+
+
+== Status ==
+Memory usage on this node: 42.8/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |     ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+--------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |      8 |          354.525 | 147456 |  5.03226 |
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+
+
+== Status ==
+Memory usage on this node: 42.8/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |     ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+--------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |      9 |          394.745 | 165888 |  4.62687 |
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+
+
+== Status ==
+Memory usage on this node: 42.8/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+| Trial name                               | status   | loc                |   iter |   total time (s) |     ts |   reward |
+|------------------------------------------+----------+--------------------+--------+------------------+--------+----------|
+| CustomPPOAgent_procgen_env_wrapper_00000 | RUNNING  | 172.31.66.244:5064 |     10 |          435.527 | 184320 |  5.40698 |
++------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
