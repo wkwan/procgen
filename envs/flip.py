@@ -6,17 +6,18 @@ import numpy as np
 from gym import ObservationWrapper
 
 class Flip(ObservationWrapper):
-    self.prev_obs = None
-    self.prev_reward = None
-    self.prev_done = None
-    self.prev_info = None
+    def __init__(self):
+        self.prev_obs = None
+        self.prev_reward = None
+        self.prev_done = None
+        self.prev_info = None
 
     def step(self, action):
         if self.prev_obs is not None:
             obs = np.flipud(self.prev_obs)
-            reward = prev_reward
-            done = prev_done
-            info = prev_info
+            reward = self.prev_reward
+            done = self.prev_done
+            info = self.prev_info
             self.prev_obs = None
             self.prev_reward = None
             self.prev_done = None
