@@ -61,7 +61,6 @@ class SyncSamplesOptimizer(PolicyOptimizer):
                 else:
                     samples.append(self.workers.local_worker().sample())
             samples = SampleBatch.concat_samples(samples)
-            print("SAMPLES COUNT", samples.count)
             self.sample_timer.push_units_processed(samples.count)
 
         with self.grad_timer:

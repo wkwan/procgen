@@ -2,6 +2,8 @@ from ray.rllib.models.tf.tf_modelv2 import TFModelV2
 from ray.rllib.utils.framework import try_import_tf
 from ray.rllib.models import ModelCatalog
 
+import numpy as np
+
 tf = try_import_tf()
 
 def conv_layer(depth, name):
@@ -66,6 +68,9 @@ class ImpalaCNN(TFModelV2):
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
         obs = tf.cast(input_dict["obs"], tf.float32)
+        if (np.random.choice([0, 1])):
+            print("do the flip")
+            obs = np.flipud(obs)
         logits, self._value = self.base_model(obs)
         return logits, state
 

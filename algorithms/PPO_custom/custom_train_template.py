@@ -139,11 +139,11 @@ def build_trainer(name,
         @override(Trainer)
         def _train(self):
             print("train once")
-            self.train_step_to_repeat()
+            self.train_step_to_repeat(False)
             print("train twice")
-            return self.train_step_to_repeat()
+            return self.train_step_to_repeat(True)
             
-        def train_step_to_repeat(self):
+        def train_step_to_repeat(self, flip_vertical):
             if self.train_exec_impl:
                 return self._train_exec_impl()
 
@@ -153,7 +153,6 @@ def build_trainer(name,
 
             start = time.time()
             optimizer_steps_this_iter = 0
-            print("do a train yo")
             while True:
                 fetches = self.optimizer.step()
 
