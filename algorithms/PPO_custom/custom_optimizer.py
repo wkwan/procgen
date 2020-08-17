@@ -75,8 +75,10 @@ class SyncSamplesOptimizer(PolicyOptimizer):
             self.learner_stats = fetches[DEFAULT_POLICY_ID]
         else:
             self.learner_stats = fetches
-        self.num_steps_sampled += samples.count
-        self.num_steps_trained += samples.count
+        self.num_steps_sampled += samples.count / 2
+        self.num_steps_trained += samples.count / 2 
+
+        print("hey we're dividing the samples count in half")
         
         return self.learner_stats
 
