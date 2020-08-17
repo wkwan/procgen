@@ -78,45 +78,6 @@ class SyncSamplesOptimizer(PolicyOptimizer):
             self.learner_stats = fetches
         self.num_steps_sampled += samples.count
         self.num_steps_trained += samples.count
-
-
-        print("DO THE STEP AGAIN")
-
-                with self.update_weights_timer:
-            if self.workers.remote_workers():
-                weights = ray.put(self.workers.local_worker().get_weights())
-                for e in self.workers.remote_workers():
-                    e.set_weights.remote(weights)
-
-        with self.sample_timer:
-            samples = []
-            while sum(s.count for s in samples) < self.train_batch_size:
-                if self.workers.remote_workers():
-                    samples.extend(
-                        ray_get_and_free([
-                            e.sample.remote()
-                            for e in self.workers.remote_workers()
-                        ]))
-                else:
-                    samples.append(self.workers.local_worker().sample())
-            samples = SampleBatch.concat_samples(samples)
-            print("SAMPLES COUNT", samples.count)
-            self.sample_timer.push_units_processed(samples.count)
-
-        with self.grad_timer:
-            fetches = do_minibatch_sgd(samples, self.policies,
-                                       self.workers.local_worker(),
-                                       self.num_sgd_iter,
-                                       self.sgd_minibatch_size,
-                                       self.standardize_fields)
-        self.grad_timer.push_units_processed(samples.count)
-
-        if len(fetches) == 1 and DEFAULT_POLICY_ID in fetches:
-            self.learner_stats = fetches[DEFAULT_POLICY_ID]
-        else:
-            self.learner_stats = fetches
-        self.num_steps_sampled += samples.count
-        self.num_steps_trained += samples.count
         
         return self.learner_stats
 
