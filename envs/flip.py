@@ -6,8 +6,8 @@ import numpy as np
 from gym import ObservationWrapper
 
 class Flip(ObservationWrapper):
-    def __init__(self, obs_wrapper):
-        super.__init__(self, obs_wrapper)
+    def __init__(self, env_wrapper):
+        super.__init__(self, env_wrapper)
         self.prev_obs = None
         self.prev_reward = None
         self.prev_done = None
