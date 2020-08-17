@@ -138,6 +138,12 @@ def build_trainer(name,
 
         @override(Trainer)
         def _train(self):
+            print("train once")
+            self.train_step_to_repeat()
+            print("train twice")
+            return self.train_step_to_repeat()
+            
+        def train_step_to_repeat(self):
             if self.train_exec_impl:
                 return self._train_exec_impl()
 
