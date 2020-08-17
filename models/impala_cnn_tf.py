@@ -67,10 +67,10 @@ class ImpalaCNN(TFModelV2):
 
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
-        obs = tf.cast(input_dict["obs"], tf.float32)
         if (np.random.choice([0, 1])):
             print("do the flip")
-            obs = np.flipud(obs)
+            input_dict["obs"] = np.flipud(input_dict["obs"])
+        obs = tf.cast(input_dict["obs"], tf.float32)
         logits, self._value = self.base_model(obs)
         return logits, state
 
