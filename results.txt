@@ -97,3 +97,33 @@ test5, back to 2 framestack
 |-------------------------------+----------+--------------------+--------+------------------+-------+----------|
 | PPO_stacked_procgen_env_00000 | RUNNING  | 172.31.66.244:8256 |      2 |          92.6656 | 39936 |        1 |
 +-------------------------------+----------+--------------------+--------+------------------+-------+----------+
+
+USING FLIPS
+
+== Status ==
+Memory usage on this node: 28.9/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+--------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:2775 |      5 |          140.702 | 92160 |      5.4 |
++---------------------------------------+----------+--------------------+--------+------------------+-------+----------+
+
+
+== Status ==
+Memory usage on this node: 28.9/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+| Trial name                            | status   | loc                |   iter |   total time (s) |     ts |   reward |
+|---------------------------------------+----------+--------------------+--------+------------------+--------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:2775 |      6 |          165.106 | 110592 |      5.2 |
++---------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+
+
+WITHOUT USING FLIPS
