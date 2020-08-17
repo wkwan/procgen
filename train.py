@@ -150,7 +150,7 @@ def run(args, parser):
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
             print(experiments.keys())
-            experiments[args.experiment_name]["stop"] = experiments[args.experiment_name]["stop"] * 2
+            experiments["procgen-ppo"]["stop"] = experiments["procgen-ppo"]["stop"] * 2
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {
