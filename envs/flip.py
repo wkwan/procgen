@@ -15,6 +15,7 @@ class Flip(ObservationWrapper):
 
     def step(self, action):
         if self.prev_obs is not None:
+            print("do flip")
             obs = np.flipud(self.prev_obs)
             reward = self.prev_reward
             done = self.prev_done
@@ -25,6 +26,7 @@ class Flip(ObservationWrapper):
             self.prev_info = None
             return obs, reward, done, info
         obs, reward, done, info = self.env.step(action)
+        print("don't do flip")
         self.prev_obs = obs
         self.prev_reward = reward
         self.prev_done = done
