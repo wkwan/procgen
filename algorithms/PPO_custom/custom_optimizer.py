@@ -78,7 +78,7 @@ class SyncSamplesOptimizer(PolicyOptimizer):
         self.num_steps_sampled += samples.count / 2
         self.num_steps_trained += samples.count / 2 
 
-        print("hey we're dividing the samples count in half")
+        # print("hey we're dividing the samples count in half")
         
         return self.learner_stats
 
