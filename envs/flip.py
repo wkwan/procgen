@@ -5,6 +5,46 @@ from envs.procgen_env_wrapper import ProcgenEnvWrapper
 import numpy as np
 from gym import ObservationWrapper
 
+class Cutout(object):
+    def __init__(self, 
+                 batch_size, 
+                 box_min=7, 
+                 box_max=22, 
+                 pivot_h=12, 
+                 pivot_w=24,
+                 *_args, 
+                 **_kwargs):
+        
+        self.box_min = box_min
+        self.box_max = box_max
+        self.pivot_h = pivot_h
+        self.pivot_w = pivot_w
+        self.batch_size = batch_size
+        self.w1 = np.random.randint(self.box_min, self.box_max, batch_size)
+        self.h1 = np.random.randint(self.box_min, self.box_max, batch_size)
+        
+    def do_augmentation(self, imgs):
+        n, h, w, c = imgs.shape
+        cutouts = np.empty((n, h, w, c), dtype=imgs.dtype)
+        for i, (img, w11, h11) in enumerate(zip(imgs, self.w1, self.h1)):
+            cut_img = img.copy()
+            cut_img[self.pivot_h+h11:self.pivot_h+h11+h11, 
+                    self.pivot_w+w11:self.pivot_w+w11+w11, :] = 0
+            cutouts[i] = cut_img
+        return cutouts
+    
+    def change_randomization_params(self, index_):
+        self.w1[index_] = np.random.randint(self.box_min, self.box_max)
+        self.h1[index_] = np.random.randint(self.box_min, self.box_max)
+
+    def change_randomization_params_all(self):
+        self.w1 = np.random.randint(self.box_min, self.box_max, self.batch_size)
+        self.h1 = np.random.randint(self.box_min, self.box_max, self.batch_size)
+        
+    def print_parms(self):
+        print(self.w1)
+        print(self.h1)
+
 class Flip(ObservationWrapper):
     def __init__(self, env_wrapper):
         super().__init__(env_wrapper)
@@ -16,6 +56,7 @@ class Flip(ObservationWrapper):
     def step(self, action):
         if self.prev_obs is not None:
             obs = np.flipud(self.prev_obs)
+            print("obs shape is", obs.shape)
             reward = self.prev_reward
             done = self.prev_done
             info = self.prev_info
