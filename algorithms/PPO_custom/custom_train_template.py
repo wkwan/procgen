@@ -147,6 +147,7 @@ def build_trainer(name,
 
             start = time.time()
             optimizer_steps_this_iter = 0
+            print("do a train yo")
             while True:
                 fetches = self.optimizer.step()
 
