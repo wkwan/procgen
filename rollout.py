@@ -460,7 +460,7 @@ def rollout(agent,
         if done:
             episodes += 1
     print("REWARD FINAL SUM", reward_final_sum)
-    print("EXPECTED RETURN", reward_final_sum / episodes)
+    print("EXPECTED REWARD", reward_final_sum / episodes)
 
 
 if __name__ == "__main__":
