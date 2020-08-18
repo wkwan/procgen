@@ -38,7 +38,7 @@ class Flip(ObservationWrapper):
 
             self.prev_obs = np.transpose(self.prev_obs, (1, 0, 2))
 
-            crop_size = 32
+            crop_size = 64
             crop_max = 75 - crop_size
             w1 = np.random.randint(0, crop_max)
             h1 = np.random.randint(0, crop_max)
