@@ -16,8 +16,8 @@ eval-test-randomcrop100000:
     # === Stop Conditions ===
     ################################################
     stop:
-        timesteps_total: 100000
-        # timesteps_total: 8000000
+        # timesteps_total: 100000
+        timesteps_total: 8000000
 
     ################################################
     # === Settings for Checkpoints ===
