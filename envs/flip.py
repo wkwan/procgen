@@ -49,7 +49,7 @@ class Flip(ObservationWrapper):
             # obs = np.flipud(self.prev_obs)
             cutout_maker = Cutout()
             obs = cutout_maker.do_augmentation(self.prev_obs)
-            print("did obs", obs)
+            print("did obs")
             reward = self.prev_reward
             done = self.prev_done
             info = self.prev_info
