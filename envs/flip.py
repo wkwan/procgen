@@ -46,7 +46,7 @@ class Flip(ObservationWrapper):
         if self.prev_obs is not None:
             # obs = np.flipud(self.prev_obs)
             cutout_maker = Cutout()
-            obs = cutout_maker.do_augmentation(obs)
+            obs = cutout_maker.do_augmentation(self.prev_obs)
             print("did obs", obs)
             reward = self.prev_reward
             done = self.prev_done
