@@ -21,7 +21,7 @@ class Cutout(object):
         
     def do_augmentation(self, img):
         cut_img = img.copy()
-        for i, (w11, h11) in enumerate(zip([self.w1, self.h1])):
+        for (w11, h11) in np.array(list(zip(self.w1,self.w2))):
             cut_img[self.pivot_h+h11:self.pivot_h+h11+h11, 
                     self.pivot_w+w11:self.pivot_w+w11+w11, :] = 0
         return cut_img
