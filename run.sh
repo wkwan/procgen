@@ -9,7 +9,7 @@ set -e
 export EXPERIMENT_DEFAULT="experiments/custom-ppo.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
 
-export CHECKPOINT="~/ray_results/eval-test-randomcrop100000/CustomPPOAgent_flip_procgen_env_0_2020-08-18_20-58-170sy4aehv/checkpoint_11/checkpoint-11"
+export CHECKPOINT=~/ray_results/eval-test-randomcrop100000/CustomPPOAgent_flip_procgen_env_0_2020-08-18_20-58-170sy4aehv/checkpoint_11/checkpoint-11
 export EPISODES=100
 
 if [[ -z $AICROWD_IS_GRADING ]]; then
