@@ -38,24 +38,7 @@ class Flip(ObservationWrapper):
 
             cropped_img = np.zeros((64, 64, 3))
             cropped_img[h_start:h_start + 32, w_start:w_start + 32, :] = self.prev_obs[h_start:h_start + 32, w_start:w_start + 32, :]
-
-            # self.prev_obs = np.transpose(self.prev_obs, (1, 0, 2))
-
-            # crop_size = 64
-            # crop_max = 75 - crop_size
-            # w1 = np.random.randint(0, crop_max)
-            # h1 = np.random.randint(0, crop_max)
-
-            # print("the crop vars", w1, h1, self.prev_obs.shape)
-
-            # # creates all sliding windows combinations of size (output_size)
-            # windows = view_as_windows(
-            #     self.prev_obs, (crop_size, crop_size, 1))
-            # # selects a random window for each batch element
-            # print("windows shape", windows.shape)
-            # cropped_img = windows[...,:, w1, h1, 0]
-            # cropped_img = np.swapaxes(cropped_img,0,2)
-
+            
             obs = cropped_img
             reward = self.prev_reward
             done = self.prev_done
