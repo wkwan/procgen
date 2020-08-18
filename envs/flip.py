@@ -50,7 +50,7 @@ class Flip(ObservationWrapper):
                 self.prev_obs, (crop_size, crop_size, 1))
             # selects a random window for each batch element
             print("windows shape", windows.shape)
-            cropped_img = windows[0, 0, :, w1, h1, 0]
+            cropped_img = windows[...,:, w1, h1, 0]
             cropped_img = np.swapaxes(cropped_img,0,2)
 
             obs = cropped_img
