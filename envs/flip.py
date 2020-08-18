@@ -21,8 +21,8 @@ class Flip(ObservationWrapper):
             box_max = 22
             pivot_h = 12
             pivot_w = 24
-            w1 = np.random.randint(self.box_min, self.box_max)
-            h1 = np.random.randint(self.box_min, self.box_max)
+            w1 = np.random.randint(box_min, box_max)
+            h1 = np.random.randint(box_min, box_max)
 
             self.prev_obs[self.pivot_h+h1:self.pivot_h+h1+h1, 
                     self.pivot_w+w1:self.pivot_w+w1+w1, :] = 0
