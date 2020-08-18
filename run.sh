@@ -9,8 +9,8 @@ set -e
 export EXPERIMENT_DEFAULT="experiments/impala-baseline.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
 
-export CHECKPOINT=~/ray_results/procgen-ppo/PPO_stacked_procgen_env_0_2020-08-18_22-49-2719c_37sl/checkpoint_7/checkpoint-7
-export EPISODES=1000
+# export CHECKPOINT=~/ray_results/procgen-ppo/PPO_stacked_procgen_env_0_2020-08-18_22-49-2719c_37sl/checkpoint_7/checkpoint-7
+# export EPISODES=1000
 
 if [[ -z $AICROWD_IS_GRADING ]]; then
   ##########################################################################
