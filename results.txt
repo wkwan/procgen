@@ -126,7 +126,7 @@ Number of trials: 1 (1 RUNNING)
 +---------------------------------------+----------+--------------------+--------+------------------+--------+----------+
 
 
-WITHOUT USING FLIPS, PPO
+WITHOUT USING FLIPS, CustomPPO
 
 == Status ==
 Memory usage on this node: 42.6/59.9 GiB
@@ -258,6 +258,8 @@ Number of trials: 1 (1 RUNNING)
 +------------------------------------------+----------+--------------------+--------+------------------+--------+----------+
 
 
+WITH FLIP, CUSTOMPPO
+
 == Status ==
 Memory usage on this node: 28.9/59.9 GiB
 Using FIFO scheduling algorithm.
@@ -386,3 +388,190 @@ Number of trials: 1 (1 RUNNING)
 |---------------------------------------+----------+--------------------+--------+------------------+--------+----------|
 | CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:6283 |     10 |            261.9 | 184320 |  4.64789 |
 +---------------------------------------+----------+--------------------+--------+------------------+--------+----------+
+
+---flip and divide samples count by 2
+
+
+== Status ==
+Memory usage on this node: 1.4/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+-------+
+| Trial name                            | status   | loc   |
+|---------------------------------------+----------+-------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  |       |
++---------------------------------------+----------+-------+
+
+
+(pid=12125) 2020-08-17 17:06:10,806	INFO trainer.py:421 -- Tip: set 'eager': true or the --eager flag to enable TensorFlow eager execution
+(pid=12125) 2020-08-17 17:06:10,828	INFO trainer.py:580 -- Current log_level is WARN. For more information, set 'log_level': 'INFO' / 'DEBUG' or use the -v and -vv flags.
+(pid=12125) Using the simple minibatch optimizer. This will significantly reduce performance, consider simple_optimizer=False.
+(pid=12125) 2020-08-17 17:06:17,223	INFO trainable.py:217 -- Getting current IP.
+(pid=12125) 2020-08-17 17:06:17,224	WARNING util.py:37 -- Install gputil for GPU system monitoring.
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 28.8/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |   ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |      1 |          41.1236 | 9216 |        4 |
++---------------------------------------+----------+---------------------+--------+------------------+------+----------+
+
+
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 28.9/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |      2 |          66.1171 | 18432 |  4.85714 |
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+
+
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 28.9/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |      3 |          91.3248 | 27648 |      5.4 |
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+
+
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 29.0/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |      4 |          116.206 | 36864 |      5.2 |
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+
+
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 29.0/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |      5 |          140.426 | 46080 |        5 |
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+
+
+== Status ==
+Memory usage on this node: 29.0/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |      6 |          165.195 | 55296 |  5.81818 |
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+
+
+(pid=12125) hey we're dividing the samples count in half
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 29.0/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |      7 |           189.76 | 64512 |  4.92063 |
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+
+
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 29.1/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |      8 |          213.841 | 73728 |  5.47945 |
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+
+
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 29.1/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |      9 |          237.699 | 82944 |  5.42169 |
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+
+
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 29.1/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |    ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+-------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |     10 |          261.804 | 92160 |      6.2 |
++---------------------------------------+----------+---------------------+--------+------------------+-------+----------+
+
+
+(pid=12125) hey we're dividing the samples count in half
+== Status ==
+Memory usage on this node: 29.1/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 7/8 CPUs, 0.9/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 RUNNING)
++---------------------------------------+----------+---------------------+--------+------------------+--------+----------+
+| Trial name                            | status   | loc                 |   iter |   total time (s) |     ts |   reward |
+|---------------------------------------+----------+---------------------+--------+------------------+--------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | RUNNING  | 172.31.66.244:12125 |     11 |          286.097 | 101376 |  6.12903 |
++---------------------------------------+----------+---------------------+--------+------------------+--------+----------+
+
+
+== Status ==
+Memory usage on this node: 29.1/59.9 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 0/8 CPUs, 0.0/1 GPUs, 0.0/55.96 GiB heap, 0.0/19.24 GiB objects
+Result logdir: /home/ubuntu/ray_results/procgen-ppo
+Number of trials: 1 (1 TERMINATED)
++---------------------------------------+------------+-------+--------+------------------+--------+----------+
+| Trial name                            | status     | loc   |   iter |   total time (s) |     ts |   reward |
+|---------------------------------------+------------+-------+--------+------------------+--------+----------|
+| CustomPPOAgent_flip_procgen_env_00000 | TERMINATED |       |     11 |          286.097 | 101376 |  6.12903 |
++---------------------------------------+------------+-------+--------+------------------+--------+----------+

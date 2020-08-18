@@ -3,3 +3,4 @@ procgen==0.10.1
 tensorflow==2.1.0
 mlflow==1.8.0
 boto3==1.13.10
+scikit-image==0.16.2
