@@ -43,7 +43,7 @@ class Flip(ObservationWrapper):
             w1 = np.random.randint(0, crop_max)
             h1 = np.random.randint(0, crop_max)
 
-            print("the crop vars", w1, h1, crop_size)
+            print("the crop vars", w1, h1, crop_size, self.prev_obs.shape)
 
             # creates all sliding windows combinations of size (output_size)
             windows = view_as_windows(
