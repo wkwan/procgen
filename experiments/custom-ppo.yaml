@@ -1,4 +1,4 @@
-procgen-ppo:
+eval-test-randomcrop100000:
     env: flip_procgen_env  # Change this at your own risk :D
     run: CustomPPOAgent
     # Can be replaced by any of the available agents as described at : 
@@ -16,8 +16,8 @@ procgen-ppo:
     # === Stop Conditions ===
     ################################################
     stop:
-        # timesteps_total: 100000
-        timesteps_total: 8000000
+        timesteps_total: 100000
+        # timesteps_total: 8000000
 
     ################################################
     # === Settings for Checkpoints ===
