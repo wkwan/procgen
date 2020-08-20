@@ -1,4 +1,4 @@
-sac-tune:
+tune-sac:
     env: procgen_env_wrapper  # Change this at your own risk :D
     run: SAC
     # Can be replaced by any of the available agents as described at : 
@@ -128,92 +128,92 @@ sac-tune:
         # NOTE: Some agents may not support `torch` yet and throw an error.
         use_pytorch: False
 
+            # === Model ===
+        twin_q: True
+        use_state_preprocessor: False
+        # RLlib model options for the Q function(s).
+        "Q_model": {
+            "fcnet_activation": "relu",
+            "fcnet_hiddens": [256, 256],
+            "hidden_activation": DEPRECATED_VALUE,
+            "hidden_layer_sizes": DEPRECATED_VALUE,
+        }
+        # RLlib model options for the policy function.
+        "policy_model": {
+            "fcnet_activation": "relu",
+            "fcnet_hiddens": [256, 256],
+            "hidden_activation": DEPRECATED_VALUE,
+            "hidden_layer_sizes": DEPRECATED_VALUE,
+        }
+        # Unsquash actions to the upper and lower bounds of env's action space.
+        # Ignored for discrete action spaces.
+        "normalize_actions": True
+
+        # === Learning ===
+        # Disable setting done=True at end of episode. This should be set to True
+        # for infinite-horizon MDPs (e.g., many continuous control problems).
+        "no_done_at_end": False
+        # Update the target by \tau * policy + (1-\tau) * target_policy.
+        "tau": 5e-3
+        # Initial value to use for the entropy weight alpha.
+        "initial_alpha": 1.0
+        # Target entropy lower bound. If "auto", will be set to -|A| (e.g. -2.0 for
+        # Discrete(2), -3.0 for Box(shape=(3,))).
+        # This is the inverse of reward scale, and will be optimized automatically.
+        "target_entropy": "auto"
+        # N-step target updates.
+        "n_step": 1
+
+        # Number of env steps to optimize for before returning.
+        "timesteps_per_iteration": 100
+
+        # === Replay buffer ===
+        # Size of the replay buffer. Note that if async_updates is set, then
+        # each worker will have a replay buffer of this size.
+        "buffer_size": int(1e6)
+        # If True prioritized replay buffer will be used.
+        "prioritized_replay": False
+        "prioritized_replay_alpha": 0.6
+        "prioritized_replay_beta": 0.4
+        "prioritized_replay_eps": 1e-6
+        "prioritized_replay_beta_annealing_timesteps": 20000
+        "final_prioritized_replay_beta": 0.4
+        # Whether to LZ4 compress observations
+        "compress_observations": False
+        # If set, this will fix the ratio of replayed from a buffer and learned on
+        # timesteps to sampled from an environment and stored in the replay buffer
+        # timesteps. Otherwise, the replay will proceed at the native ratio
+        # determined by (train_batch_size / rollout_fragment_length).
+        "training_intensity": None
+
+        # === Optimization ===
+        "optimization": {
+            "actor_learning_rate": 3e-4,
+            "critic_learning_rate": 3e-4,
+            "entropy_learning_rate": 3e-4
+        }
+        # If not None, clip gradients during optimization at this value.
+        "grad_clip": None
+        # How many steps of the model to sample before learning starts.
+        "learning_starts": 1500
+        # Update the replay buffer with this many samples at once. Note that this
+        # setting applies per-worker if num_workers > 1.
+        "rollout_fragment_length": 1
+        # Size of a batched sampled from replay buffer for training. Note that
+        # if async_updates is set, then each worker returns gradients for a
+        # batch of this size.
+        "train_batch_size": 256
+        # Update the target network every `target_network_update_freq` steps.
+        "target_network_update_freq": 0
+
+
+
         ################################################
         ################################################
         # === Settings for Model ===
         ################################################
         ################################################
         model:
-
-                # === Model ===
-            # twin_q: True
-            use_state_preprocessor: False
-            # RLlib model options for the Q function(s).
-            "Q_model": {
-                "fcnet_activation": "relu",
-                "fcnet_hiddens": [256, 256],
-                "hidden_activation": DEPRECATED_VALUE,
-                "hidden_layer_sizes": DEPRECATED_VALUE,
-            }
-            # RLlib model options for the policy function.
-            "policy_model": {
-                "fcnet_activation": "relu",
-                "fcnet_hiddens": [256, 256],
-                "hidden_activation": DEPRECATED_VALUE,
-                "hidden_layer_sizes": DEPRECATED_VALUE,
-            }
-            # Unsquash actions to the upper and lower bounds of env's action space.
-            # Ignored for discrete action spaces.
-            "normalize_actions": True
-
-            # === Learning ===
-            # Disable setting done=True at end of episode. This should be set to True
-            # for infinite-horizon MDPs (e.g., many continuous control problems).
-            "no_done_at_end": False
-            # Update the target by \tau * policy + (1-\tau) * target_policy.
-            "tau": 5e-3
-            # Initial value to use for the entropy weight alpha.
-            "initial_alpha": 1.0
-            # Target entropy lower bound. If "auto", will be set to -|A| (e.g. -2.0 for
-            # Discrete(2), -3.0 for Box(shape=(3,))).
-            # This is the inverse of reward scale, and will be optimized automatically.
-            "target_entropy": "auto"
-            # N-step target updates.
-            "n_step": 1
-
-            # Number of env steps to optimize for before returning.
-            "timesteps_per_iteration": 100
-
-            # === Replay buffer ===
-            # Size of the replay buffer. Note that if async_updates is set, then
-            # each worker will have a replay buffer of this size.
-            "buffer_size": int(1e6)
-            # If True prioritized replay buffer will be used.
-            "prioritized_replay": False
-            "prioritized_replay_alpha": 0.6
-            "prioritized_replay_beta": 0.4
-            "prioritized_replay_eps": 1e-6
-            "prioritized_replay_beta_annealing_timesteps": 20000
-            "final_prioritized_replay_beta": 0.4
-            # Whether to LZ4 compress observations
-            "compress_observations": False
-            # If set, this will fix the ratio of replayed from a buffer and learned on
-            # timesteps to sampled from an environment and stored in the replay buffer
-            # timesteps. Otherwise, the replay will proceed at the native ratio
-            # determined by (train_batch_size / rollout_fragment_length).
-            "training_intensity": None
-
-            # === Optimization ===
-            "optimization": {
-                "actor_learning_rate": 3e-4,
-                "critic_learning_rate": 3e-4,
-                "entropy_learning_rate": 3e-4
-            }
-            # If not None, clip gradients during optimization at this value.
-            "grad_clip": None
-            # How many steps of the model to sample before learning starts.
-            "learning_starts": 1500
-            # Update the replay buffer with this many samples at once. Note that this
-            # setting applies per-worker if num_workers > 1.
-            "rollout_fragment_length": 1
-            # Size of a batched sampled from replay buffer for training. Note that
-            # if async_updates is set, then each worker returns gradients for a
-            # batch of this size.
-            "train_batch_size": 256
-            # Update the target network every `target_network_update_freq` steps.
-            "target_network_update_freq": 0
-
-
 
             # These options are used when not using a custom model, to use a default model,
             # comment out the `custom_model` field and then un-comment the below model options.
