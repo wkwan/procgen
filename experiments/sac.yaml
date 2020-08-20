@@ -184,7 +184,7 @@ tune-sac:
         # timesteps to sampled from an environment and stored in the replay buffer
         # timesteps. Otherwise, the replay will proceed at the native ratio
         # determined by (train_batch_size / rollout_fragment_length).
-        "training_intensity": None
+        # "training_intensity": None
 
         # === Optimization ===
         "optimization": {
