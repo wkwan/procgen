@@ -134,16 +134,12 @@ tune-sac:
         # RLlib model options for the Q function(s).
         "Q_model": {
             "fcnet_activation": "relu",
-            "fcnet_hiddens": [256, 256],
-            "hidden_activation": DEPRECATED_VALUE,
-            "hidden_layer_sizes": DEPRECATED_VALUE,
+            "fcnet_hiddens": [256, 256]
         }
         # RLlib model options for the policy function.
         "policy_model": {
             "fcnet_activation": "relu",
-            "fcnet_hiddens": [256, 256],
-            "hidden_activation": DEPRECATED_VALUE,
-            "hidden_layer_sizes": DEPRECATED_VALUE,
+            "fcnet_hiddens": [256, 256]
         }
         # Unsquash actions to the upper and lower bounds of env's action space.
         # Ignored for discrete action spaces.
