@@ -145,7 +145,7 @@ test-tune:
             # https://ray.readthedocs.io/en/stable/rllib-models.html#built-in-models-and-preprocessors
             #
             # Filter config. List of [out_channels, kernel, stride] for each filter
-            conv_filters: [[3, [1, 1], 1]]
+            # conv_filters: [[3, [1, 1], 1]]
             # Nonlinearity for built-in convnet
             # conv_activation: relu
             # Nonlinearity for fully connected net (tanh, relu)
@@ -191,9 +191,9 @@ test-tune:
             # Examples of implementing the model in Keras is also available
             # here :
             # https://github.com/ray-project/ray/blob/master/rllib/examples/custom_keras_model.py
-            custom_model: my_vision_network
+            custom_model: impala_cnn_tf
             # Extra options to pass to custom class
-            # custom_options: {}
+            custom_options: {}
 
         ################################################
         ################################################
