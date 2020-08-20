@@ -136,7 +136,7 @@ sac-tune:
         model:
 
                 # === Model ===
-            twin_q: True
+            # twin_q: True
             use_state_preprocessor: False
             # RLlib model options for the Q function(s).
             "Q_model": {
