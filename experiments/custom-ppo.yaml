@@ -143,32 +143,32 @@ test-tune:
             # https://ray.readthedocs.io/en/stable/rllib-models.html#built-in-models-and-preprocessors
             #
             # Filter config. List of [out_channels, kernel, stride] for each filter
-            # conv_filters: null
+            conv_filters: null
             # Nonlinearity for built-in convnet
-            # conv_activation: relu
+            conv_activation: relu
             # Nonlinearity for fully connected net (tanh, relu)
-            # fcnet_activation: tanh
+            fcnet_activation: tanh
             # Number of hidden layers for fully connected net
-            # fcnet_hiddens: [256, 256]
+            fcnet_hiddens: [256, 256]
             # Whether to skip the final linear layer used to resize the hidden layer
             # outputs to size `num_outputs`. If True, then the last hidden layer
             # should already match num_outputs.
-            # no_final_linear: false
+            no_final_linear: false
             # Whether layers should be shared for the value function
-            # vf_share_layers: true
+            vf_share_layers: true
 
             # == LSTM ==
             # Whether to wrap the model with a LSTM
-            # use_lstm: false
+            use_lstm: false
             # Max seq len for training the LSTM, defaults to 20
-            # max_seq_len: 20
+            max_seq_len: 20
             # Size of the LSTM cell
-            # lstm_cell_size: 256
+            lstm_cell_size: 256
             # Whether to feed a_{t-1}, r_{t-1} to LSTM
-            # lstm_use_prev_action_reward: false
+            lstm_use_prev_action_reward: false
             # When using modelv1 models with a modelv2 algorithm, you may have to
             # define the state shape here (e.g., [256, 256]).
-            # state_shape: null
+            state_shape: null
 
             # === Options for custom models ===
             # Name of a custom model to use
@@ -189,7 +189,7 @@ test-tune:
             # Examples of implementing the model in Keras is also available
             # here :
             # https://github.com/ray-project/ray/blob/master/rllib/examples/custom_keras_model.py
-            custom_model: my_vision_network
+            # custom_model: impala_cnn_tf
             # Extra options to pass to custom class
             custom_options: {}
 
