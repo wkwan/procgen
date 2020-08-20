@@ -149,7 +149,7 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            print(experiments['test_tune']['config']['lr'])
+            print(experiments['test-tune']['config']['lr'])
             # experiments["procgen-ppo"]["stop"]["timesteps_total"] = experiments["procgen-ppo"]["stop"]["timesteps_total"] * 2
     else:
         # Note: keep this in sync with tune/config_parser.py
