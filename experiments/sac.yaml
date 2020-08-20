@@ -185,8 +185,8 @@ tune-sac:
         # # === Optimization ===
         optimization: 
             actor_learning_rate: .0003
-            critic_learning_rate: .0003
-            entropy_learning_rate: .0003
+            critic_learning_rate: .0006
+            entropy_learning_rate: .0009
         
         # If not None, clip gradients during optimization at this value.
         # "grad_clip": None
