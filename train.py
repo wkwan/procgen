@@ -149,8 +149,8 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            experiments['test-tune']['config']['lr'] = ray.tune.grid_search([4.0e-4, 6.0e-4])
-            experiments['test-tune']['config']['num_sgd_iter'] = ray.tune.grid_search([2, 4])
+            # experiments['sac-tune']['config']['lr'] = ray.tune.grid_search([4.0e-4, 6.0e-4])
+            # experiments['sac-tune']['config']['num_sgd_iter'] = ray.tune.grid_search([2, 4])
             # experiments["procgen-ppo"]["stop"]["timesteps_total"] = experiments["procgen-ppo"]["stop"]["timesteps_total"] * 2
     else:
         # Note: keep this in sync with tune/config_parser.py
