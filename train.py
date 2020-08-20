@@ -149,7 +149,13 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            # experiments['sac-tune']['config']['lr'] = ray.tune.grid_search([4.0e-4, 6.0e-4])
+            experiments['tune-sac-full-experiment']['config']['optimization']['actor_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
+            experiments['tune-sac-full-experiment']['config']['optimization']['critic_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
+            experiments['tune-sac-full-experiment']['config']['optimization']['entropy_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
+            experiments['tune-sac-full-experiment']['config']['buffer_size'] = ray.tune.grid_search([500000, 1000000, 2000000])
+            experiments['tune-sac-full-experiment']['config']['train_batch_size'] = ray.tune.grid_search([64, 256, 512])
+            experiments['tune-sac-full-experiment']['config']['target_network_update_freq'] = ray.tune.grid_search([0, 1, 500])
+            experiments['tune-sac-full-experiment']['config']['learning_starts'] = ray.tune.grid_search([0, 1500, 15000])
             # experiments['sac-tune']['config']['num_sgd_iter'] = ray.tune.grid_search([2, 4])
             # experiments["procgen-ppo"]["stop"]["timesteps_total"] = experiments["procgen-ppo"]["stop"]["timesteps_total"] * 2
     else:
