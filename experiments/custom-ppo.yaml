@@ -145,8 +145,7 @@ test-tune:
             # Filter config. List of [out_channels, kernel, stride] for each filter
             conv_filters: [
                     [16, [8, 8], 4],
-                    [32, [4, 4], 2],
-                    [512, [10, 10], 1]]
+                    [32, [4, 4], 2]]
             # Nonlinearity for built-in convnet
             conv_activation: relu
             # Nonlinearity for fully connected net (tanh, relu)
