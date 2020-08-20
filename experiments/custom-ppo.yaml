@@ -60,7 +60,7 @@ test-tune:
         # The GAE(lambda) parameter.
         lambda: 0.95
         # The default learning rate.
-        # lr: 5.0e-4
+        lr: 5.0e-4
         # lr: tune.grid_search([4.0e-4, 6.0e-4])
         # Number of SGD iterations in each outer loop (i.e., number of epochs to
         # execute per train batch).
