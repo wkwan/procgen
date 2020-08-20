@@ -182,11 +182,11 @@ tune-sac:
         # determined by (train_batch_size / rollout_fragment_length).
         # "training_intensity": None
 
-        # === Optimization ===
-        optimization: 
-            actor_learning_rate: 3e-4
-            critic_learning_rate: 3e-4
-            entropy_learning_rate: 3e-4
+        # # === Optimization ===
+        # optimization: 
+        #     actor_learning_rate: 3e-4
+        #     critic_learning_rate: 3e-4
+        #     entropy_learning_rate: 3e-4
         
         # # If not None, clip gradients during optimization at this value.
         # # "grad_clip": None
