@@ -61,10 +61,12 @@ test-tune:
         lambda: 0.95
         # The default learning rate.
         # lr: 5.0e-4
-        lr: tune.grid_search([4.0e-4, 6.0e-4])
+        # lr: tune.grid_search([4.0e-4, 6.0e-4])
         # Number of SGD iterations in each outer loop (i.e., number of epochs to
         # execute per train batch).
-        num_sgd_iter: 3
+        # num_sgd_iter: 3
+        num_sgd_iter: tune.grid_search([1, 6])
+
         # Total SGD batch size across all devices for SGD. This defines the
         # minibatch size within each epoch.
         sgd_minibatch_size: 2048
