@@ -143,7 +143,10 @@ test-tune:
             # https://ray.readthedocs.io/en/stable/rllib-models.html#built-in-models-and-preprocessors
             #
             # Filter config. List of [out_channels, kernel, stride] for each filter
-            conv_filters: None
+            conv_filters: [
+                    [16, [8, 8], 4],
+                    [32, [4, 4], 2],
+                    [512, [10, 10], 1]]
             # Nonlinearity for built-in convnet
             conv_activation: relu
             # Nonlinearity for fully connected net (tanh, relu)
