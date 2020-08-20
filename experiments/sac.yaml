@@ -166,7 +166,7 @@ tune-sac:
         # === Replay buffer ===
         # Size of the replay buffer. Note that if async_updates is set, then
         # each worker will have a replay buffer of this size.
-        buffer_size: int(1e6)
+        buffer_size: 1000000
         # If True prioritized replay buffer will be used.
         prioritized_replay: False
         prioritized_replay_alpha: 0.6
