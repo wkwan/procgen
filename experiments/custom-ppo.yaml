@@ -61,7 +61,7 @@ test-tune:
         lambda: 0.95
         # The default learning rate.
         # lr: 5.0e-4
-        lr: tune.grid_search([1e-5, 1e-4])
+        lr: 5.0e-4
         # Number of SGD iterations in each outer loop (i.e., number of epochs to
         # execute per train batch).
         num_sgd_iter: 3
