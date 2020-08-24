@@ -1,6 +1,6 @@
 procgen-ppo:
     env: procgen_env_wrapper  # Change this at your own risk :D
-    run: PPO
+    run: IMPALA
     # Can be replaced by any of the available agents as described at : 
     # https://github.com/ray-project/ray/blob/master/rllib/agents/registry.py#L103
     # 
