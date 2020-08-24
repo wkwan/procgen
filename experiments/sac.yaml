@@ -16,8 +16,8 @@ tune-sac-full-experiment:
     # === Stop Conditions ===
     ################################################
     stop:
-        timesteps_total: 500000
-        # timesteps_total: 8000000
+        # timesteps_total: 500000
+        timesteps_total: 8000000
 
     ################################################
     # === Settings for Checkpoints ===
@@ -186,12 +186,12 @@ tune-sac-full-experiment:
         optimization: 
             actor_learning_rate: .0003
             critic_learning_rate: .0003
-            entropy_learning_rate: .0003
+            entropy_learning_rate: .0001
         
         # If not None, clip gradients during optimization at this value.
         # "grad_clip": None
         # How many steps of the model to sample before learning starts.
-        learning_starts: 1500
+        learning_starts: 0
         # Update the replay buffer with this many samples at once. Note that this
         # setting applies per-worker if num_workers > 1.
         rollout_fragment_length: 1
