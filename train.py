@@ -149,6 +149,19 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
+            experiments['tune-impala-baseline']['config']['num_sgd_iter'] = ray.tune.grid_search([3, 30])
+            experiments['tune-impala-baseline']['config']['clip_param'] = ray.tune.grid_search([0.1, 0.3])
+            experiments['tune-impala-baseline']['config']['vf_clip_param'] = ray.tune.grid_search([0.1, 0.3])
+            experiments['tune-impala-baseline']['config']['kl_target'] = ray.tune.grid_search([0.003, 0.03])
+            experiments['tune-impala-baseline']['config']['kl_coeff'] = ray.tune.grid_search([0.0, 1])
+            experiments['tune-impala-baseline']['config']['gamma'] = ray.tune.grid_search([0.8, 0.9997])
+            experiments['tune-impala-baseline']['config']['lambda'] = ray.tune.grid_search([0.9, 1])
+            experiments['tune-impala-baseline']['config']['vf_loss_coeff'] = ray.tune.grid_search([0.5, 1])
+            experiments['tune-impala-baseline']['config']['entropy_coeff'] = ray.tune.grid_search([0, 0.01])
+            experiments['tune-impala-baseline']['config']['lr'] = ray.tune.grid_search([0.000005, 0.003])
+
+
+
             # experiments['tune-sac-full-experiment']['config']['optimization']['actor_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
             # experiments['tune-sac-full-experiment']['config']['optimization']['critic_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
             # experiments['tune-sac-full-experiment']['config']['optimization']['entropy_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
