@@ -75,7 +75,7 @@ procgen-dqn:
         # # Whether to use double dqn
         double_q: True
         # # N-step Q learning
-        # n_step: 1
+        n_step: 1
 
         # # === Exploration Settings ===
         # exploration_config: 
