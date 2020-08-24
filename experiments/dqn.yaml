@@ -120,7 +120,7 @@ procgen-dqn:
         # Whether to LZ4 compress observations
         compress_observations: False
         # Callback to run before learning on a multi-agent batch of experiences.
-        before_learn_on_batch: None
+        # before_learn_on_batch: None
         # If set, this will fix the ratio of replayed from a buffer and learned on
         # timesteps to sampled from an environment and stored in the replay buffer
         # timesteps. Otherwise, the replay will proceed at the native ratio
@@ -145,6 +145,8 @@ procgen-dqn:
         # if async_updates is set, then each worker returns gradients for a
         # batch of this size.
         train_batch_size: 32
+
+        use_exec_api: True,
         # Discount factor of the MDP.
         # gamma: 0.999
         # # The GAE(lambda) parameter.
