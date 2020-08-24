@@ -138,13 +138,13 @@ procgen-dqn:
         grad_clip: 40
         # How many steps of the model to sample before learning starts.
         learning_starts: 1000
-        # Update the replay buffer with this many samples at once. Note that
-        # this setting applies per-worker if num_workers > 1.
-        rollout_fragment_length: 4
-        # Size of a batch sampled from replay buffer for training. Note that
-        # if async_updates is set, then each worker returns gradients for a
-        # batch of this size.
-        train_batch_size: 32
+        # # Update the replay buffer with this many samples at once. Note that
+        # # this setting applies per-worker if num_workers > 1.
+        # rollout_fragment_length: 4
+        # # Size of a batch sampled from replay buffer for training. Note that
+        # # if async_updates is set, then each worker returns gradients for a
+        # # batch of this size.
+        # train_batch_size: 32
 
         # use_exec_api: True
         # Discount factor of the MDP.
