@@ -355,7 +355,7 @@ procgen-dqn:
         # Default exploration behavior, iff `explore`=None is passed into
         # compute_action(s).
         # Set to False for no exploration behavior (e.g., for evaluation).
-        explore: True,
+        # explore: True
         # Provide a dict specifying the Exploration object's config.
         # exploration_config:
             # The Exploration class to use. In the simplest case, this is the name
