@@ -204,7 +204,7 @@ procgen-dqn:
         # # Whether to np.clip() actions to the action space low/high range spec.
         # clip_actions: True
         # # Whether to use rllib or deepmind preprocessors by default
-        # preprocessor_pref: deepmind
+        preprocessor_pref: deepmind
 
         # Whether to attempt to continue training if a worker crashes. The number
         # of currently healthy workers is reported as the "num_healthy_workers"
