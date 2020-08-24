@@ -131,7 +131,7 @@ procgen-dqn:
         # Learning rate for adam optimizer
         lr: 5.0e-4
         # Learning rate schedule
-        lr_schedule: None
+        # lr_schedule: None
         # # Adam epsilon hyper parameter
         # adam_epsilon: 1.0e-8
         # # If not None, clip gradients during optimization at this value
