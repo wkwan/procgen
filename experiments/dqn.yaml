@@ -116,7 +116,7 @@ procgen-dqn:
         # Time steps over which the beta parameter is annealed.
         prioritized_replay_beta_annealing_timesteps: 20000
         # Epsilon to add to the TD errors when updating priorities.
-        prioritized_replay_eps: 1e-6
+        prioritized_replay_eps: 1.0e-6
         # Whether to LZ4 compress observations
         compress_observations: False
         # Callback to run before learning on a multi-agent batch of experiences.
@@ -129,11 +129,11 @@ procgen-dqn:
 
         # === Optimization ===
         # Learning rate for adam optimizer
-        lr: 5e-4
+        lr: 5.0e-4
         # Learning rate schedule
         lr_schedule: None
         # Adam epsilon hyper parameter
-        adam_epsilon: 1e-8
+        adam_epsilon: 1.0e-8
         # If not None, clip gradients during optimization at this value
         grad_clip: 40
         # How many steps of the model to sample before learning starts.
