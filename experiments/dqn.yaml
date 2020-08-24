@@ -77,23 +77,23 @@ procgen-dqn:
         # # N-step Q learning
         n_step: 1
 
-        # # === Exploration Settings ===
-        # exploration_config: 
-        #     # The Exploration class to use.
-        #     type: EpsilonGreedy
-        #     # Config for the Exploration class' constructor:
-        #     initial_epsilon: 1.0
-        #     final_epsilon: 0.02
-        #     epsilon_timesteps: 10000  # Timesteps over which to anneal epsilon.
+        # === Exploration Settings ===
+        exploration_config: 
+            # The Exploration class to use.
+            type: EpsilonGreedy
+            # Config for the Exploration class' constructor:
+            initial_epsilon: 1.0
+            final_epsilon: 0.02
+            epsilon_timesteps: 10000  # Timesteps over which to anneal epsilon.
 
-        #     # For soft_q, use:
-        #     # "exploration_config" = {
-        #     #   "type": "SoftQ"
-        #     #   "temperature": [float, e.g. 1.0]
-        #     # }
-        # # Switch to greedy actions in evaluation workers.
-        # evaluation_config: 
-        #     explore: False
+            # For soft_q, use:
+            # "exploration_config" = {
+            #   "type": "SoftQ"
+            #   "temperature": [float, e.g. 1.0]
+            # }
+        # Switch to greedy actions in evaluation workers.
+        evaluation_config: 
+            explore: False
         
 
         # # Minimum env steps to optimize for per train call. This value does
