@@ -291,7 +291,7 @@ procgen-dqn:
         ################################################
         # Number of rollout worker actors to create for parallel sampling. Setting
         # this to 0 will force rollouts to be done in the trainer actor.
-        num_workers: 6
+        num_workers: 3
 
         # Number of environments to evaluate vectorwise per worker. This enables
         # model inference batching, which can improve performance for inference
@@ -355,7 +355,7 @@ procgen-dqn:
         # Default exploration behavior, iff `explore`=None is passed into
         # compute_action(s).
         # Set to False for no exploration behavior (e.g., for evaluation).
-        # explore: True
+        explore: True
         # Provide a dict specifying the Exploration object's config.
         # exploration_config:
             # The Exploration class to use. In the simplest case, this is the name
