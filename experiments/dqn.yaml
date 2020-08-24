@@ -73,7 +73,7 @@ procgen-dqn:
         # in a dueling architecture.
         hiddens: [256]
         # # Whether to use double dqn
-        # double_q: True
+        double_q: True
         # # N-step Q learning
         # n_step: 1
 
