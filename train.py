@@ -149,7 +149,7 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            experiments['tune-impala-baseline-rand']['config']['num_sgd_iter'] = ray.tune.uniform(3, 30)
+            experiments['tune-impala-baseline-rand']['config']['num_sgd_iter'] = ray.tune.randint(3, 30)
             experiments['tune-impala-baseline-rand']['config']['clip_param'] = ray.tune.uniform(0.1, 0.3)
             experiments['tune-impala-baseline-rand']['config']['vf_clip_param'] = ray.tune.uniform(0.1, 0.3)
             experiments['tune-impala-baseline-rand']['config']['kl_target'] = ray.tune.uniform(0.003, 0.03)
