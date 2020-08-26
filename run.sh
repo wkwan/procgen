@@ -6,7 +6,7 @@ set -e
 #########################################
 
 #will: change this to whatever experiment config
-export EXPERIMENT_DEFAULT="experiments/tune-td3.yaml"
+export EXPERIMENT_DEFAULT="experiments/tune-es.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
 
 # export CHECKPOINT=~/ray_results/procgen-ppo/PPO_stacked_procgen_env_0_2020-08-18_22-49-2719c_37sl/checkpoint_7/checkpoint-7
