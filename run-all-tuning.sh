@@ -18,11 +18,11 @@ python3 train-sac.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-150000000
 # export EXPERIMENT="experiments/tune-td3.yaml"
 # python3 train-tune-td3.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
 
-export EXPERIMENT="experiments/tune-es.yaml"
-python3 train-tune-es.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
+# export EXPERIMENT="experiments/tune-es.yaml"
+# python3 train-tune-es.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
 
-export EXPERIMENT="experiments/tune-ars.yaml"
-python3 train-tune-ars.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
+# export EXPERIMENT="experiments/tune-ars.yaml"
+# python3 train-tune-ars.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
 
 export EXPERIMENT="experiments/tune-dqn.yaml"
 python3 train-tune-dqn.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
