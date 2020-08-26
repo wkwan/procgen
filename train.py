@@ -159,7 +159,7 @@ def run(args, parser):
             experiments['tune-impala-baseline']['config']['vf_loss_coeff'] = ray.tune.uniform(0.5, 1)
             experiments['tune-impala-baseline']['config']['entropy_coeff'] = ray.tune.uniform(0, 0.01)
             experiments['tune-impala-baseline']['config']['lr'] = ray.tune.uniform(0.000005, 0.003)
-            experiments['tune-impala-baseline']['num_samples'] = 10
+            experiments['tune-impala-baseline']['num_samples'] = 100
 
             # experiments['tune-sac-full-experiment']['config']['optimization']['actor_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
             # experiments['tune-sac-full-experiment']['config']['optimization']['critic_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
