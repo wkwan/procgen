@@ -93,7 +93,7 @@ tune-ddppo-10samples-10ksteps:
         # Use PyTorch (instead of tf). If using `rllib train`, this can also be
         # enabled with the `--torch` flag.
         # NOTE: Some agents may not support `torch` yet and throw an error.
-        use_pytorch: False
+        use_pytorch: True
 
         ################################################
         ################################################

@@ -39,14 +39,14 @@ python3 train-tune-a3c.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500
 export EXPERIMENT="experiments/tune-a2c.yaml"
 python3 train-tune-a2c.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
 
-export EXPERIMENT="experiments/tune-pg.yaml"
-python3 train-tune-pg.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
+# export EXPERIMENT="experiments/tune-pg.yaml"
+# python3 train-tune-pg.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
 
 export EXPERIMENT="experiments/tune-impala.yaml"
 python3 train-tune-impala.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
 
-export EXPERIMENT="experiments/tune-qmix.yaml"
-python3 train-tune-qmix.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
+# export EXPERIMENT="experiments/tune-qmix.yaml"
+# python3 train-tune-qmix.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
 
 export EXPERIMENT="experiments/tune-appo.yaml"
 python3 train-tune-appo.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
