@@ -1,4 +1,4 @@
-tune-td3:
+tune-td3-10samples-10ksteps:
     env: procgen_env_wrapper  # Change this at your own risk :D
     run: ES
     # Can be replaced by any of the available agents as described at : 
