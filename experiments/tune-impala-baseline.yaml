@@ -56,14 +56,14 @@ tune-impala-baseline:
         ################################################
         ################################################
         # Discount factor of the MDP.
-        gamma: 0.999
+        gamma: 0.9997
         # The GAE(lambda) parameter.
-        lambda: 0.95
+        lambda: 1
         # The default learning rate.
-        lr: 5.0e-4
+        lr: 5.0e-6
         # Number of SGD iterations in each outer loop (i.e., number of epochs to
         # execute per train batch).
-        num_sgd_iter: 3
+        num_sgd_iter: 30
         # Total SGD batch size across all devices for SGD. This defines the
         # minibatch size within each epoch.
         sgd_minibatch_size: 256
@@ -74,17 +74,17 @@ tune-impala-baseline:
         # Initial coefficient for KL divergence.
         kl_coeff: 0.0
         # Target value for KL divergence.
-        kl_target: 0.01
+        kl_target: 0.03
         # Coefficient of the value function loss. IMPORTANT: you must tune this if
         # you set vf_share_layers: True.
         vf_loss_coeff: 0.5
         # Coefficient of the entropy regularizer.
         entropy_coeff: 0.01
         # PPO clip parameter.
-        clip_param: 0.2
+        clip_param: 0.1
         # Clip param for the value function. Note that this is sensitive to the
         # scale of the rewards. If your expected V is large, increase this.
-        vf_clip_param: 0.2
+        vf_clip_param: 0.3
         # If specified, clip the global norm of gradients by this amount.
         grad_clip: 0.5
         # Which observation filter to apply to the observation.
@@ -117,7 +117,7 @@ tune-impala-baseline:
         # Whether to attempt to continue training if a worker crashes. The number
         # of currently healthy workers is reported as the "num_healthy_workers"
         # metric.
-        ignore_worker_failures: False
+        ignore_worker_failures: True
         # Log system resource metrics to results. This requires `psutil` to be
         # installed for sys stats, and `gputil` for GPU metrics.
         # Note : The AIcrowd Evaluators will always override this to be True
