@@ -149,17 +149,17 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            experiments['tune-impala-baseline']['config']['num_sgd_iter'] = ray.tune.uniform(3, 30)
-            experiments['tune-impala-baseline']['config']['clip_param'] = ray.tune.uniform(0.1, 0.3)
-            experiments['tune-impala-baseline']['config']['vf_clip_param'] = ray.tune.uniform(0.1, 0.3)
-            experiments['tune-impala-baseline']['config']['kl_target'] = ray.tune.uniform(0.003, 0.03)
-            experiments['tune-impala-baseline']['config']['kl_coeff'] = ray.tune.uniform(0.0, 1)
-            experiments['tune-impala-baseline']['config']['gamma'] = ray.tune.uniform(0.8, 0.9997)
-            experiments['tune-impala-baseline']['config']['lambda'] = ray.tune.uniform(0.9, 1)
-            experiments['tune-impala-baseline']['config']['vf_loss_coeff'] = ray.tune.uniform(0.5, 1)
-            experiments['tune-impala-baseline']['config']['entropy_coeff'] = ray.tune.uniform(0, 0.01)
-            experiments['tune-impala-baseline']['config']['lr'] = ray.tune.uniform(0.000005, 0.003)
-            experiments['tune-impala-baseline']['num_samples'] = 100
+            experiments['tune-impala-baseline-rand']['config']['num_sgd_iter'] = ray.tune.uniform(3, 30)
+            experiments['tune-impala-baseline-rand']['config']['clip_param'] = ray.tune.uniform(0.1, 0.3)
+            experiments['tune-impala-baseline-rand']['config']['vf_clip_param'] = ray.tune.uniform(0.1, 0.3)
+            experiments['tune-impala-baseline-rand']['config']['kl_target'] = ray.tune.uniform(0.003, 0.03)
+            experiments['tune-impala-baseline-rand']['config']['kl_coeff'] = ray.tune.uniform(0.0, 1)
+            experiments['tune-impala-baseline-rand']['config']['gamma'] = ray.tune.uniform(0.8, 0.9997)
+            experiments['tune-impala-baseline-rand']['config']['lambda'] = ray.tune.uniform(0.9, 1)
+            experiments['tune-impala-baseline-rand']['config']['vf_loss_coeff'] = ray.tune.uniform(0.5, 1)
+            experiments['tune-impala-baseline-rand']['config']['entropy_coeff'] = ray.tune.uniform(0, 0.01)
+            experiments['tune-impala-baseline-rand']['config']['lr'] = ray.tune.uniform(0.000005, 0.003)
+            experiments['tune-impala-baseline-rand']['num_samples'] = 100
 
             # experiments['tune-sac-full-experiment']['config']['optimization']['actor_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
             # experiments['tune-sac-full-experiment']['config']['optimization']['critic_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
