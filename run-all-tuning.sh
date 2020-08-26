@@ -60,8 +60,8 @@ python3 train-tune-marwil.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1
 export EXPERIMENT="experiments/tune-maml.yaml"
 python3 train-tune-maml.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
 
-export EXPERIMENT="experiments/tune-mbmpo.yaml"
-python3 train-tune-mbmpo.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
+# export EXPERIMENT="experiments/tune-mbmpo.yaml"
+# python3 train-tune-mbmpo.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
 
 export EXPERIMENT="experiments/tune-dreamer.yaml"
 python3 train-tune-dreamer.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
