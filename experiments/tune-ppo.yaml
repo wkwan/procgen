@@ -1,6 +1,6 @@
-tune-sac-full-experiment:
+tune-ppo-10samples-10ksteps:
     env: procgen_env_wrapper  # Change this at your own risk :D
-    run: SAC
+    run: PPO
     # Can be replaced by any of the available agents as described at : 
     # https://github.com/ray-project/ray/blob/master/rllib/agents/registry.py#L103
     # 
@@ -16,15 +16,15 @@ tune-sac-full-experiment:
     # === Stop Conditions ===
     ################################################
     stop:
-        # timesteps_total: 500000
-        timesteps_total: 8000000
+        timesteps_total: 10000
+        # timesteps_total: 8000000
 
     ################################################
     # === Settings for Checkpoints ===
     ################################################
-    checkpoint_freq: 100
-    checkpoint_at_end: True
-    keep_checkpoints_num: 5
+    # checkpoint_freq: 100
+    # checkpoint_at_end: True
+    # keep_checkpoints_num: 5
 
     config:
         ################################################
@@ -56,42 +56,42 @@ tune-sac-full-experiment:
         ################################################
         ################################################
         # Discount factor of the MDP.
-        # gamma: 0.999
-        # # The GAE(lambda) parameter.
-        # # lambda: 0.95
-        # # The default learning rate.
-        # lr: 5.0e-4
-        # # Number of SGD iterations in each outer loop (i.e., number of epochs to
-        # # execute per train batch).
-        # num_sgd_iter: 3
-        # # Total SGD batch size across all devices for SGD. This defines the
-        # # minibatch size within each epoch.
-        # sgd_minibatch_size: 2048
-        # # Training batch size, if applicable. Should be >= rollout_fragment_length.
-        # # Samples batches will be concatenated together to a batch of this size,
-        # # which is then passed to SGD.
-        # train_batch_size: 16384 # 256 * 64
-        # # Initial coefficient for KL divergence.
-        # kl_coeff: 0.0
-        # # Target value for KL divergence.
-        # kl_target: 0.01
-        # # Coefficient of the value function loss. IMPORTANT: you must tune this if
-        # # you set vf_share_layers: True.
-        # vf_loss_coeff: 0.5
-        # # Coefficient of the entropy regularizer.
-        # entropy_coeff: 0.01
-        # # PPO clip parameter.
-        # clip_param: 0.2
-        # # Clip param for the value function. Note that this is sensitive to the
-        # # scale of the rewards. If your expected V is large, increase this.
-        # vf_clip_param: 0.2
-        # # If specified, clip the global norm of gradients by this amount.
-        # grad_clip: 0.5
+        gamma: 0.9997
+        # The GAE(lambda) parameter.
+        lambda: 1
+        # The default learning rate.
+        lr: 5.0e-6
+        # Number of SGD iterations in each outer loop (i.e., number of epochs to
+        # execute per train batch).
+        num_sgd_iter: 30
+        # Total SGD batch size across all devices for SGD. This defines the
+        # minibatch size within each epoch.
+        sgd_minibatch_size: 256
+        # Training batch size, if applicable. Should be >= rollout_fragment_length.
+        # Samples batches will be concatenated together to a batch of this size,
+        # which is then passed to SGD.
+        train_batch_size: 16384 # 256 * 64
+        # Initial coefficient for KL divergence.
+        kl_coeff: 0.0
+        # Target value for KL divergence.
+        kl_target: 0.03
+        # Coefficient of the value function loss. IMPORTANT: you must tune this if
+        # you set vf_share_layers: True.
+        vf_loss_coeff: 0.5
+        # Coefficient of the entropy regularizer.
+        entropy_coeff: 0.01
+        # PPO clip parameter.
+        clip_param: 0.1
+        # Clip param for the value function. Note that this is sensitive to the
+        # scale of the rewards. If your expected V is large, increase this.
+        vf_clip_param: 0.3
+        # If specified, clip the global norm of gradients by this amount.
+        grad_clip: 0.5
         # Which observation filter to apply to the observation.
         observation_filter: NoFilter
         # Share layers for value function. If you set this to True, it's important
         # to tune vf_loss_coeff.
-        # vf_share_layers: True
+        vf_share_layers: True
         # Number of steps after which the episode is forced to terminate. Defaults
         # to `env.spec.max_episode_steps` (if present) for Gym envs.
         horizon: null
@@ -117,7 +117,7 @@ tune-sac-full-experiment:
         # Whether to attempt to continue training if a worker crashes. The number
         # of currently healthy workers is reported as the "num_healthy_workers"
         # metric.
-        ignore_worker_failures: False
+        ignore_worker_failures: True
         # Log system resource metrics to results. This requires `psutil` to be
         # installed for sys stats, and `gputil` for GPU metrics.
         # Note : The AIcrowd Evaluators will always override this to be True
@@ -128,89 +128,12 @@ tune-sac-full-experiment:
         # NOTE: Some agents may not support `torch` yet and throw an error.
         use_pytorch: False
 
-            # === Model ===
-        twin_q: True
-        use_state_preprocessor: False
-        # RLlib model options for the Q function(s).
-        Q_model: 
-            fcnet_activation: "relu"
-            fcnet_hiddens: [256, 256]
-        
-        # RLlib model options for the policy function.
-        policy_model: 
-            fcnet_activation: "relu"
-            fcnet_hiddens: [256, 256]
-        
-        # Unsquash actions to the upper and lower bounds of env's action space.
-        # Ignored for discrete action spaces.
-        normalize_actions: True
-
-        # === Learning ===
-        # Disable setting done=True at end of episode. This should be set to True
-        # for infinite-horizon MDPs (e.g., many continuous control problems).
-        no_done_at_end: False
-        # Update the target by \tau * policy + (1-\tau) * target_policy.
-        tau: 5e-3
-        # Initial value to use for the entropy weight alpha.
-        initial_alpha: 1.0
-        # Target entropy lower bound. If "auto", will be set to -|A| (e.g. -2.0 for
-        # Discrete(2), -3.0 for Box(shape=(3,))).
-        # This is the inverse of reward scale, and will be optimized automatically.
-        target_entropy: "auto"
-        # N-step target updates.
-        n_step: 1
-
-        # # Number of env steps to optimize for before returning.
-        timesteps_per_iteration: 100
-
-        # === Replay buffer ===
-        # Size of the replay buffer. Note that if async_updates is set, then
-        # each worker will have a replay buffer of this size.
-        buffer_size: 1000000
-        # If True prioritized replay buffer will be used.
-        prioritized_replay: False
-        prioritized_replay_alpha: 0.6
-        prioritized_replay_beta: 0.4
-        prioritized_replay_eps: 1e-6
-        prioritized_replay_beta_annealing_timesteps: 20000
-        final_prioritized_replay_beta: 0.4
-        # Whether to LZ4 compress observations
-        compress_observations: False
-        # If set, this will fix the ratio of replayed from a buffer and learned on
-        # timesteps to sampled from an environment and stored in the replay buffer
-        # timesteps. Otherwise, the replay will proceed at the native ratio
-        # determined by (train_batch_size / rollout_fragment_length).
-        # "training_intensity": None
-
-        # # === Optimization ===
-        optimization: 
-            actor_learning_rate: .0003
-            critic_learning_rate: .0003
-            entropy_learning_rate: .0001
-        
-        # If not None, clip gradients during optimization at this value.
-        # "grad_clip": None
-        # How many steps of the model to sample before learning starts.
-        learning_starts: 0
-        # Update the replay buffer with this many samples at once. Note that this
-        # setting applies per-worker if num_workers > 1.
-        rollout_fragment_length: 1
-        # Size of a batched sampled from replay buffer for training. Note that
-        # if async_updates is set, then each worker returns gradients for a
-        # batch of this size.
-        train_batch_size: 256
-        # Update the target network every `target_network_update_freq` steps.
-        target_network_update_freq: 0
-
-
-
         ################################################
         ################################################
         # === Settings for Model ===
         ################################################
         ################################################
         model:
-
             # These options are used when not using a custom model, to use a default model,
             # comment out the `custom_model` field and then un-comment the below model options.
 
@@ -298,7 +221,7 @@ tune-sac-full-experiment:
         #
         # The dataflow here can vary per algorithm. For example, PPO further
         # divides the train batch into minibatches for multi-epoch SGD.
-        # rollout_fragment_length: 256
+        rollout_fragment_length: 256
 
         # Whether to rollout "complete_episodes" or "truncate_episodes" to
         # `rollout_fragment_length` length unrolls. Episode truncation guarantees

@@ -149,25 +149,18 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            # experiments['tune-impala-baseline-rand']['config']['num_sgd_iter'] = ray.tune.randint(3, 30)
-            # experiments['tune-impala-baseline-rand']['config']['clip_param'] = ray.tune.uniform(0.1, 0.3)
-            # experiments['tune-impala-baseline-rand']['config']['vf_clip_param'] = ray.tune.uniform(0.1, 0.3)
-            # experiments['tune-impala-baseline-rand']['config']['kl_target'] = ray.tune.uniform(0.003, 0.03)
-            # experiments['tune-impala-baseline-rand']['config']['kl_coeff'] = ray.tune.uniform(0.0, 1)
-            # experiments['tune-impala-baseline-rand']['config']['gamma'] = ray.tune.uniform(0.8, 0.9997)
-            # experiments['tune-impala-baseline-rand']['config']['lambda'] = ray.tune.uniform(0.9, 1)
-            # experiments['tune-impala-baseline-rand']['config']['vf_loss_coeff'] = ray.tune.uniform(0.5, 1)
-            # experiments['tune-impala-baseline-rand']['config']['entropy_coeff'] = ray.tune.uniform(0, 0.01)
-            # experiments['tune-impala-baseline-rand']['config']['lr'] = ray.tune.uniform(0.000005, 0.003)
-            # experiments['tune-impala-baseline-rand']['num_samples'] = 100
-
-            # experiments['tune-sac-full-experiment']['config']['optimization']['actor_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
-            # experiments['tune-sac-full-experiment']['config']['optimization']['critic_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
-            # experiments['tune-sac-full-experiment']['config']['optimization']['entropy_learning_rate'] = ray.tune.grid_search([.0001, .0003, 0.0005, .003])
-            # experiments['tune-sac-full-experiment']['config']['buffer_size'] = ray.tune.grid_search([500000, 1000000, 2000000])
-            # experiments['tune-sac-full-experiment']['config']['train_batch_size'] = ray.tune.grid_search([64, 256, 512])
-            # experiments['tune-sac-full-experiment']['config']['target_network_update_freq'] = ray.tune.grid_search([0, 1, 500])
-            # experiments['tune-sac-full-experiment']['config']['learning_starts'] = ray.tune.grid_search([0, 1500, 15000])
+            EXPERIMENT_NAME = 'tune-ppo-full-experiment'
+            experiments[EXPERIMENT_NAME]['config']['num_sgd_iter'] = ray.tune.randint(3, 30)
+            experiments[EXPERIMENT_NAME]['config']['clip_param'] = ray.tune.uniform(0.1, 0.3)
+            experiments[EXPERIMENT_NAME]['config']['vf_clip_param'] = ray.tune.uniform(0.1, 0.3)
+            experiments[EXPERIMENT_NAME]['config']['kl_target'] = ray.tune.uniform(0.003, 0.03)
+            experiments[EXPERIMENT_NAME]['config']['kl_coeff'] = ray.tune.uniform(0.0, 1)
+            experiments[EXPERIMENT_NAME]['config']['gamma'] = ray.tune.uniform(0.8, 0.9997)
+            experiments[EXPERIMENT_NAME]['config']['lambda'] = ray.tune.uniform(0.9, 1)
+            experiments[EXPERIMENT_NAME]['config']['vf_loss_coeff'] = ray.tune.uniform(0.5, 1)
+            experiments[EXPERIMENT_NAME]['config']['entropy_coeff'] = ray.tune.uniform(0, 0.01)
+            experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.000005, 0.003)
+            experiments[EXPERIMENT_NAME]['num_samples'] = 10
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {
