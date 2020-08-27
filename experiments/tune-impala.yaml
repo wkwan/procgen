@@ -110,7 +110,7 @@ tune-impala-10samples-10ksteps:
         # either "adam" or "rmsprop"
         opt_type: adam
         lr: 0.0005
-        lr_schedule: None
+        # lr_schedule: None
         # rmsprop considered
         decay: 0.99
         momentum: 0.0
