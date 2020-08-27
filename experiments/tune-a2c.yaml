@@ -87,7 +87,7 @@ tune-a2c-10samples-10ksteps:
         # batch of this size until the train batch size is reached. This allows
         # training with batch sizes much larger than can fit in GPU memory.
         # To enable, set this to a value less than the train batch size.
-        microbatch_size: None
+        # microbatch_size: None
 
         # FROM BASELINE
 
