@@ -149,7 +149,7 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            EXPERIMENT_NAME = 'tune-ddppo-10samples-10ksteps'
+            EXPERIMENT_NAME = 'tune-marwil-10samples-10ksteps'
             experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.0001, 0.001)
             experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 10000)
             experiments[EXPERIMENT_NAME]['config']['replay_buffer_size'] = ray.tune.randint(10000, 100000)
