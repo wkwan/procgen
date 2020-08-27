@@ -101,8 +101,8 @@ tune-marwil-10samples-10ksteps:
         ################################################
         ################################################
 
-        # You should override this to point to an offline dataset (see agent.py).
-        input: sampler
+        # # You should override this to point to an offline dataset (see agent.py).
+        # input: sampler
         # Use importance sampling estimators for reward
         input_evaluation: [is, wis]
 
