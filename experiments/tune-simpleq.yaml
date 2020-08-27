@@ -56,7 +56,7 @@ tune-simpleq-10samples-10ksteps:
         ################################################
         ################################################
 
-
+        adam_epsilon: 1e-8
         # FROM BASELINE
 
         # Number of steps after which the episode is forced to terminate. Defaults
