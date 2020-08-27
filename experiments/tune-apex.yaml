@@ -159,7 +159,7 @@ tune-apex-10samples-10ksteps:
         rollout_fragment_length: 50
         target_network_update_freq: 500000
         timesteps_per_iteration: 25000
-        worker_side_prioritization": True
+        # worker_side_prioritization": True
         min_iter_time_s: 30
 
 
