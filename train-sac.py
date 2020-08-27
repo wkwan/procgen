@@ -158,7 +158,7 @@ def run(args, parser):
             experiments[EXPERIMENT_NAME]['config']['target_network_update_freq'] = ray.tune.randint(0, 10)
             experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 10000)
 
-            experiments[EXPERIMENT_NAME]['num_samples'] = 4
+            experiments[EXPERIMENT_NAME]['num_samples'] = 2
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {

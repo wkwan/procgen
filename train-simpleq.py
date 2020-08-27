@@ -156,7 +156,7 @@ def run(args, parser):
             experiments[EXPERIMENT_NAME]['config']['exploration_config']['final_epsilon'] = ray.tune.uniform(0.01, 0.1)
             experiments[EXPERIMENT_NAME]['config']['exploration_config']['initial_epsilon'] = ray.tune.uniform(0.7, 1.0)
 
-            experiments[EXPERIMENT_NAME]['num_samples'] = 10
+            experiments[EXPERIMENT_NAME]['num_samples'] = 2
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {

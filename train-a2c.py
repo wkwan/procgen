@@ -153,7 +153,7 @@ def run(args, parser):
             experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.00083, 0.002)
             experiments[EXPERIMENT_NAME]['config']['entropy_coeff'] = ray.tune.uniform(0.0, 0.001)
             experiments[EXPERIMENT_NAME]['config']['lambda'] = ray.tune.uniform(0.99, 0.995)
-            experiments[EXPERIMENT_NAME]['num_samples'] = 10
+            experiments[EXPERIMENT_NAME]['num_samples'] = 2
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {

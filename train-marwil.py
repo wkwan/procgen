@@ -153,7 +153,7 @@ def run(args, parser):
             experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.0001, 0.001)
             experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 10000)
             experiments[EXPERIMENT_NAME]['config']['replay_buffer_size'] = ray.tune.randint(10000, 100000)
-            experiments[EXPERIMENT_NAME]['num_samples'] = 10
+            experiments[EXPERIMENT_NAME]['num_samples'] = 2
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {

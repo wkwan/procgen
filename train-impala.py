@@ -150,7 +150,7 @@ def run(args, parser):
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
             EXPERIMENT_NAME = 'tune-impala-10samples-10ksteps'
-            experiments[EXPERIMENT_NAME]['num_samples'] = 10
+            experiments[EXPERIMENT_NAME]['num_samples'] = 2
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {
