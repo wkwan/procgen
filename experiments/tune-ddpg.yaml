@@ -84,7 +84,7 @@ tune-ddpg:
         # Whether to attempt to continue training if a worker crashes. The number
         # of currently healthy workers is reported as the "num_healthy_workers"
         # metric.
-        ignore_worker_failures: False
+        ignore_worker_failures: True
         # Log system resource metrics to results. This requires `psutil` to be
         # installed for sys stats, and `gputil` for GPU metrics.
         # Note : The AIcrowd Evaluators will always override this to be True
