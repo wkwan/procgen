@@ -71,7 +71,7 @@ tune-a3c-10samples-10ksteps:
         # Learning rate
         lr: 0.0001
         # Learning rate schedule
-        # lr_schedule: None
+        # lr_schedule: None ## why does this fail??
         # Value Function Loss coefficient
         vf_loss_coeff: 0.5
         # Entropy coefficient
