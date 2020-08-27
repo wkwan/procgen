@@ -105,23 +105,23 @@ tune-impala-10samples-10ksteps:
         # if ingesting >2GB/s of samples, or if the data requires decompression.
         num_aggregation_workers: 0
 
-        # Learning params.
-        grad_clip: 40.0
-        # either "adam" or "rmsprop"
-        opt_type: adam
-        lr: 0.0005
-        # lr_schedule: None
-        # rmsprop considered
-        decay: 0.99
-        momentum: 0.0
-        epsilon: 0.1
-        # balancing the three losses
-        vf_loss_coeff: 0.5
-        entropy_coeff: 0.01
-        entropy_coeff_schedule: None
+        # # Learning params.
+        # grad_clip: 40.0
+        # # either "adam" or "rmsprop"
+        # opt_type: adam
+        # lr: 0.0005
+        # # lr_schedule: None
+        # # rmsprop considered
+        # decay: 0.99
+        # momentum: 0.0
+        # epsilon: 0.1
+        # # balancing the three losses
+        # vf_loss_coeff: 0.5
+        # entropy_coeff: 0.01
+        # entropy_coeff_schedule: None
 
-        # use fake (infinite speed) sampler for testing
-        _fake_sampler: False
+        # # use fake (infinite speed) sampler for testing
+        # _fake_sampler: False
 
         # FROM BASELINE
 
