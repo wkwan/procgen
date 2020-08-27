@@ -35,7 +35,3 @@ python3 train-tune-ddppo.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-15
 
 export EXPERIMENT="experiments/tune-marwil.yaml"
 python3 train-tune-marwil.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
-
-export EXPERIMENT="experiments/tune-dreamer.yaml"
-python3 train-tune-dreamer.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
-
