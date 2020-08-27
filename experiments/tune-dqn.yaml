@@ -56,10 +56,10 @@ tune-dqn-10samples-10ksteps:
         ################################################
         ################################################
 
-            # === Model ===
-    # Number of atoms for representing the distribution of return. When
-    # this is greater than 1, distributional Q-learning is used.
-    # the discrete supports are bounded by v_min and v_max
+        # === Model ===
+        # Number of atoms for representing the distribution of return. When
+        # this is greater than 1, distributional Q-learning is used.
+        # the discrete supports are bounded by v_min and v_max
         num_atoms: 1
         v_max: 10.0
         v_min: -10.0
