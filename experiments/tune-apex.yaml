@@ -145,10 +145,10 @@ tune-apex-10samples-10ksteps:
         # batch of this size.
         # train_batch_size: 32
 
-        # optimizer: 
-        #     max_weight_sync_delay: 400,
-        #     num_replay_buffer_shards: 4,
-        #     debug: False
+        optimizer: 
+            max_weight_sync_delay: 400,
+            num_replay_buffer_shards: 4,
+            debug: False
 
         # n_step: 3
         # # num_gpus: 1
