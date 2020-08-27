@@ -70,19 +70,19 @@ tune-a3c-10samples-10ksteps:
         grad_clip: 40.0
         # Learning rate
         lr: 0.0001
-        # # Learning rate schedule
-        # lr_schedule: None
-        # # Value Function Loss coefficient
-        # vf_loss_coeff: 0.5
-        # # Entropy coefficient
-        # entropy_coeff: 0.01
-        # # Min time per iteration
-        # min_iter_time_s: 5
-        # # Workers sample async. Note that this increases the effective
-        # # rollout_fragment_length by up to 5x due to async buffering of batches.
-        # sample_async: True
-        # # Use the execution plan API instead of policy optimizers.
-        # use_exec_api: True
+        # Learning rate schedule
+        lr_schedule: None
+        # Value Function Loss coefficient
+        vf_loss_coeff: 0.5
+        # Entropy coefficient
+        entropy_coeff: 0.01
+        # Min time per iteration
+        min_iter_time_s: 5
+        # Workers sample async. Note that this increases the effective
+        # rollout_fragment_length by up to 5x due to async buffering of batches.
+        sample_async: True
+        # Use the execution plan API instead of policy optimizers.
+        use_exec_api: True
 
         # FROM BASELINE
 
