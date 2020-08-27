@@ -89,7 +89,7 @@ tune-simpleq-10samples-10ksteps:
 
         # === Optimization ===
         # Learning rate for adam optimizer
-        lr: 5e-4
+        lr: 5.0e-4
         # Learning rate schedule
         lr_schedule: None
         # Adam epsilon hyper parameter
