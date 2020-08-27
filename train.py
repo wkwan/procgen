@@ -150,7 +150,7 @@ def run(args, parser):
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
 
-            EXPERIMENT_NAME = 'tune-ppo-10samples-10ksteps'
+            EXPERIMENT_NAME = 'tune-simpleq-10samples-10ksteps'
             experiments[EXPERIMENT_NAME]['config']['adam_epsilon'] = ray.tune.uniform(1e-8, 1e-6)
             experiments[EXPERIMENT_NAME]['num_samples'] = 10
             # experiments['tune-impala-baseline-rand']['config']['num_sgd_iter'] = ray.tune.randint(3, 30)
