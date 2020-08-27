@@ -153,10 +153,10 @@ def run(args, parser):
             experiments[EXPERIMENT_NAME]['config']['optimization']['actor_learning_rate'] = ray.tune.uniform(.0001, .003)
             experiments[EXPERIMENT_NAME]['config']['optimization']['critic_learning_rate'] = ray.tune.uniform(.0001, .003)
             experiments[EXPERIMENT_NAME]['config']['optimization']['entropy_learning_rate'] = ray.tune.uniform(.0001, .003)
-            experiments[EXPERIMENT_NAME]['config']['buffer_size'] = ray.tune.randint(500000, 2000000)
+            experiments[EXPERIMENT_NAME]['config']['buffer_size'] = ray.tune.randint(50000, 2000000)
             experiments[EXPERIMENT_NAME]['config']['train_batch_size'] = ray.tune.grid_search([64, 256, 512])
             experiments[EXPERIMENT_NAME]['config']['target_network_update_freq'] = ray.tune.randint(0, 10)
-            experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 15000)
+            experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 10000)
 
             experiments[EXPERIMENT_NAME]['num_samples'] = 4
     else:

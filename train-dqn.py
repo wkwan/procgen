@@ -150,13 +150,11 @@ def run(args, parser):
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
             EXPERIMENT_NAME = 'tune-dqn-10samples-10ksteps'
-            experiments[EXPERIMENT_NAME]['config']['optimization']['actor_learning_rate'] = ray.tune.uniform(.0001, .003)
-            experiments[EXPERIMENT_NAME]['config']['optimization']['critic_learning_rate'] = ray.tune.uniform(.0001, .003)
-            experiments[EXPERIMENT_NAME]['config']['optimization']['entropy_learning_rate'] = ray.tune.uniform(.0001, .003)
-            experiments[EXPERIMENT_NAME]['config']['buffer_size'] = ray.tune.randint(500000, 2000000)
-            experiments[EXPERIMENT_NAME]['config']['train_batch_size'] = ray.tune.grid_search([64, 256, 512])
-            experiments[EXPERIMENT_NAME]['config']['target_network_update_freq'] = ray.tune.randint(0, 10)
-            experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 15000)
+            experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.0001, 0.001)
+            experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 10000)
+            experiments[EXPERIMENT_NAME]['config']['buffer_size'] = ray.tune.randint(10000, 100000)
+            experiments[EXPERIMENT_NAME]['config']['exploration_config']['final_epsilon'] = ray.tune.uniform(0.01, 0.1)
+            experiments[EXPERIMENT_NAME]['config']['exploration_config']['initial_epsilon'] = ray.tune.uniform(0.7, 1.0)
 
             experiments[EXPERIMENT_NAME]['num_samples'] = 10
     else:

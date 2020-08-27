@@ -150,7 +150,11 @@ def run(args, parser):
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
             EXPERIMENT_NAME = 'tune-simpleq-10samples-10ksteps'
-            experiments[EXPERIMENT_NAME]['config']['adam_epsilon'] = ray.tune.uniform(1e-8, 1e-6)
+            experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.0001, 0.001)
+            experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 10000)
+            experiments[EXPERIMENT_NAME]['config']['buffer_size'] = ray.tune.randint(10000, 100000)
+            experiments[EXPERIMENT_NAME]['config']['exploration_config']['final_epsilon'] = ray.tune.uniform(0.01, 0.1)
+            experiments[EXPERIMENT_NAME]['config']['exploration_config']['initial_epsilon'] = ray.tune.uniform(0.7, 1.0)
 
             experiments[EXPERIMENT_NAME]['num_samples'] = 10
     else:
