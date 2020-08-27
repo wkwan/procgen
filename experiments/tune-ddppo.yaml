@@ -55,7 +55,26 @@ tune-ddppo-10samples-10ksteps:
         # === Environment Settings ===
         ################################################
         ################################################
+        # During the sampling phase, each rollout worker will collect a batch
+        # `rollout_fragment_length * num_envs_per_worker` steps in size.
+        rollout_fragment_length: 100
+        # Vectorize the env (should enable by default since each worker has a GPU).
+        # num_envs_per_worker": 5,
+        # During the SGD phase, workers iterate over minibatches of this size.
+        # The effective minibatch size will be `sgd_minibatch_size * num_workers`.
+        sgd_minibatch_size: 50
+        # Number of SGD epochs per optimization round.
+        num_sgd_iter: 10
 
+        # *** WARNING: configs below are DDPPO overrides over PPO; you
+        #     shouldn't need to adjust them. ***
+        use_pytorch: True  # DDPPO requires PyTorch distributed.
+        # "num_gpus": 0,  # Learning is no longer done on the driver process, so
+                        # giving GPUs to the driver does not make sense!
+        # "num_gpus_per_worker": 1,  # Each rollout worker gets a GPU.
+        truncate_episodes: True  # Require evenly sized batches. Otherwise,
+                                    # collective allreduce could fail.
+        train_batch_size: -1  # This is auto set based on sample batch size.
 
         # FROM BASELINE
 
@@ -93,7 +112,7 @@ tune-ddppo-10samples-10ksteps:
         # Use PyTorch (instead of tf). If using `rllib train`, this can also be
         # enabled with the `--torch` flag.
         # NOTE: Some agents may not support `torch` yet and throw an error.
-        use_pytorch: True
+        # use_pytorch: True
 
         ################################################
         ################################################
