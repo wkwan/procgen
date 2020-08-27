@@ -152,7 +152,6 @@ def run(args, parser):
             EXPERIMENT_NAME = 'tune-appo-10samples-10ksteps'
             experiments[EXPERIMENT_NAME]['config']['num_sgd_iter'] = ray.tune.randint(3, 30)
             experiments[EXPERIMENT_NAME]['config']['clip_param'] = ray.tune.uniform(0.1, 0.3)
-            experiments[EXPERIMENT_NAME]['config']['vf_clip_param'] = ray.tune.uniform(0.1, 0.3)
             experiments[EXPERIMENT_NAME]['config']['kl_target'] = ray.tune.uniform(0.003, 0.03)
             experiments[EXPERIMENT_NAME]['config']['kl_coeff'] = ray.tune.uniform(0.0, 1)
             experiments[EXPERIMENT_NAME]['config']['gamma'] = ray.tune.uniform(0.8, 0.9997)
