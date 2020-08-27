@@ -63,7 +63,7 @@ tune-a3c-10samples-10ksteps:
         # with a value function, see https://arxiv.org/pdf/1506.02438.pdf.
         use_gae: True
         # Size of rollout batch
-        rollout_fragment_length: 10,
+        rollout_fragment_length: 10
         # GAE(gamma) parameter
         lambda: 1.0
         # Max global norm for each gradient calculated by worker
