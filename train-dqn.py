@@ -149,7 +149,7 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            EXPERIMENT_NAME = 'tune-sac-baseline-10samples-10ksteps'
+            EXPERIMENT_NAME = 'tune-dqn-10samples-10ksteps'
             experiments[EXPERIMENT_NAME]['config']['optimization']['actor_learning_rate'] = ray.tune.uniform(.0001, .003)
             experiments[EXPERIMENT_NAME]['config']['optimization']['critic_learning_rate'] = ray.tune.uniform(.0001, .003)
             experiments[EXPERIMENT_NAME]['config']['optimization']['entropy_learning_rate'] = ray.tune.uniform(.0001, .003)
