@@ -114,7 +114,7 @@ class ImpalaCNN(TFModelV2):
         for i, depth in enumerate(depths):
             x = conv_sequence(x, depth, prefix=f"seq{i}")
 
-        # x = tf.keras.backend.print_tensor(x, message='last conv')
+        x = tf.keras.backend.print_tensor(x, message='last conv')
 
         x = tf.keras.layers.Flatten()(x)
         
@@ -139,12 +139,12 @@ class ImpalaCNN(TFModelV2):
         obs = tf.cast(input_dict["obs"], tf.float32)
         # obs = tf.keras.backend.print_tensor(obs, message='obs')
 
-        intermediate_out = self.base_model.get_layer("seq1_block1_conv0").output
-        intermediate_model = self.base_model(obs, intermediate_out)
-        tf.keras.backend.print_tensor(intermediate_model, message="seq1 block 1 conv 0")
+        # intermediate_out = self.base_model.get_layer("seq1_block1_conv0").output
+        # intermediate_model = self.base_model(obs, intermediate_out)
+        # tf.keras.backend.print_tensor(intermediate_model, message="seq1 block 1 conv 0")
 
         logits, self._value = self.base_model(obs)
-        print(logits, self._value)
+        # print(logits, self._value)
         return logits, state
 
     def value_function(self):
