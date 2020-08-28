@@ -21,9 +21,10 @@ if [[ -z $AICROWD_IS_GRADING ]]; then
 
 #will: https://discourse.aicrowd.com/t/aws-instance-setup/3380
   export OUTPUTS_DIR=./outputs
-  # export RAY_MEMORY_LIMIT=480000000000
-  # export RAY_CPUS=64
-  # export RAY_STORE_MEMORY=240000000000
+  export RAY_MEMORY_LIMIT=480000000000
+  export RAY_CPUS=64
+  export RAY_GPUS=8
+  export RAY_STORE_MEMORY=240000000000
 
   # export RAY_MEMORY_LIMIT=60129542144
   # export RAY_CPUS=8
@@ -83,8 +84,8 @@ print_banner
 
 if [[ " $@ " =~ " --train " ]]; then
   export VALID_RUN=true
-  echo "Executing: python3 train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}"
-  python3 train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
+  echo "Executing: python3 train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-num-gpus ${RAY_GPUS:-1} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}"
+  python3 train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-num-gpus ${RAY_GPUS:-1} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
   STATUS_CODE=$?
 fi
 
