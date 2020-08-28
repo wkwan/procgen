@@ -22,7 +22,6 @@ def residual_block(x, depth, prefix):
 def conv_sequence(x, depth, prefix):
     # print("x shape", x.shape)
     x = conv_layer(depth, prefix + "_conv")(x)
-    print(x.output)
     # if "seq0" in prefix:
     #     # print("do seq 0")
     #     x = tf.reshape(x, tf.stack([tf.shape(x)[0], 128, 64, 3]))
@@ -62,6 +61,8 @@ class ImpalaCNN(TFModelV2):
         logits = tf.keras.layers.Dense(units=num_outputs, name="pi")(x)
         value = tf.keras.layers.Dense(units=1, name="vf")(x)
         self.base_model = tf.keras.Model(inputs, [logits, value])
+
+        print("output of layer 0",self.base_model.layers[0].output)
         self.register_variables(self.base_model.variables)
 
     def forward(self, input_dict, state, seq_lens):
