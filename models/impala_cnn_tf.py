@@ -78,7 +78,7 @@ class ImpalaCNN(TFModelV2):
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
         obs = tf.cast(input_dict["obs"], tf.float32)
-        print("forward pass yo")
+        print(obs)
         logits, self._value = self.base_model(obs)
         return logits, state
 
