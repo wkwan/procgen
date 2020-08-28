@@ -141,7 +141,7 @@ class ImpalaCNN(TFModelV2):
 
         intermediate_out = self.base_model.get_layer("seq1_block1_conv0").output
         intermediate_model = self.base_model(obs, intermediate_out)
-        print(intermediate_model)
+        tf.keras.backend.print_tensor(intermediate_model, message="seq1 block 1 conv 0")
 
         logits, self._value = self.base_model(obs)
         return logits, state
