@@ -4,6 +4,64 @@ from ray.rllib.models import ModelCatalog
 
 tf = try_import_tf()
 
+class CustomCallback(tf.keras.callbacks.Callback):
+    def on_train_begin(self, logs=None):
+        keys = list(logs.keys())
+        print("Starting training; got log keys: {}".format(keys))
+
+    def on_train_end(self, logs=None):
+        keys = list(logs.keys())
+        print("Stop training; got log keys: {}".format(keys))
+
+    def on_epoch_begin(self, epoch, logs=None):
+        keys = list(logs.keys())
+        print("Start epoch {} of training; got log keys: {}".format(epoch, keys))
+
+    def on_epoch_end(self, epoch, logs=None):
+        keys = list(logs.keys())
+        print("End epoch {} of training; got log keys: {}".format(epoch, keys))
+
+    def on_test_begin(self, logs=None):
+        keys = list(logs.keys())
+        print("Start testing; got log keys: {}".format(keys))
+
+    def on_test_end(self, logs=None):
+        keys = list(logs.keys())
+        print("Stop testing; got log keys: {}".format(keys))
+
+    def on_predict_begin(self, logs=None):
+        keys = list(logs.keys())
+        print("Start predicting; got log keys: {}".format(keys))
+
+    def on_predict_end(self, logs=None):
+        keys = list(logs.keys())
+        print("Stop predicting; got log keys: {}".format(keys))
+
+    def on_train_batch_begin(self, batch, logs=None):
+        keys = list(logs.keys())
+        print("...Training: start of batch {}; got log keys: {}".format(batch, keys))
+
+    def on_train_batch_end(self, batch, logs=None):
+        keys = list(logs.keys())
+        print("...Training: end of batch {}; got log keys: {}".format(batch, keys))
+
+    def on_test_batch_begin(self, batch, logs=None):
+        keys = list(logs.keys())
+        print("...Evaluating: start of batch {}; got log keys: {}".format(batch, keys))
+
+    def on_test_batch_end(self, batch, logs=None):
+        keys = list(logs.keys())
+        print("...Evaluating: end of batch {}; got log keys: {}".format(batch, keys))
+
+    def on_predict_batch_begin(self, batch, logs=None):
+        keys = list(logs.keys())
+        print("...Predicting: start of batch {}; got log keys: {}".format(batch, keys))
+
+    def on_predict_batch_end(self, batch, logs=None):
+        keys = list(logs.keys())
+        print("...Predicting: end of batch {}; got log keys: {}".format(batch, keys))
+
+
 def conv_layer(depth, name):
     layer = tf.keras.layers.Conv2D( 
         filters=depth, kernel_size=3, strides=1, padding="same", name=name)
@@ -61,6 +119,7 @@ class ImpalaCNN(TFModelV2):
         x = tf.keras.layers.Flatten()(x)
         
         x = tf.keras.layers.ReLU()(x)
+        
 
         #intermediate output:
         # self.base_model = tf.keras.Model(inputs=inputs, outputs=final_relu_layer.output)
@@ -72,13 +131,13 @@ class ImpalaCNN(TFModelV2):
 
         # for layer in self.base_model.layers:
         #     print("output of layer ", layer.output)
-        # print(self.base_model.summary())
+        print(self.base_model.summary())
         self.register_variables(self.base_model.variables)
 
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
         obs = tf.cast(input_dict["obs"], tf.float32)
-        obs = tf.keras.backend.print_tensor(obs, message='obs')
+        # obs = tf.keras.backend.print_tensor(obs, message='obs')
         logits, self._value = self.base_model(obs)
         return logits, state
 
