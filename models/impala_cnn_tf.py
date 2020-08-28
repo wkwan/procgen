@@ -141,7 +141,7 @@ class ImpalaCNN(TFModelV2):
 
         intermediate_out = self.base_model.get_layer("re_lu_11").output
         intermediate_model = self.base_model(self.base_model.inputs, intermediate_out)
-        print(intermediate_model.predict(obs))
+        print(intermediate_model.summary())
 
         logits, self._value = self.base_model(obs)
         return logits, state
