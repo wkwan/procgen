@@ -70,7 +70,7 @@ class ImpalaCNN(TFModelV2):
 
         # for layer in self.base_model.layers:
         #     print("output of layer ", layer.output)
-        # print("output of first relu", self.base_model.get_layer("re_lu").output)
+        print("output of final_relu_layer", final_relu_layer.output)
         # print(self.base_model.summary())
         self.register_variables(self.base_model.variables)
 
