@@ -55,16 +55,20 @@ class ImpalaCNN(TFModelV2):
         for i, depth in enumerate(depths):
             x = conv_sequence(x, depth, prefix=f"seq{i}")
 
-        x = tf.keras.layers.Flatten()(x)
-        x = tf.keras.layers.ReLU()(x)
-        x = tf.keras.layers.Dense(units=256, activation="relu", name="hidden")(x)
-        logits = tf.keras.layers.Dense(units=num_outputs, name="pi")(x)
-        value = tf.keras.layers.Dense(units=1, name="vf")(x)
-        self.base_model = tf.keras.Model(inputs, [logits, value])
+        #intermediate output:
+        self.base_model = tf.keras.Model(inputs, x.output)
+
+
+        # x = tf.keras.layers.Flatten()(x)
+        # x = tf.keras.layers.ReLU()(x)
+        # x = tf.keras.layers.Dense(units=256, activation="relu", name="hidden")(x)
+        # logits = tf.keras.layers.Dense(units=num_outputs, name="pi")(x)
+        # value = tf.keras.layers.Dense(units=1, name="vf")(x)
+        # self.base_model = tf.keras.Model(inputs, [logits, value])
 
         # for layer in self.base_model.layers:
         #     print("output of layer ", layer.output)
-        print("output of first relu", self.base_model.get_layer("re_lu").output)
+        # print("output of first relu", self.base_model.get_layer("re_lu").output)
         # print(self.base_model.summary())
         self.register_variables(self.base_model.variables)
 
