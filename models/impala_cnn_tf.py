@@ -53,10 +53,10 @@ class ImpalaCNN(TFModelV2):
 
         x = scaled_inputs
 
-        x = tf.keras.backend.print_tensor(x, message='scaled inputs')
-
         for i, depth in enumerate(depths):
             x = conv_sequence(x, depth, prefix=f"seq{i}")
+
+        x = tf.keras.backend.print_tensor(x, message='last conv')
 
         x = tf.keras.layers.Flatten()(x)
         
