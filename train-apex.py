@@ -149,14 +149,14 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            EXPERIMENT_NAME = 'tune-apex-10samples-10ksteps'
+            EXPERIMENT_NAME = 'tune-apex'
             experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.0001, 0.001)
             experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 10000)
             experiments[EXPERIMENT_NAME]['config']['buffer_size'] = ray.tune.randint(10000, 100000)
             experiments[EXPERIMENT_NAME]['config']['exploration_config']['final_epsilon'] = ray.tune.uniform(0.01, 0.1)
             experiments[EXPERIMENT_NAME]['config']['exploration_config']['initial_epsilon'] = ray.tune.uniform(0.7, 1.0)
 
-            experiments[EXPERIMENT_NAME]['num_samples'] = 2
+            experiments[EXPERIMENT_NAME]['num_samples'] = 30
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {

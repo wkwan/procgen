@@ -1,4 +1,4 @@
-tune-maml-10samples-10ksteps:
+tune-maml:
     env: procgen_env_wrapper  # Change this at your own risk :D
     run: MAML
     # Can be replaced by any of the available agents as described at : 
@@ -16,7 +16,7 @@ tune-maml-10samples-10ksteps:
     # === Stop Conditions ===
     ################################################
     stop:
-        timesteps_total: 10000
+        timesteps_total: 100000
         # timesteps_total: 8000000
 
     ################################################

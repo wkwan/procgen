@@ -149,16 +149,15 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            EXPERIMENT_NAME = 'tune-sac-10samples-10ksteps'
+            EXPERIMENT_NAME = 'tune-sac'
             experiments[EXPERIMENT_NAME]['config']['optimization']['actor_learning_rate'] = ray.tune.uniform(.0001, .003)
             experiments[EXPERIMENT_NAME]['config']['optimization']['critic_learning_rate'] = ray.tune.uniform(.0001, .003)
             experiments[EXPERIMENT_NAME]['config']['optimization']['entropy_learning_rate'] = ray.tune.uniform(.0001, .003)
             experiments[EXPERIMENT_NAME]['config']['buffer_size'] = ray.tune.randint(50000, 2000000)
-            # experiments[EXPERIMENT_NAME]['config']['train_batch_size'] = ray.tune.grid_search([64, 256, 512])
             experiments[EXPERIMENT_NAME]['config']['target_network_update_freq'] = ray.tune.randint(0, 10)
             experiments[EXPERIMENT_NAME]['config']['learning_starts'] = ray.tune.randint(0, 10000)
 
-            experiments[EXPERIMENT_NAME]['num_samples'] = 2
+            experiments[EXPERIMENT_NAME]['num_samples'] = 30
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {

@@ -149,7 +149,7 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            EXPERIMENT_NAME = 'tune-ppo-10samples-10ksteps'
+            EXPERIMENT_NAME = 'tune-ppo'
             experiments[EXPERIMENT_NAME]['config']['num_sgd_iter'] = ray.tune.randint(3, 30)
             experiments[EXPERIMENT_NAME]['config']['clip_param'] = ray.tune.uniform(0.1, 0.3)
             experiments[EXPERIMENT_NAME]['config']['vf_clip_param'] = ray.tune.uniform(0.1, 0.3)
@@ -160,7 +160,7 @@ def run(args, parser):
             experiments[EXPERIMENT_NAME]['config']['vf_loss_coeff'] = ray.tune.uniform(0.5, 1)
             experiments[EXPERIMENT_NAME]['config']['entropy_coeff'] = ray.tune.uniform(0, 0.01)
             experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.000005, 0.003)
-            experiments[EXPERIMENT_NAME]['num_samples'] = 2
+            experiments[EXPERIMENT_NAME]['num_samples'] = 30
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {

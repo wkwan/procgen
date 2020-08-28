@@ -149,11 +149,12 @@ def run(args, parser):
     if args.config_file:
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
-            EXPERIMENT_NAME = 'tune-a2c-10samples-10ksteps'
+            EXPERIMENT_NAME = 'tune-a2c'
             experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.00083, 0.002)
             experiments[EXPERIMENT_NAME]['config']['entropy_coeff'] = ray.tune.uniform(0.0, 0.001)
             experiments[EXPERIMENT_NAME]['config']['lambda'] = ray.tune.uniform(0.99, 0.995)
-            experiments[EXPERIMENT_NAME]['num_samples'] = 2
+            experiments[EXPERIMENT_NAME]['config']['vf_loss_coeff'] = ray.tune.uniform(0.5, 1)
+            experiments[EXPERIMENT_NAME]['num_samples'] = 30
     else:
         # Note: keep this in sync with tune/config_parser.py
         experiments = {
