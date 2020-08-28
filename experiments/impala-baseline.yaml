@@ -16,8 +16,8 @@ procgen-ppo:
     # === Stop Conditions ===
     ################################################
     stop:
-        # timesteps_total: 100000
-        timesteps_total: 8000000
+        timesteps_total: 10000
+        # timesteps_total: 8000000
 
     ################################################
     # === Settings for Checkpoints ===
@@ -66,7 +66,7 @@ procgen-ppo:
         num_sgd_iter: 3
         # Total SGD batch size across all devices for SGD. This defines the
         # minibatch size within each epoch.
-        sgd_minibatch_size: 256
+        sgd_minibatch_size: 2048 # 8 minibatches per epoch
         # Training batch size, if applicable. Should be >= rollout_fragment_length.
         # Samples batches will be concatenated together to a batch of this size,
         # which is then passed to SGD.
@@ -197,14 +197,14 @@ procgen-ppo:
         # === Settings for Rollout Worker processes ===
         ################################################
         ################################################
-        # # Number of rollout worker actors to create for parallel sampling. Setting
-        # # this to 0 will force rollouts to be done in the trainer actor.
-        # num_workers: 62
+        # Number of rollout worker actors to create for parallel sampling. Setting
+        # this to 0 will force rollouts to be done in the trainer actor.
+        num_workers: 6
 
-        # # Number of environments to evaluate vectorwise per worker. This enables
-        # # model inference batching, which can improve performance for inference
-        # # bottlenecked workloads.
-        # num_envs_per_worker: 12
+        # Number of environments to evaluate vectorwise per worker. This enables
+        # model inference batching, which can improve performance for inference
+        # bottlenecked workloads.
+        num_envs_per_worker: 12
 
         # Divide episodes into fragments of this many steps each during rollouts.
         # Sample batches of this size are collected from rollout workers and
@@ -230,30 +230,30 @@ procgen-ppo:
         batch_mode: truncate_episodes
 
         ################################################
-        # ################################################
-        # # === Advanced Resource Settings ===
-        # ################################################
-        # ################################################
-        # # Number of CPUs to allocate per worker.
-        # num_cpus_per_worker: 1
-        # # Number of GPUs to allocate per worker. This can be fractional. This is
-        # # usually needed only if your env itself requires a GPU (i.e., it is a
-        # # GPU-intensive video game), or model inference is unusually expensive.
-        # num_gpus_per_worker: .1
-        # # Number of CPUs to allocate for the trainer. Note: this only takes effect
-        # # when running in Tune. Otherwise, the trainer runs in the main program.
-        # num_cpus_for_driver: 1
+        ################################################
+        # === Advanced Resource Settings ===
+        ################################################
+        ################################################
+        # Number of CPUs to allocate per worker.
+        num_cpus_per_worker: 1
+        # Number of GPUs to allocate per worker. This can be fractional. This is
+        # usually needed only if your env itself requires a GPU (i.e., it is a
+        # GPU-intensive video game), or model inference is unusually expensive.
+        num_gpus_per_worker: 0.1
+        # Number of CPUs to allocate for the trainer. Note: this only takes effect
+        # when running in Tune. Otherwise, the trainer runs in the main program.
+        num_cpus_for_driver: 1
 
-        # ################################################
-        # ################################################
-        # # === Settings for the Trainer process ===
-        # ################################################
-        # ################################################
-        # # Number of GPUs to allocate to the trainer process. Note that not all
-        # # algorithms can take advantage of trainer GPUs. This can be fractional
-        # # (e.g., 0.3 GPUs).
-        # # Note : If GPUs are not available, this will be overriden by the AIcrowd evaluators to 0.
-        num_gpus: 1
+        ################################################
+        ################################################
+        # === Settings for the Trainer process ===
+        ################################################
+        ################################################
+        # Number of GPUs to allocate to the trainer process. Note that not all
+        # algorithms can take advantage of trainer GPUs. This can be fractional
+        # (e.g., 0.3 GPUs).
+        # Note : If GPUs are not available, this will be overriden by the AIcrowd evaluators to 0.
+        num_gpus: 0.3
 
         ################################################
         ################################################
@@ -292,4 +292,3 @@ procgen-ppo:
         # each worker, so that identically configured trials will have identical
         # results. This makes experiments reproducible.
         seed: null
-        

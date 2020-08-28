@@ -150,8 +150,7 @@ def run(args, parser):
         with open(args.config_file) as f:
             experiments = yaml.safe_load(f)
             EXPERIMENT_NAME = 'tune-impala'
-            experiments[EXPERIMENT_NAME]['config']['num_sgd_iter'] = ray.tune.randint(3, 30)
-            experiments[EXPERIMENT_NAME]['config']['lambda'] = ray.tune.uniform(0.9, 1)
+            experiments[EXPERIMENT_NAME]['config']['num_sgd_iter'] = ray.tune.randint(1, 30)
             experiments[EXPERIMENT_NAME]['config']['vf_loss_coeff'] = ray.tune.uniform(0.5, 1)
             experiments[EXPERIMENT_NAME]['config']['entropy_coeff'] = ray.tune.uniform(0, 0.01)
             experiments[EXPERIMENT_NAME]['config']['lr'] = ray.tune.uniform(0.000005, 0.003)
