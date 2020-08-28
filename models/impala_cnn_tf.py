@@ -56,7 +56,7 @@ class ImpalaCNN(TFModelV2):
         for i, depth in enumerate(depths):
             x = conv_sequence(x, depth, prefix=f"seq{i}")
 
-        x = tf.keras.backend.print_tensor(x, message='last conv')
+        # x = tf.keras.backend.print_tensor(x, message='last conv')
 
         x = tf.keras.layers.Flatten()(x)
         
@@ -78,7 +78,7 @@ class ImpalaCNN(TFModelV2):
     def forward(self, input_dict, state, seq_lens):
         # explicit cast to float32 needed in eager
         obs = tf.cast(input_dict["obs"], tf.float32)
-        print(obs)
+        obs = tf.keras.backend.print_tensor(x, message='obs')
         logits, self._value = self.base_model(obs)
         return logits, state
 
