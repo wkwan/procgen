@@ -57,8 +57,8 @@ class ImpalaCNN(TFModelV2):
 
         x = tf.keras.layers.Flatten()(x)
         
-        final_relu_layer = tf.keras.layers.ReLU()
-        x = final_relu_layer(x)
+        x = tf.keras.layers.ReLU()(x)
+        x = tf.keras.backend.print_tensor(x, message='final relu layer')
 
         #intermediate output:
         # self.base_model = tf.keras.Model(inputs=inputs, outputs=final_relu_layer.output)
@@ -70,7 +70,6 @@ class ImpalaCNN(TFModelV2):
 
         # for layer in self.base_model.layers:
         #     print("output of layer ", layer.output)
-        tf.keras.backend.print_tensor(final_relu_layer, message='final relu layer')
         # print(self.base_model.summary())
         self.register_variables(self.base_model.variables)
 
