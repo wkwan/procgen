@@ -140,7 +140,7 @@ class ImpalaCNN(TFModelV2):
         # obs = tf.keras.backend.print_tensor(obs, message='obs')
 
         intermediate_out = self.base_model.get_layer("re_lu_11").output
-        intermediate_model = self.base_model(inputs=self.base_model.inputs, output=intermediate_out)
+        intermediate_model = self.base_model(self.base_model.inputs, intermediate_out)
         print(intermediate_model.predict(obs))
 
         logits, self._value = self.base_model(obs)
