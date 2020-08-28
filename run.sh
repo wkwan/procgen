@@ -9,8 +9,8 @@ set -e
 export EXPERIMENT_DEFAULT="experiments/impala-baseline.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
 
-# export CHECKPOINT=~/ray_results/procgen-ppo/PPO_stacked_procgen_env_0_2020-08-18_22-49-2719c_37sl/checkpoint_7/checkpoint-7
-# export EPISODES=1000
+export CHECKPOINT=~/ray_results/procgen-ppo/PPO_procgen_env_wrapper_0_2020-08-28_18-08-19umjr2fgm/checkpoint_2/checkpoint-2
+export EPISODES=1
 
 if [[ -z $AICROWD_IS_GRADING ]]; then
   ##########################################################################
@@ -24,7 +24,7 @@ if [[ -z $AICROWD_IS_GRADING ]]; then
   # export RAY_MEMORY_LIMIT=480000000000
   # export RAY_CPUS=64
   # export RAY_GPUS=8
-  # export RAY_STORE_MEMORY=240000000000
+# export RAY_STORE_MEMORY=240000000000
 
   export RAY_MEMORY_LIMIT=60129542144
   export RAY_CPUS=8
