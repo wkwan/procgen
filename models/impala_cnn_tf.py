@@ -131,7 +131,7 @@ class ImpalaCNN(TFModelV2):
 
         # for layer in self.base_model.layers:
         #     print("output of layer ", layer.output)
-        # print(self.base_model.summary())
+        print(self.base_model.summary())
         self.register_variables(self.base_model.variables)
 
     def forward(self, input_dict, state, seq_lens):
@@ -139,7 +139,7 @@ class ImpalaCNN(TFModelV2):
         obs = tf.cast(input_dict["obs"], tf.float32)
         # obs = tf.keras.backend.print_tensor(obs, message='obs')
 
-        intermediate_out = self.base_model.get_layer("re_lu_11").output
+        intermediate_out = self.base_model.get_layer("re_lu_8").output
         intermediate_model = self.base_model(self.base_model.inputs, intermediate_out)
         print(intermediate_model)
 
