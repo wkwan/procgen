@@ -138,6 +138,11 @@ class ImpalaCNN(TFModelV2):
         # explicit cast to float32 needed in eager
         obs = tf.cast(input_dict["obs"], tf.float32)
         # obs = tf.keras.backend.print_tensor(obs, message='obs')
+
+        intermediate_out = self.base_model.get_layer("re_lu_11").outputs
+        intermediate_model = self.base_model(inputs=self.base_model.inputs, outputs=intermediate_out)
+        print(intermediate_model.predict(obs))
+
         logits, self._value = self.base_model(obs)
         return logits, state
 
