@@ -139,8 +139,8 @@ class ImpalaCNN(TFModelV2):
         obs = tf.cast(input_dict["obs"], tf.float32)
         # obs = tf.keras.backend.print_tensor(obs, message='obs')
 
-        intermediate_out = self.base_model.get_layer("seq1_block1_conv0).output
-        intermediate_model = self.base_model(self.base_model.inputs, intermediate_out)
+        intermediate_out = self.base_model.get_layer("seq1_block1_conv0").output
+        intermediate_model = self.base_model(obs, intermediate_out)
         print(intermediate_model)
 
         logits, self._value = self.base_model(obs)
