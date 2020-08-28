@@ -64,6 +64,7 @@ class ImpalaCNN(TFModelV2):
 
         # for layer in self.base_model.layers:
         #     print("output of layer ", layer.output)
+        print(self.base_model.summary())
         self.register_variables(self.base_model.variables)
 
     def forward(self, input_dict, state, seq_lens):
