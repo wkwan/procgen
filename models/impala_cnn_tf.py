@@ -61,7 +61,7 @@ class ImpalaCNN(TFModelV2):
         x = final_relu_layer(x)
 
         #intermediate output:
-        self.base_model = tf.keras.Model(inputs, final_relu_layer.output)
+        self.base_model = tf.keras.Model(inputs=inputs, outputs=final_relu_layer.output)
         # x = tf.keras.layers.Dense(units=256, activation="relu", name="hidden")(x)
         # logits = tf.keras.layers.Dense(units=num_outputs, name="pi")(x)
         # value = tf.keras.layers.Dense(units=1, name="vf")(x)
