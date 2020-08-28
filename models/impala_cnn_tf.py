@@ -52,13 +52,15 @@ class ImpalaCNN(TFModelV2):
         scaled_inputs = tf.cast(inputs, tf.float32) / 255.0
 
         x = scaled_inputs
+
+        x = tf.keras.backend.print_tensor(x, message='scaled inputs')
+
         for i, depth in enumerate(depths):
             x = conv_sequence(x, depth, prefix=f"seq{i}")
 
         x = tf.keras.layers.Flatten()(x)
         
         x = tf.keras.layers.ReLU()(x)
-        x = tf.keras.backend.print_tensor(x, message='final relu layer')
 
         #intermediate output:
         # self.base_model = tf.keras.Model(inputs=inputs, outputs=final_relu_layer.output)
