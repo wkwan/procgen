@@ -68,9 +68,9 @@ class ImpalaCNN(TFModelV2):
         value = tf.keras.layers.Dense(units=1, name="vf")(x)
         self.base_model = tf.keras.Model(inputs, [logits, value])
 
-        for layer in self.base_model.layers:
-            print("output of layer ", layer.output)
-        print("output of first relu", self.base_model.get_layer("re_lu").output)
+        # for layer in self.base_model.layers:
+        #     print("output of layer ", layer.output)
+        # print("output of first relu", self.base_model.get_layer("re_lu").output)
         # print(self.base_model.summary())
         self.register_variables(self.base_model.variables)
 
