@@ -144,6 +144,7 @@ class ImpalaCNN(TFModelV2):
         tf.keras.backend.print_tensor(intermediate_model, message="seq1 block 1 conv 0")
 
         logits, self._value = self.base_model(obs)
+        print(logts, self._value)
         return logits, state
 
     def value_function(self):
