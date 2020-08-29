@@ -89,4 +89,4 @@ class ImpalaCNN(TFModelV2):
 
 
 # Register model in ModelCatalog
-ModelCatalog.register_custom_model("impala_cnn_tf", ImpalaCNN)
+ModelCatalog.register_custom_model("impala_cnn_tf_framestack", ImpalaCNN)
