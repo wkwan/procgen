@@ -10,6 +10,9 @@ class FrameSkip(ActionWrapper):
         self.env.step(self.action(action))
         return self.env.step(self.action(action))
 
+    def action(self, action):
+        return action
+
 # Register Env in Ray
 registry.register_env(
     "frameskip_procgen_env",  # This should be different from procgen_env_wrapper
