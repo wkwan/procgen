@@ -1,5 +1,6 @@
 procgen-ppo:
     env: procgen_env_wrapper  # Change this at your own risk :D
+    disable_evaluation_worker: True
     run: PPO
     # Can be replaced by any of the available agents as described at : 
     # https://github.com/ray-project/ray/blob/master/rllib/agents/registry.py#L103
@@ -16,6 +17,7 @@ procgen-ppo:
     # === Stop Conditions ===
     ################################################
     stop:
+        # timesteps_total: 30000
         timesteps_total: 8000000
 
     ################################################
@@ -55,14 +57,14 @@ procgen-ppo:
         ################################################
         ################################################
         # Discount factor of the MDP.
-        gamma: 0.999
+        gamma: 0.9997
         # The GAE(lambda) parameter.
         lambda: 0.95
         # The default learning rate.
-        lr: 5.0e-4
+        lr: 5.0e-6
         # Number of SGD iterations in each outer loop (i.e., number of epochs to
         # execute per train batch).
-        num_sgd_iter: 3
+        num_sgd_iter: 30
         # Total SGD batch size across all devices for SGD. This defines the
         # minibatch size within each epoch.
         sgd_minibatch_size: 2048 # 8 minibatches per epoch
@@ -73,17 +75,17 @@ procgen-ppo:
         # Initial coefficient for KL divergence.
         kl_coeff: 0.0
         # Target value for KL divergence.
-        kl_target: 0.01
+        kl_target: 0.03
         # Coefficient of the value function loss. IMPORTANT: you must tune this if
         # you set vf_share_layers: True.
         vf_loss_coeff: 0.5
         # Coefficient of the entropy regularizer.
         entropy_coeff: 0.01
         # PPO clip parameter.
-        clip_param: 0.2
+        clip_param: 0.1
         # Clip param for the value function. Note that this is sensitive to the
         # scale of the rewards. If your expected V is large, increase this.
-        vf_clip_param: 0.2
+        vf_clip_param: 0.3
         # If specified, clip the global norm of gradients by this amount.
         grad_clip: 0.5
         # Which observation filter to apply to the observation.
@@ -198,7 +200,7 @@ procgen-ppo:
         ################################################
         # Number of rollout worker actors to create for parallel sampling. Setting
         # this to 0 will force rollouts to be done in the trainer actor.
-        num_workers: 6
+        num_workers: 7
 
         # Number of environments to evaluate vectorwise per worker. This enables
         # model inference batching, which can improve performance for inference
@@ -291,4 +293,3 @@ procgen-ppo:
         # each worker, so that identically configured trials will have identical
         # results. This makes experiments reproducible.
         seed: null
-        
