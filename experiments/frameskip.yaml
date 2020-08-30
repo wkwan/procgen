@@ -22,9 +22,9 @@ procgen-ppo:
     ################################################
     # === Settings for Checkpoints ===
     ################################################
-    checkpoint_freq: 100
-    checkpoint_at_end: True
-    keep_checkpoints_num: 5
+    # checkpoint_freq: 100
+    # checkpoint_at_end: True
+    # keep_checkpoints_num: 5
 
     config:
         ################################################
@@ -199,7 +199,7 @@ procgen-ppo:
         ################################################
         # Number of rollout worker actors to create for parallel sampling. Setting
         # this to 0 will force rollouts to be done in the trainer actor.
-        num_workers: 6
+        num_workers: 7
 
         # Number of environments to evaluate vectorwise per worker. This enables
         # model inference batching, which can improve performance for inference
