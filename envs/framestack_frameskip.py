@@ -20,5 +20,5 @@ class FrameSkip(ActionWrapper, FrameStack):
 # Register Env in Ray
 registry.register_env(
     "framestack_frameskip_procgen_env",  # This should be different from procgen_env_wrapper
-    lambda config: FrameStack(ProcgenEnvWrapper(config), 2),
+    lambda config: FrameStack(ProcgenEnvWrapper(config), 4),
 )
