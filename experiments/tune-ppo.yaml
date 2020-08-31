@@ -56,17 +56,17 @@ tune-ppo:
         ################################################
         ################################################
         # Discount factor of the MDP.
-        gamma: 0.9997
+        gamma: 0.999
         # The GAE(lambda) parameter.
-        lambda: 1
+        lambda: 0.95
         # The default learning rate.
-        lr: 5.0e-6
+        lr: 5.0e-4
         # Number of SGD iterations in each outer loop (i.e., number of epochs to
         # execute per train batch).
-        num_sgd_iter: 30
+        num_sgd_iter: 3
         # Total SGD batch size across all devices for SGD. This defines the
         # minibatch size within each epoch.
-        sgd_minibatch_size: 1024
+        sgd_minibatch_size: 2048 # 8 minibatches per epoch
         # Training batch size, if applicable. Should be >= rollout_fragment_length.
         # Samples batches will be concatenated together to a batch of this size,
         # which is then passed to SGD.
@@ -74,17 +74,17 @@ tune-ppo:
         # Initial coefficient for KL divergence.
         kl_coeff: 0.0
         # Target value for KL divergence.
-        kl_target: 0.03
+        kl_target: 0.01
         # Coefficient of the value function loss. IMPORTANT: you must tune this if
         # you set vf_share_layers: True.
         vf_loss_coeff: 0.5
         # Coefficient of the entropy regularizer.
         entropy_coeff: 0.01
         # PPO clip parameter.
-        clip_param: 0.1
+        clip_param: 0.2
         # Clip param for the value function. Note that this is sensitive to the
         # scale of the rewards. If your expected V is large, increase this.
-        vf_clip_param: 0.3
+        vf_clip_param: 0.2
         # If specified, clip the global norm of gradients by this amount.
         grad_clip: 0.5
         # Which observation filter to apply to the observation.
@@ -117,7 +117,7 @@ tune-ppo:
         # Whether to attempt to continue training if a worker crashes. The number
         # of currently healthy workers is reported as the "num_healthy_workers"
         # metric.
-        ignore_worker_failures: True
+        ignore_worker_failures: False
         # Log system resource metrics to results. This requires `psutil` to be
         # installed for sys stats, and `gputil` for GPU metrics.
         # Note : The AIcrowd Evaluators will always override this to be True
@@ -235,7 +235,7 @@ tune-ppo:
         ################################################
         ################################################
         # Number of CPUs to allocate per worker.
-        num_cpus_per_worker: 1
+        num_cpus_per_worker: 4
         # Number of GPUs to allocate per worker. This can be fractional. This is
         # usually needed only if your env itself requires a GPU (i.e., it is a
         # GPU-intensive video game), or model inference is unusually expensive.
