@@ -17,15 +17,15 @@ tune-impala:
     # === Stop Conditions ===
     ################################################
     stop:
-        # timesteps_total: 100000
-        timesteps_total: 8000000
+        timesteps_total: 100000
+        # timesteps_total: 8000000
 
     ################################################
     # === Settings for Checkpoints ===
     ################################################
-    # checkpoint_freq: 100
-    # checkpoint_at_end: True
-    # keep_checkpoints_num: 5
+    checkpoint_freq: 100
+    checkpoint_at_end: True
+    keep_checkpoints_num: 5
 
     config:
         ################################################
