@@ -16,7 +16,7 @@ tune-ppo:
     # === Stop Conditions ===
     ################################################
     stop:
-        timesteps_total: 1000000
+        timesteps_total: 3000000
         # timesteps_total: 8000000
 
     ################################################
