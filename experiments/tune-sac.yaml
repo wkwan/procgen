@@ -298,7 +298,7 @@ tune-sac:
         #
         # The dataflow here can vary per algorithm. For example, PPO further
         # divides the train batch into minibatches for multi-epoch SGD.
-        rollout_fragment_length: 256
+        # rollout_fragment_length: 256
 
         # Whether to rollout "complete_episodes" or "truncate_episodes" to
         # `rollout_fragment_length` length unrolls. Episode truncation guarantees
@@ -357,14 +357,14 @@ tune-sac:
         ################################################
         ################################################
         # Element-wise observation filter, either "NoFilter" or "MeanStdFilter".
-        observation_filter: "NoFilter"
+        # observation_filter: "NoFilter"
         # Whether to synchronize the statistics of remote filters.
         synchronize_filters: True
         # Whether to LZ4 compress individual observations
-        compress_observations: False
+        # compress_observations: False
         # Minimum env steps to optimize for per train call. This value does
         # not affect learning, only the length of train iterations.
-        timesteps_per_iteration: 0
+        # timesteps_per_iteration: 0
         # This argument, in conjunction with worker_index, sets the random seed of
         # each worker, so that identically configured trials will have identical
         # results. This makes experiments reproducible.
