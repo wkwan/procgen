@@ -240,7 +240,7 @@ tune-impala:
         num_gpus_per_worker: 0.1
         # Number of CPUs to allocate for the trainer. Note: this only takes effect
         # when running in Tune. Otherwise, the trainer runs in the main program.
-        num_cpus_for_driver: 1
+        num_cpus_for_driver: 8
 
         ################################################
         ################################################
@@ -251,7 +251,7 @@ tune-impala:
         # algorithms can take advantage of trainer GPUs. This can be fractional
         # (e.g., 0.3 GPUs).
         # Note : If GPUs are not available, this will be overriden by the AIcrowd evaluators to 0.
-        num_gpus: 0.3
+        num_gpus: 6
 
         ################################################
         ################################################
