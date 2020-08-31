@@ -10,7 +10,7 @@ export EXPERIMENT_DEFAULT="experiments/full-tune-impala.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
 
 export CHECKPOINT=~/ray_results/full-tune-impala/IMPALA_procgen_env_wrapper_0_2020-08-31_02-12-02vo62u_bq/checkpoint_127/checkpoint-127
-export EPISODES=1
+export EPISODES=100
 
 if [[ -z $AICROWD_IS_GRADING ]]; then
   ##########################################################################
