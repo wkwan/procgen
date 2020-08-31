@@ -240,7 +240,7 @@ tune-impala:
         num_gpus_per_worker: 0.4
         # Number of CPUs to allocate for the trainer. Note: this only takes effect
         # when running in Tune. Otherwise, the trainer runs in the main program.
-        num_cpus_for_driver: 8
+        num_cpus_for_driver: 16
 
         ################################################
         ################################################
