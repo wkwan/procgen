@@ -93,7 +93,7 @@ procgen-ppo:
         # vf_share_layers: True
         # # Number of steps after which the episode is forced to terminate. Defaults
         # # to `env.spec.max_episode_steps` (if present) for Gym envs.
-        # horizon: null
+        horizon: null
         # Calculate rewards but don't reset the environment when the horizon is
         # hit. This allows value estimation and RNN state to span across logical
         # episodes denoted by horizon. This only has an effect if horizon != inf.
@@ -220,7 +220,7 @@ procgen-ppo:
         #
         # The dataflow here can vary per algorithm. For example, PPO further
         # divides the train batch into minibatches for multi-epoch SGD.
-        rollout_fragment_length: 256
+        # rollout_fragment_length: 256
 
         # Whether to rollout "complete_episodes" or "truncate_episodes" to
         # `rollout_fragment_length` length unrolls. Episode truncation guarantees
