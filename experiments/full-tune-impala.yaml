@@ -1,4 +1,4 @@
-tune-impala:
+full-tune-impala:
     env: procgen_env_wrapper  # Change this at your own risk :D
     # disable_evaluation_worker: True
     run: IMPALA
