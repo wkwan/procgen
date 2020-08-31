@@ -9,7 +9,7 @@ set -e
 export EXPERIMENT_DEFAULT="experiments/full-tune-a2c.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
 
-export CHECKPOINT=~/ray_results/tune-a2c/A2C_procgen_env_wrapper_0_2020-08-31_11-45-475zdgmy_p/checkpoint_200/checkpoint_200
+export CHECKPOINT=~/ray_results/tune-a2c/A2C_procgen_env_wrapper_0_2020-08-31_11-45-475zdgmy_p/checkpoint_200/checkpoint-200
 export EPISODES=100
 
 if [[ -z $AICROWD_IS_GRADING ]]; then
