@@ -253,7 +253,7 @@ procgen-ppo:
         # algorithms can take advantage of trainer GPUs. This can be fractional
         # (e.g., 0.3 GPUs).
         # Note : If GPUs are not available, this will be overriden by the AIcrowd evaluators to 0.
-        num_gpus: 3
+        num_gpus: 2
 
         ################################################
         ################################################
