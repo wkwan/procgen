@@ -55,7 +55,6 @@ tune-a3c:
         # === Environment Settings ===
         ################################################
         ################################################
-        train_batch_size: 32768
 
         # Should use a critic as a baseline (otherwise don't use value baseline;
         # required for using GAE).
