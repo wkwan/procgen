@@ -21,7 +21,7 @@ def residual_block(x, depth, prefix):
 
 def conv_sequence(x, depth, prefix):
     if "seq0" in prefix:
-        x = tf.reshape(x, tf.stack([tf.shape(x)[0], 128, 64, 3]))
+        x = tf.reshape(x, tf.stack([tf.shape(x)[0], 256, 64, 3]))
         x = conv_layer(depth, prefix + "_conv")(x)
     else:
         x = conv_layer(depth, prefix + "_conv")(x)
