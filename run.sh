@@ -6,7 +6,7 @@ set -e
 #########################################
 
 #will: change this to whatever experiment config
-export EXPERIMENT_DEFAULT="experiments/full-tune-impala.yaml"
+export EXPERIMENT_DEFAULT="experiments/full-tune-a2c.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
 
 export CHECKPOINT=~/ray_results/full-tune-impala/IMPALA_procgen_env_wrapper_0_2020-08-31_02-12-02vo62u_bq/checkpoint_127/checkpoint-127
