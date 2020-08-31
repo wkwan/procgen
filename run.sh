@@ -6,7 +6,7 @@ set -e
 #########################################
 
 #will: change this to whatever experiment config
-export EXPERIMENT_DEFAULT="experiments/tune-sac.yaml"
+export EXPERIMENT_DEFAULT="experiments/tune-a2c.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
 
 export CHECKPOINT=~/ray_results/tune-a2c/A2C_procgen_env_wrapper_0_2020-08-31_11-45-475zdgmy_p/checkpoint_200/checkpoint-200
