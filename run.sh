@@ -6,7 +6,7 @@ set -e
 #########################################
 
 #will: change this to whatever experiment config
-export EXPERIMENT_DEFAULT="experiments/ucb_drac.yaml"
+export EXPERIMENT_DEFAULT="experiments/impala-baseline.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
 
 # export CHECKPOINT=~/ray_results/procgen-ppo/PPO_flip_procgen_env_0_2020-09-02_14-55-35ns3s9onb/checkpoint_2/checkpoint-2
