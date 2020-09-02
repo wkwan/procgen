@@ -2,6 +2,7 @@ import logging
 
 from ray.rllib.agents import with_common_config
 from ray.rllib.agents.ppo.ppo_tf_policy import PPOTFPolicy
+from ray.rllib.agents.ppo.ppo_torch_policy import PPOTorchPolicy
 from ray.rllib.agents.trainer_template import build_trainer
 from ray.rllib.optimizers import SyncSamplesOptimizer, LocalMultiGPUOptimizer
 from ray.rllib.utils import try_import_tf
@@ -69,7 +70,7 @@ DEFAULT_CONFIG = with_common_config({
     # Set this to True for debugging on non-GPU machines (set `num_gpus` > 0).
     "_fake_gpus": False,
     # Use PyTorch as framework?
-    "use_pytorch": False
+    "use_pytorch": True
 })
 # __sphinx_doc_end__
 # yapf: enable
@@ -184,7 +185,7 @@ def get_policy_class(config):
 UcbDracTrainer = build_trainer(
     name="UcbDracAgent",
     default_config=DEFAULT_CONFIG,
-    default_policy=PPOTFPolicy,
+    default_policy=PPOTorchPolicy,
     get_policy_class=get_policy_class,
     make_policy_optimizer=choose_policy_optimizer,
     validate_config=validate_config,
