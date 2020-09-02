@@ -3,7 +3,12 @@ import logging
 from ray.rllib.agents import with_common_config
 from ray.rllib.agents.trainer_template import build_trainer
 from ray.rllib.agents.ppo.ppo_torch_policy import PPOTorchPolicy
+from ray.rllib.agents.ppo.ppo_tf_policy import PPOTFPolicy
 from ray.rllib.agents.trainer import Trainer
+
+from ray.rllib.utils import try_import_tf
+
+tf = try_import_tf()
 
 logger = logging.getLogger(__name__)
 
@@ -156,14 +161,13 @@ def get_policy_class(config):
     if config["use_pytorch"]:
         return PPOTorchPolicy
     else:
-        from ray.rllib.agents.ppo.ppo_tf_policy import PPOTFPolicy
         return PPOTFPolicy
 
 
 UcbDracTrainer = build_trainer(
     name="UcbDracAgent",
     default_config=DEFAULT_CONFIG,
-    default_policy=PPOTorchPolicy,
+    default_policy=PPOTFPolicy,
     get_policy_class=get_policy_class,
     validate_config=validate_config,
     after_optimizer_step=update_kl,
