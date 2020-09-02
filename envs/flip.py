@@ -16,7 +16,7 @@ class Flip(ObservationWrapper):
 
     def step(self, action):
         if self.prev_obs is not None:
-            print("do the aug", self.env_wrapper.config["keep_checkpoints_num"])
+            print("do the aug", self.env_wrapper.config)
             #FLIP
             # obs = np.flipud(self.prev_obs)
 
