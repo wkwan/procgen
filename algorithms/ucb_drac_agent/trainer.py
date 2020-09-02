@@ -1,13 +1,8 @@
 import logging
 
 from ray.rllib.agents import with_common_config
-from ray.rllib.agents.ppo.ppo_tf_policy import PPOTFPolicy
-from .custom_train_template import build_trainer
-from .custom_optimizer import SyncSamplesOptimizer
-from ray.rllib.utils import try_import_tf
+from ray.rllib.agents.trainer_template import build_trainer
 from ray.rllib.agents.trainer import Trainer
-
-tf = try_import_tf()
 
 logger = logging.getLogger(__name__)
 
@@ -76,16 +71,6 @@ DEFAULT_CONFIG = with_common_config({
 })
 # __sphinx_doc_end__
 # yapf: enable
-
-
-def choose_policy_optimizer(workers, config):
-    return SyncSamplesOptimizer(
-        workers,
-        num_sgd_iter=config["num_sgd_iter"],
-        train_batch_size=config["train_batch_size"],
-        sgd_minibatch_size=config["sgd_minibatch_size"],
-        standardize_fields=["advantages"])
-
 
 def update_kl(trainer, fetches):
     # Single-agent.
@@ -171,15 +156,15 @@ def get_policy_class(config):
         from ray.rllib.agents.ppo.ppo_torch_policy import PPOTorchPolicy
         return PPOTorchPolicy
     else:
+        from ray.rllib.agents.ppo.ppo_tf_policy import PPOTFPolicy
         return PPOTFPolicy
 
 
-PPOCustomTrainer = build_trainer(
-    name="CustomPPOAgent",
+UcbDracTrainer = build_trainer(
+    name="UcbDracAgent",
     default_config=DEFAULT_CONFIG,
-    default_policy=PPOTFPolicy,
+    default_policy=PPOTorchPolicy,
     get_policy_class=get_policy_class,
-    make_policy_optimizer=choose_policy_optimizer,
     validate_config=validate_config,
     after_optimizer_step=update_kl,
     after_train_result=warn_about_bad_reward_scales)

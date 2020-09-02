@@ -17,12 +17,12 @@ def _import_custom_random_agent():
     from .custom_random_agent.custom_random_agent import CustomRandomAgent
     return CustomRandomAgent
 
-def _import_custom_ppo():
-    from .PPO_custom.trainer import PPOCustomTrainer
-    return PPOCustomTrainer
+def _import_ucb_drac_agent():
+    from .ucb_drac_agent.trainer import UcbDracTrainer
+    return UcbDracTrainer
 
 
 CUSTOM_ALGORITHMS = {
     "custom/CustomRandomAgent": _import_custom_random_agent,
-    "CustomPPOAgent": _import_custom_ppo
+    "UcbDracAgent": _import_ucb_drac_agent
 }
