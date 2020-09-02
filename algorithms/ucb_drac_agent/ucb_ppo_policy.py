@@ -28,6 +28,7 @@ class PPOLoss:
                  prev_logits,
                  prev_actions_logp,
                  vf_preds,
+                 cur_obs,
                  curr_action_dist,
                  value_fn,
                  cur_kl_coeff,
@@ -64,6 +65,7 @@ class PPOLoss:
             vf_loss_coeff (float): Coefficient of the value function loss
             use_gae (bool): If true, use the Generalized Advantage Estimator.
         """
+        print("CUR OBS SHAPE", cur_obs.shape)
         if valid_mask is not None:
             num_valid = torch.sum(valid_mask)
 
@@ -128,6 +130,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
         train_batch[SampleBatch.ACTION_DIST_INPUTS],
         train_batch[SampleBatch.ACTION_LOGP],
         train_batch[SampleBatch.VF_PREDS],
+        train_batch[SampleBatch.CUR_OBS],
         action_dist,
         model.value_function(),
         policy.kl_coeff,
@@ -136,7 +139,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
         clip_param=policy.config["clip_param"],
         vf_clip_param=policy.config["vf_clip_param"],
         vf_loss_coeff=policy.config["vf_loss_coeff"],
-        use_gae=policy.config["use_gae"],
+        use_gae=policy.config["use_gae"]
     )
 
     return policy.loss_obj.loss
