@@ -1,8 +1,8 @@
 import logging
 
 from ray.rllib.agents import with_common_config
-# from .ucb_ppo_policy import PPOTorchPolicy
-from ray.rllib.agents.ppo.ppo_torch_policy import PPOTorchPolicy
+from .ucb_ppo_policy import PPOTorchPolicy
+# from ray.rllib.agents.ppo.ppo_torch_policy import PPOTorchPolicy
 from ray.rllib.agents.trainer_template import build_trainer
 from ray.rllib.optimizers import SyncSamplesOptimizer, LocalMultiGPUOptimizer
 
