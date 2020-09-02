@@ -4,9 +4,8 @@ from ray.rllib.agents import with_common_config
 from .ucb_ppo_policy import PPOTorchPolicy
 from ray.rllib.agents.trainer_template import build_trainer
 from ray.rllib.optimizers import SyncSamplesOptimizer, LocalMultiGPUOptimizer
-from ray.rllib.utils import try_import_tf
 
-tf = try_import_tf()
+logger = logging.getLogger(__name__)
 
 # yapf: disable
 # __sphinx_doc_begin__
