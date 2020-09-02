@@ -616,6 +616,7 @@ class PPOLoss:
             use_gae (bool): If true, use the Generalized Advantage Estimator.
         """
         print("CUR OBS SHAPE", cur_obs.shape)
+        print("CUR OBS TYPE", type(cur_obs))
 
         # select aug
         for i in range(num_aug_types):
