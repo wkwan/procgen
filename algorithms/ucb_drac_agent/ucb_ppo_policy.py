@@ -229,29 +229,29 @@ class Rotate(object):
         print(self.random_inds)
         
 
-class Crop(object):
-    """
-    Crop Augmentation
-    """
-    def __init__(self,  
-                 batch_size, 
-                 *_args, 
-                 **_kwargs):
-        self.batch_size = batch_size 
+# class Crop(object):
+#     """
+#     Crop Augmentation
+#     """
+#     def __init__(self,  
+#                  batch_size, 
+#                  *_args, 
+#                  **_kwargs):
+#         self.batch_size = batch_size 
 
-    def do_augmentation(self, x):
-        aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
-                            kornia.augmentation.RandomCrop((64, 64)))
-        return aug_trans(x)
+#     def do_augmentation(self, x):
+#         aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
+#                             kornia.augmentation.RandomCrop((64, 64)))
+#         return aug_trans(x)
 
-    def change_randomization_params(self, index_):
-        pass
+#     def change_randomization_params(self, index_):
+#         pass
 
-    def change_randomization_params_all(self):
-        pass
+#     def change_randomization_params_all(self):
+#         pass
 
-    def print_parms(self):
-        pass
+#     def print_parms(self):
+#         pass
 
 
 class RandomConv(object):
@@ -543,7 +543,7 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        'crop': Crop,
+        # 'crop': Crop,
         'random-conv': RandomConv,
         'grayscale': Grayscale,
         'flip': Flip,
