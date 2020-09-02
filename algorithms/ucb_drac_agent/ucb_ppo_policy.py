@@ -65,7 +65,7 @@ class PPOLoss:
             vf_loss_coeff (float): Coefficient of the value function loss
             use_gae (bool): If true, use the Generalized Advantage Estimator.
         """
-        print("CUR OBS SHAPE", cur_obs.shape)
+        # print("CUR OBS SHAPE", cur_obs.shape)
         if valid_mask is not None:
             num_valid = torch.sum(valid_mask)
 

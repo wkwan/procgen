@@ -17,6 +17,7 @@ DEFAULT_CONFIG = with_common_config({
     # with a value function, see https://arxiv.org/pdf/1506.02438.pdf.
     "use_gae": True,
     # The GAE(lambda) parameter.
+    "gamma": 0.999,
     "lambda": 0.95,
     # Initial coefficient for KL divergence.
     "kl_coeff": 0.0,
@@ -27,7 +28,7 @@ DEFAULT_CONFIG = with_common_config({
     "train_batch_size": 16384,
     # Total SGD batch size across all devices for SGD. This defines the
     # minibatch size within each epoch.
-    "sgd_minibatch_size": 256,
+    "sgd_minibatch_size": 2048,
     # Whether to shuffle sequences in the batch when training (recommended).
     "shuffle_sequences": True,
     # Number of SGD iterations in each outer loop (i.e., number of epochs to
