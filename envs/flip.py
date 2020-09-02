@@ -15,7 +15,7 @@ class Flip(ObservationWrapper):
 
     def step(self, action):
         if self.prev_obs is not None:
-            
+            print("do the aug")
             #FLIP
             # obs = np.flipud(self.prev_obs)
 

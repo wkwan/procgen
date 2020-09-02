@@ -1,5 +1,5 @@
 procgen-ppo:
-    env: procgen_env_wrapper  # Change this at your own risk :D
+    env: flip_procgen_env  # Change this at your own risk :D
     run: PPO
     # Can be replaced by any of the available agents as described at : 
     # https://github.com/ray-project/ray/blob/master/rllib/agents/registry.py#L103
@@ -16,7 +16,8 @@ procgen-ppo:
     # === Stop Conditions ===
     ################################################
     stop:
-        timesteps_total: 8000000
+        timesteps_total: 20000
+        # timesteps_total: 8000000
 
     ################################################
     # === Settings for Checkpoints ===
