@@ -12,10 +12,11 @@ class Flip(ObservationWrapper):
         self.prev_reward = None
         self.prev_done = None
         self.prev_info = None
+        self.env_wrapper = env_wrapper
 
     def step(self, action):
         if self.prev_obs is not None:
-            print("do the aug", env_wrapper.config["rollout"])
+            print("do the aug", self.env_wrapper.config["rollout"])
             #FLIP
             # obs = np.flipud(self.prev_obs)
 
