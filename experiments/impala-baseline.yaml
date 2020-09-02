@@ -1,6 +1,6 @@
 impala-bigfish:
     env: procgen_env_wrapper  # Change this at your own risk :D
-    disable_evaluation_worker: True
+    # disable_evaluation_worker: True
     run: IMPALA
     # Can be replaced by any of the available agents as described at : 
     # https://github.com/ray-project/ray/blob/master/rllib/agents/registry.py#L103
