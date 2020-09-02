@@ -1,7 +1,7 @@
 procgen-ppo:
     env: procgen_env_wrapper  # Change this at your own risk :D
     # disable_evaluation_worker: True
-    run: UcbDracAgent
+    run: CustomPPOAgent
     # Can be replaced by any of the available agents as described at : 
     # https://github.com/ray-project/ray/blob/master/rllib/agents/registry.py#L103
     # 
@@ -189,7 +189,7 @@ procgen-ppo:
             # Examples of implementing the model in Keras is also available
             # here :
             # https://github.com/ray-project/ray/blob/master/rllib/examples/custom_keras_model.py
-            custom_model: impala_cnn_tf
+            custom_model: impala_cnn_torch
             # Extra options to pass to custom class
             custom_options: {}
 
