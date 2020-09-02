@@ -6,19 +6,19 @@ import numpy as np
 from gym import ObservationWrapper
 
 class Flip(ObservationWrapper):
-    def __init__(self, env_wrapper):
+    def __init__(self, env_wrapper, is_rollout):
         super().__init__(env_wrapper)
         self.prev_obs = None
         self.prev_reward = None
         self.prev_done = None
         self.prev_info = None
-        self.env_wrapper = env_wrapper
+        self.is_rollout = is_rollout
 
     def step(self, action):
         if self.prev_obs is not None:
-            print("do the aug", self.env_wrapper.config)
             #FLIP
             # obs = np.flipud(self.prev_obs)
+            print("is rollout?", self.is_rollout)
 
             #CUTOUT
             # box_min = 7
@@ -59,8 +59,11 @@ class Flip(ObservationWrapper):
     def observation(self, obs):
         return obs
 
+def create_my_custom_env(config):
+    return Flip(ProcgenEnvWrapper(config), bool(config["rollout"]))
+
 # Register Env in Ray
 registry.register_env(
     "flip_procgen_env",  # This should be different from procgen_env_wrapper
-    lambda config: Flip(ProcgenEnvWrapper(config)),
+    create_my_custom_env
 )
