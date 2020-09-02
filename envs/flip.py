@@ -15,11 +15,9 @@ class Flip(ObservationWrapper):
         self.is_rollout = is_rollout
 
     def step(self, action):
-        if self.prev_obs is not None:
+        if not self.is_rollout and self.prev_obs is not None:
             #FLIP
             # obs = np.flipud(self.prev_obs)
-            print("is rollout?", self.is_rollout)
-
             #CUTOUT
             # box_min = 7
             # box_max = 22
