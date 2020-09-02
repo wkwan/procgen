@@ -58,6 +58,7 @@ class Flip(ObservationWrapper):
         return obs
 
 def create_my_custom_env(config):
+    print("IS ROLLOUT", config["rollout"] if ("rollout" in config) else False)
     return Flip(ProcgenEnvWrapper(config), config["rollout"] if ("rollout" in config) else False)
 
 # Register Env in Ray
