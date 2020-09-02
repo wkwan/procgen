@@ -564,9 +564,9 @@ num_action = [1.] * num_aug_types
 qval_action = [0.] * num_aug_types
 ucb_exploration_coef = 0.5
 ucb_window_length = 10
-self.return_action = []
+return_action = []
 for i in range(num_aug_types):
-    self.return_action.append(deque(maxlen=ucb_window_length))
+    return_action.append(deque(maxlen=ucb_window_length))
 
 class PPOLoss:
     def __init__(self,
