@@ -21,7 +21,7 @@ DEFAULT_CONFIG = with_common_config({
     # Initial coefficient for KL divergence.
     "kl_coeff": 0.2,
     # Size of batches collected from each worker.
-    "rollout_fragment_length": 200,
+    "rollout_fragment_length": 256,
     # Number of timesteps collected for each SGD round. This defines the size
     # of each SGD epoch.
     "train_batch_size": 16384,
@@ -32,7 +32,7 @@ DEFAULT_CONFIG = with_common_config({
     "shuffle_sequences": True,
     # Number of SGD iterations in each outer loop (i.e., number of epochs to
     # execute per train batch).
-    "num_sgd_iter": 30,
+    "num_sgd_iter": 3,
     # Stepsize of SGD.
     "lr": 5e-5,
     # Learning rate schedule.
