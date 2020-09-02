@@ -13,6 +13,8 @@ from ray.rllib.utils.explained_variance import explained_variance
 from ray.rllib.utils.torch_ops import sequence_mask
 from ray.rllib.utils import try_import_torch
 
+from collections import deque
+
 torch, nn = try_import_torch()
 
 logger = logging.getLogger(__name__)
@@ -551,8 +553,20 @@ aug_to_func = {
         'color-jitter': ColorJitter,
 }
 
-aug_list = [aug_to_func[t](batch_size=256) 
+aug_list = [aug_to_func[t](batch_size=2048) 
             for t in list(aug_to_func.keys())]
+
+num_aug_types = len(aug_list)
+expl_action = [0.] * num_aug_types
+ucb_action = [0.] * num_aug_types
+total_num = 1
+num_action = [1.] * num_aug_types
+qval_action = [0.] * num_aug_types
+ucb_exploration_coef = 0.5
+ucb_window_length = 10
+self.return_action = []
+for i in range(num_aug_types):
+    self.return_action.append(deque(maxlen=ucb_window_length))
 
 class PPOLoss:
     def __init__(self,
@@ -602,6 +616,19 @@ class PPOLoss:
             use_gae (bool): If true, use the Generalized Advantage Estimator.
         """
         print("CUR OBS SHAPE", cur_obs.shape)
+
+        # select aug
+        for i in range(num_aug_types):
+            expl_action[i] = ucb_exploration_coef * np.sqrt(np.log(total_num) / num_action[i])
+            ucb_action[i] = qval_action[i] + expl_action[i]
+        ucb_aug_id = np.argmax(ucb_action)
+        current_aug_func = aug_list[ucb_aug_id]
+
+        #should update the ucb vals at end of every "step" (is that an episode?)
+
+
+    
+
         if valid_mask is not None:
             num_valid = torch.sum(valid_mask)
 
@@ -645,6 +672,9 @@ class PPOLoss:
                                      cur_kl_coeff * action_kl -
                                      entropy_coeff * curr_entropy)
         self.loss = loss
+
+        cur_obs_aug = current_aug_func.do_augmentation(cur_obs)
+        print("we did the augmentation yo")
 
 
 def ppo_surrogate_loss(policy, model, dist_class, train_batch):
