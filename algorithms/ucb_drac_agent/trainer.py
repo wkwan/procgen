@@ -63,7 +63,7 @@ DEFAULT_CONFIG = with_common_config({
     # Uses the sync samples optimizer instead of the multi-gpu one. This is
     # usually slower, but you might want to try it if you run into issues with
     # the default optimizer.
-    "simple_optimizer": True,
+    "simple_optimizer": False,
     # Whether to fake GPUs (using CPUs).
     # Set this to True for debugging on non-GPU machines (set `num_gpus` > 0).
     "_fake_gpus": False,
