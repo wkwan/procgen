@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 
 
 import numpy as np
+import torch
+import torch.nn as nn
 import numbers
 import random
 import time
@@ -538,8 +540,19 @@ def Identity(x):
     """
     return x
 
+aug_to_func = {    
+        'crop': Crop,
+        'random-conv': RandomConv,
+        'grayscale': Grayscale,
+        'flip': Flip,
+        'rotate': Rotate,
+        'cutout': Cutout,
+        'cutout-color': CutoutColor,
+        'color-jitter': ColorJitter,
+}
 
-
+aug_list = [aug_to_func[t](batch_size=256) 
+            for t in list(aug_to_func.keys())]
 
 class PPOLoss:
     def __init__(self,
