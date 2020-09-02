@@ -2,6 +2,7 @@ import logging
 
 from ray.rllib.agents import with_common_config
 from ray.rllib.agents.trainer_template import build_trainer
+from ray.rllib.agents.ppo.ppo_torch_policy import PPOTorchPolicy
 from ray.rllib.agents.trainer import Trainer
 
 logger = logging.getLogger(__name__)
@@ -153,7 +154,6 @@ def validate_config(config):
 
 def get_policy_class(config):
     if config["use_pytorch"]:
-        from ray.rllib.agents.ppo.ppo_torch_policy import PPOTorchPolicy
         return PPOTorchPolicy
     else:
         from ray.rllib.agents.ppo.ppo_tf_policy import PPOTFPolicy
