@@ -1,5 +1,5 @@
-from ray.rllib.policy.policy import Policy, LEARNER_STATS_KEY
-from .torch_policy import TorchPolicy
+from ray.rllib.policy.policy import Policy
+.torch_policy import TorchPolicy
 from ray.rllib.models.catalog import ModelCatalog
 from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.rllib.utils import add_mixins
@@ -19,9 +19,7 @@ def build_torch_policy(name,
                        postprocess_fn=None,
                        extra_action_out_fn=None,
                        extra_grad_process_fn=None,
-                       extra_learn_fetches_fn=None,
                        optimizer_fn=None,
-                       validate_spaces=None,
                        before_init=None,
                        after_init=None,
                        action_sampler_fn=None,
@@ -48,13 +46,8 @@ def build_torch_policy(name,
             returns a dict of extra values to include in experiences.
         extra_grad_process_fn (Optional[callable]): Optional callable that is
             called after gradients are computed and returns processing info.
-        extra_learn_fetches_fn (func): optional function that returns a dict of
-            extra values to fetch from the policy after loss evaluation.
         optimizer_fn (Optional[callable]): Optional callable that returns a
             torch optimizer given the policy and config.
-        validate_spaces (Optional[callable]): Optional callable that takes the
-            Policy, observation_space, action_space, and config to check for
-            correctness.
         before_init (Optional[callable]): Optional callable to run at the
             beginning of `Policy.__init__` that takes the same arguments as
             the Policy constructor.
@@ -101,17 +94,12 @@ def build_torch_policy(name,
                 config = dict(get_default_config(), **config)
             self.config = config
 
-            if validate_spaces:
-                validate_spaces(self, obs_space, action_space, self.config)
-
             if before_init:
-                before_init(self, obs_space, action_space, self.config)
+                before_init(self, obs_space, action_space, config)
 
             # Model is customized (use default action dist class).
             if make_model:
-                assert make_model_and_action_dist is None, \
-                    "Either `make_model` or `make_model_and_action_dist`" \
-                    " must be None!"
+                assert make_model_and_action_dist is None
                 self.model = make_model(self, obs_space, action_space, config)
                 dist_class, _ = ModelCatalog.get_action_dist(
                     action_space, self.config["model"], framework="torch")
@@ -129,7 +117,7 @@ def build_torch_policy(name,
                     num_outputs=logit_dim,
                     model_config=self.config["model"],
                     framework="torch",
-                    **self.config["model"].get("custom_model_config", {}))
+                    **self.config["model"].get("custom_options", {}))
 
             # Make sure, we passed in a correct Model factory.
             assert isinstance(self.model, TorchModelV2), \
@@ -181,16 +169,6 @@ def build_torch_policy(name,
                 return extra_grad_process_fn(self, optimizer, loss)
             else:
                 return TorchPolicy.extra_grad_process(self, optimizer, loss)
-
-        @override(TorchPolicy)
-        def extra_compute_grad_fetches(self):
-            if extra_learn_fetches_fn:
-                fetches = convert_to_non_torch_type(
-                    extra_learn_fetches_fn(self))
-                # Auto-add empty learner stats dict if needed.
-                return dict({LEARNER_STATS_KEY: {}}, **fetches)
-            else:
-                return TorchPolicy.extra_compute_grad_fetches(self)
 
         @override(TorchPolicy)
         def apply_gradients(self, gradients):
