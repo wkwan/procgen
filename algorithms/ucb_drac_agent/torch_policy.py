@@ -327,47 +327,47 @@ class TorchPolicy(Policy):
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
         # Call Model's custom-loss with Policy loss outputs and train_batch.
-    if self.model:
-        loss_out = self.model.custom_loss(loss_out, train_batch)
-        assert len(loss_out) == len(self._optimizers)
-        # assert not any(torch.isnan(l) for l in loss_out)
-        fetches = self.extra_compute_grad_fetches()
+        if self.model:
+            loss_out = self.model.custom_loss(loss_out, train_batch)
+            assert len(loss_out) == len(self._optimizers)
+            # assert not any(torch.isnan(l) for l in loss_out)
+            fetches = self.extra_compute_grad_fetches()
 
-        # Loop through all optimizers.
-        grad_info = {"allreduce_latency": 0.0}
-        for i, opt in enumerate(self._optimizers):
-            # Erase gradients in all vars of this optimizer.
-            opt.zero_grad()
-            # Recompute gradients of loss over all variables.
-            loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
-            grad_info.update(self.extra_grad_process(opt, loss_out[i]))
+            # Loop through all optimizers.
+            grad_info = {"allreduce_latency": 0.0}
+            for i, opt in enumerate(self._optimizers):
+                # Erase gradients in all vars of this optimizer.
+                opt.zero_grad()
+                # Recompute gradients of loss over all variables.
+                loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
+                grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
-            if self.distributed_world_size:
-                grads = []
-                for param_group in opt.param_groups:
-                    for p in param_group["params"]:
-                        if p.grad is not None:
-                            grads.append(p.grad)
+                if self.distributed_world_size:
+                    grads = []
+                    for param_group in opt.param_groups:
+                        for p in param_group["params"]:
+                            if p.grad is not None:
+                                grads.append(p.grad)
 
-                start = time.time()
-                if torch.cuda.is_available():
-                    # Sadly, allreduce_coalesced does not work with CUDA yet.
-                    for g in grads:
-                        torch.distributed.all_reduce(
-                            g, op=torch.distributed.ReduceOp.SUM)
-                else:
-                    torch.distributed.all_reduce_coalesced(
-                        grads, op=torch.distributed.ReduceOp.SUM)
+                    start = time.time()
+                    if torch.cuda.is_available():
+                        # Sadly, allreduce_coalesced does not work with CUDA yet.
+                        for g in grads:
+                            torch.distributed.all_reduce(
+                                g, op=torch.distributed.ReduceOp.SUM)
+                    else:
+                        torch.distributed.all_reduce_coalesced(
+                            grads, op=torch.distributed.ReduceOp.SUM)
 
-                for param_group in opt.param_groups:
-                    for p in param_group["params"]:
-                        if p.grad is not None:
-                            p.grad /= self.distributed_world_size
+                    for param_group in opt.param_groups:
+                        for p in param_group["params"]:
+                            if p.grad is not None:
+                                p.grad /= self.distributed_world_size
 
-                grad_info["allreduce_latency"] += time.time() - start
+                    grad_info["allreduce_latency"] += time.time() - start
 
-            # Step the optimizer.
-            opt.step()
+                # Step the optimizer.
+                opt.step()
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
