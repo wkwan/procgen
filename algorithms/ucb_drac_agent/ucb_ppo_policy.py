@@ -80,6 +80,8 @@ class Cutout(object):
         
     def do_augmentation(self, imgs):
         n, c, h, w = imgs.shape
+        self.batch_size = n
+        self.change_randomization_params_all()
         cutouts = torch.empty((n, c, h, w), dtype=imgs.dtype, device=imgs.device)
         for i, (img, w11, h11) in enumerate(zip(imgs, self.w1, self.h1)):
             cut_img = img.clone()
@@ -129,6 +131,8 @@ class CutoutColor(object):
     def do_augmentation(self, imgs):
         device = imgs.device
         imgs = imgs.cpu().numpy()
+        self.batch_size = imgs.shape[0]
+        self.change_randomization_params_all()
         n, c, h, w = imgs.shape
         pivot_h = 12
         pivot_w = 24
@@ -214,6 +218,8 @@ class Rotate(object):
     def do_augmentation(self, imgs):
         device = imgs.device
         imgs = imgs.cpu().numpy()
+        self.batch_size = imgs.shape[0]
+        self.change_randomization_params_all()
         tot_imgs = imgs
         for k in range(3):
             rot_imgs = np.ascontiguousarray(np.rot90(imgs,k=(k+1),axes=(2,3)))
@@ -428,6 +434,8 @@ class ColorJitter(nn.Module):
     def do_augmentation(self, imgs):
         # batch size
         imgs_copy = imgs.clone()
+        self.batch_size = img_copy.shape[0]
+        self.change_randomization_params_all()
         outputs = self.forward(imgs_copy)
         return outputs
     
@@ -546,14 +554,14 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        # 'crop': Crop,
-        # 'random-conv': RandomConv,
-        # 'grayscale': Grayscale,
+        'crop': Crop,
+        'random-conv': RandomConv,
+        'grayscale': Grayscale,
         'flip': Flip,
-        # 'rotate': Rotate,
-        # 'cutout': Cutout,
-        # 'cutout-color': CutoutColor,
-        # 'color-jitter': ColorJitter,
+        'rotate': Rotate,
+        'cutout': Cutout,
+        'cutout-color': CutoutColor,
+        'color-jitter': ColorJitter,
 }
 
 aug_list = [aug_to_func[t](batch_size=2048) 
@@ -618,8 +626,8 @@ class PPOLoss:
             vf_loss_coeff (float): Coefficient of the value function loss
             use_gae (bool): If true, use the Generalized Advantage Estimator.
         """
-        print("CUR OBS SHAPE", cur_obs.shape)
-        print("CUR OBS TYPE", type(cur_obs))
+        # print("CUR OBS SHAPE", cur_obs.shape)
+        # print("CUR OBS TYPE", type(cur_obs))
 
         # select aug
         for i in range(num_aug_types):
@@ -678,7 +686,7 @@ class PPOLoss:
         self.loss = loss
 
         cur_obs_aug = current_aug_func.do_augmentation(cur_obs)
-        print("we did the augmentation yo")
+        # print("we did the augmentation yo")
 
 
 def ppo_surrogate_loss(policy, model, dist_class, train_batch):
