@@ -42,6 +42,7 @@ class Grayscale(object):
         self.transform = kornia.color.gray.RgbToGrayscale()
         
     def do_augmentation(self, x):
+        self.batch_size = x.shape[0]
         x_copy = x.clone()
         x_copy = self.transform(x_copy)
         x_copy = x_copy.repeat([1,3,1,1])
