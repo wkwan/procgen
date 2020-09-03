@@ -222,7 +222,7 @@ class Rotate(object):
         self.change_randomization_params_all()
         tot_imgs = imgs
         for k in range(3):
-            rot_imgs = np.ascontiguousarray(np.rot90(imgs,k=(k+1),axes=(2,3)))
+            rot_imgs = np.ascontiguousarray(np.rot90(imgs,k=(k+1),axes=(3,4)))
             tot_imgs = np.concatenate((tot_imgs, rot_imgs), 0)
         images = torch.tensor(tot_imgs[self.random_inds], device=device)
         return images
