@@ -221,7 +221,7 @@ class Rotate(object):
         self.batch_size = imgs.shape[0]
         self.change_randomization_params_all()
         tot_imgs = imgs
-        print("TO ROTATE IMGS SHAPE", imgs.shape)
+        # print("TO ROTATE IMGS SHAPE", imgs.shape)
         for k in range(3):
             rot_imgs = np.ascontiguousarray(np.rot90(imgs,k=(k+1),axes=(1, 2)))
             tot_imgs = np.concatenate((tot_imgs, rot_imgs), 0)
@@ -559,7 +559,7 @@ aug_to_func = {
         # 'random-conv': RandomConv,
         # 'grayscale': Grayscale,
         # 'flip': Flip,
-        'rotate': Rotate,
+        # 'rotate': Rotate,
         'cutout': Cutout,
         'cutout-color': CutoutColor,
         'color-jitter': ColorJitter,
