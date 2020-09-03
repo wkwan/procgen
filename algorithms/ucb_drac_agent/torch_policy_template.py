@@ -1,5 +1,5 @@
 from ray.rllib.policy.policy import Policy
-.torch_policy import TorchPolicy
+from .torch_policy import TorchPolicy
 from ray.rllib.models.catalog import ModelCatalog
 from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.rllib.utils import add_mixins
