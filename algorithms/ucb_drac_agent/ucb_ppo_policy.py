@@ -435,7 +435,7 @@ class ColorJitter(nn.Module):
     def do_augmentation(self, imgs):
         # batch size
         imgs_copy = imgs.clone()
-        self.batch_size = img_copy.shape[0]
+        self.batch_size = imgs_copy.shape[0]
         self.change_randomization_params_all()
         outputs = self.forward(imgs_copy)
         return outputs
