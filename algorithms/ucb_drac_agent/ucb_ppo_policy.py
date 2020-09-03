@@ -183,7 +183,6 @@ class Flip(object):
     def do_augmentation(self, images):
         device = images.device
         images = images.cpu().numpy()
-        print("Images Shape before flip", images.shape)
         self.batch_size = images.shape[0]
         self.change_randomization_params_all()
         if self.random_inds.sum() > 0:
@@ -558,7 +557,7 @@ aug_to_func = {
         # 'crop': Crop,
         # 'random-conv': RandomConv,
         # 'grayscale': Grayscale,
-        'flip': Flip,
+        # 'flip': Flip,
         'rotate': Rotate,
         'cutout': Cutout,
         'cutout-color': CutoutColor,
