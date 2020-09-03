@@ -560,7 +560,7 @@ aug_to_func = {
         # 'grayscale': Grayscale,
         # 'flip': Flip,
         # 'rotate': Rotate,
-        'cutout': Cutout,
+        # 'cutout': Cutout,
         'cutout-color': CutoutColor,
         'color-jitter': ColorJitter,
 }
