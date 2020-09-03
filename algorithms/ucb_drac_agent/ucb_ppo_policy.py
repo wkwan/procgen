@@ -561,7 +561,7 @@ aug_to_func = {
         # 'flip': Flip,
         # 'rotate': Rotate,
         # 'cutout': Cutout,
-        # 'cutout-color': CutoutColor,
+        'cutout-color': CutoutColor,
         'color-jitter': ColorJitter,
 }
 
