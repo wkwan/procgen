@@ -223,7 +223,7 @@ class Rotate(object):
         tot_imgs = imgs
         print("TO ROTATE IMGS SHAPE", imgs.shape)
         for k in range(3):
-            rot_imgs = np.ascontiguousarray(np.rot90(imgs,k=(k+1),axes=(2,3)))
+            rot_imgs = np.ascontiguousarray(np.rot90(imgs,k=(k+1),axes=(1, 2)))
             tot_imgs = np.concatenate((tot_imgs, rot_imgs), 0)
         images = torch.tensor(tot_imgs[self.random_inds], device=device)
         return images
