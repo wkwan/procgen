@@ -132,9 +132,9 @@ class CutoutColor(object):
     def do_augmentation(self, imgs):
         device = imgs.device
         imgs = imgs.cpu().numpy()
-        self.batch_size = imgs.shape[0]
-        self.change_randomization_params_all()
         n, c, h, w = imgs.shape
+        self.batch_size = n
+        self.change_randomization_params_all()
         pivot_h = 12
         pivot_w = 24
 
@@ -558,10 +558,10 @@ aug_to_func = {
         # 'crop': Crop,
         # 'random-conv': RandomConv,
         # 'grayscale': Grayscale,
-        # 'flip': Flip,
-        # 'rotate': Rotate,
-        # 'cutout': Cutout,
-        'cutout-color': CutoutColor,
+        # 'flip': Flip, #works
+        # 'rotate': Rotate, #works
+        # 'cutout': Cutout, #works
+        # 'cutout-color': CutoutColor,
         'color-jitter': ColorJitter,
 }
 
