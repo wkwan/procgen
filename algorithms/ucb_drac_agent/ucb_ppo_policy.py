@@ -554,7 +554,7 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        'crop': Crop,
+        # 'crop': Crop,
         'random-conv': RandomConv,
         'grayscale': Grayscale,
         'flip': Flip,
