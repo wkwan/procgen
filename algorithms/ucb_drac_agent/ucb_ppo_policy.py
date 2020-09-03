@@ -178,6 +178,7 @@ class Flip(object):
     def do_augmentation(self, images):
         device = images.device
         images = images.cpu().numpy()
+        print("Images Shape before flip", images.shape)
         if self.random_inds.sum() > 0:
             images[self.random_inds] = np.flip(images[self.random_inds], 2)
         images = torch.tensor(images, device=device)
@@ -229,29 +230,29 @@ class Rotate(object):
         print(self.random_inds)
         
 
-# class Crop(object):
-#     """
-#     Crop Augmentation
-#     """
-#     def __init__(self,  
-#                  batch_size, 
-#                  *_args, 
-#                  **_kwargs):
-#         self.batch_size = batch_size 
+class Crop(object):
+    """
+    Crop Augmentation
+    """
+    def __init__(self,  
+                 batch_size, 
+                 *_args, 
+                 **_kwargs):
+        self.batch_size = batch_size 
 
-#     def do_augmentation(self, x):
-#         aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
-#                             kornia.augmentation.RandomCrop((64, 64)))
-#         return aug_trans(x)
+    def do_augmentation(self, x):
+        aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
+                            kornia.augmentation.RandomCrop((64, 64)))
+        return aug_trans(x)
 
-#     def change_randomization_params(self, index_):
-#         pass
+    def change_randomization_params(self, index_):
+        pass
 
-#     def change_randomization_params_all(self):
-#         pass
+    def change_randomization_params_all(self):
+        pass
 
-#     def print_parms(self):
-#         pass
+    def print_parms(self):
+        pass
 
 
 class RandomConv(object):
@@ -544,13 +545,13 @@ def Identity(x):
 
 aug_to_func = {    
         # 'crop': Crop,
-        'random-conv': RandomConv,
-        'grayscale': Grayscale,
+        # 'random-conv': RandomConv,
+        # 'grayscale': Grayscale,
         'flip': Flip,
-        'rotate': Rotate,
-        'cutout': Cutout,
-        'cutout-color': CutoutColor,
-        'color-jitter': ColorJitter,
+        # 'rotate': Rotate,
+        # 'cutout': Cutout,
+        # 'cutout-color': CutoutColor,
+        # 'color-jitter': ColorJitter,
 }
 
 aug_list = [aug_to_func[t](batch_size=2048) 
