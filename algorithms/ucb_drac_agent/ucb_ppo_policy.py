@@ -8,7 +8,7 @@ from ray.rllib.evaluation.postprocessing import Postprocessing
 from ray.rllib.policy.sample_batch import SampleBatch
 from ray.rllib.policy.torch_policy import EntropyCoeffSchedule, \
     LearningRateSchedule
-from ray.rllib.policy.torch_policy_template import build_torch_policy
+from .torch_policy_template import build_torch_policy
 from ray.rllib.utils.explained_variance import explained_variance
 from ray.rllib.utils.torch_ops import sequence_mask
 from ray.rllib.utils import try_import_torch
@@ -558,11 +558,11 @@ aug_to_func = {
         # 'crop': Crop,
         # 'random-conv': RandomConv,
         # 'grayscale': Grayscale,
-        # 'flip': Flip, #works
-        # 'rotate': Rotate, #works
-        # 'cutout': Cutout, #works
+        'flip': Flip, #works
+        'rotate': Rotate, #works
+        'cutout': Cutout, #works
         # 'cutout-color': CutoutColor,
-        'color-jitter': ColorJitter,
+        # 'color-jitter': ColorJitter,
 }
 
 aug_list = [aug_to_func[t](batch_size=2048) 
@@ -686,7 +686,7 @@ class PPOLoss:
                                      entropy_coeff * curr_entropy)
         self.loss = loss
 
-        cur_obs_aug = current_aug_func.do_augmentation(cur_obs)
+        # cur_obs_aug = current_aug_func.do_augmentation(cur_obs)
         # print("we did the augmentation yo")
 
 
