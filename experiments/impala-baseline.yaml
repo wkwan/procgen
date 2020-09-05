@@ -88,7 +88,7 @@ impala-bigfish:
         num_sgd_iter: 1
         # set >0 to enable experience replay. Saved samples will be replayed with
         # a p:1 proportion to new data samples.
-        replay_proportion: 0.5
+        replay_proportion: 0.25
         # number of sample batches to store for replay. The number of transitions
         # saved total will be (replay_buffer_num_slots * rollout_fragment_length).
         replay_buffer_num_slots: 15
