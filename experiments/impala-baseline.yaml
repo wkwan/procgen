@@ -91,7 +91,7 @@ impala-bigfish:
         replay_proportion: 0.5
         # number of sample batches to store for replay. The number of transitions
         # saved total will be (replay_buffer_num_slots * rollout_fragment_length).
-        replay_buffer_num_slots: 10
+        replay_buffer_num_slots: 15
         # max queue size for train batches feeding into the learner
         learner_queue_size: 16
         # wait for train batches to be available in minibatch buffer queue
