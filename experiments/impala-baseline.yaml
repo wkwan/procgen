@@ -1,6 +1,6 @@
-impala-bigfish:
+impala-miner:
     env: procgen_env_wrapper  # Change this at your own risk :D
-    disable_evaluation_worker: True
+    # disable_evaluation_worker: True
     run: IMPALA
     # Can be replaced by any of the available agents as described at : 
     # https://github.com/ray-project/ray/blob/master/rllib/agents/registry.py#L103
@@ -35,7 +35,7 @@ impala-bigfish:
         ################################################
         env_config:
             # Name of the procgen environment to train on # Note, that this parameter will be overriden during the evaluation by the AIcrowd evaluators.
-            env_name: bigfish
+            env_name: miner
             # The number of unique levels that can be generated. Set to 0 to use unlimited levels
             num_levels: 0
             # The lowest seed that will be used to generated levels. 'start_level' and 'num_levels' fully specify the set of possible levels
@@ -58,8 +58,8 @@ impala-bigfish:
         ################################################
         # V-trace params (see vtrace_tf.py).
         vtrace: True
-        vtrace_clip_rho_threshold: 0.8064136649858131
-        vtrace_clip_pg_rho_threshold: 1.1977484543337393
+        vtrace_clip_rho_threshold: 0.7650280655675494
+        vtrace_clip_pg_rho_threshold: 0.9373025532473312
         # System params.
         #
         # == Overview of data flow in IMPALA ==
@@ -85,15 +85,15 @@ impala-bigfish:
         # only has an effect if `num_sgd_iter > 1`.
         minibatch_buffer_size: 1
         # number of passes to make over each train batch
-        num_sgd_iter: 1
+        num_sgd_iter: 3
         # set >0 to enable experience replay. Saved samples will be replayed with
         # a p:1 proportion to new data samples.
-        replay_proportion: 0.3154961659547032
+        replay_proportion: 0.1030388020309716
         # number of sample batches to store for replay. The number of transitions
         # saved total will be (replay_buffer_num_slots * rollout_fragment_length).
         replay_buffer_num_slots: 12
         # max queue size for train batches feeding into the learner
-        learner_queue_size: 24
+        learner_queue_size: 18
         # wait for train batches to be available in minibatch buffer queue
         # this many seconds. This may need to be increased e.g. when training
         # with a slow environment
@@ -107,18 +107,18 @@ impala-bigfish:
         num_aggregation_workers: 0
 
         # Learning params.
-        grad_clip: 58.94943901691127
+        grad_clip: 22.780738435260748
         # either "adam" or "rmsprop"
         opt_type: adam
-        lr: 0.00023737415874711606
+        lr: 0.00018218208579015352
         # lr_schedule: None
         # rmsprop considered
-        decay: 0.9749986100809555
-        momentum: 0.1020239723421959
-        epsilon: 0.26171471038421074
+        decay: 0.9895786835765803
+        momentum: 0.09502532799933179
+        epsilon: 0.10719985387587658
         # balancing the three losses
-        vf_loss_coeff: 0.781725951959626
-        entropy_coeff: 0.006376844004420352
+        vf_loss_coeff: 0.5229306298374019
+        entropy_coeff: 0.005040493030450776
         # entropy_coeff_schedule: None
 
         # use fake (infinite speed) sampler for testing
