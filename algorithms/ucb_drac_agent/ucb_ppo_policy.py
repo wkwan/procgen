@@ -786,6 +786,7 @@ def update_ucb_values(rollout_reward_mean):
     for i in range(num_aug_types):
         expl_action[i] = ucb_exploration_coef * np.sqrt(np.log(total_num) / num_action[i])
         ucb_action[i] = qval_action[i] + expl_action[i]
+    print(ucb_action)
     ucb_aug_id = np.argmax(ucb_action)
 
     print("select the aug", ucb_aug_id)
