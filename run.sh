@@ -5,8 +5,12 @@ set -e
 # Your experiment file for submission   #
 #########################################
 
-export EXPERIMENT_DEFAULT="experiments/impala-baseline.yaml"
+#will: change this to whatever experiment config
+export EXPERIMENT_DEFAULT="experiments/ucb-drac.yaml"
 export EXPERIMENT=${EXPERIMENT:-$EXPERIMENT_DEFAULT}
+
+# export CHECKPOINT=~/ray_results/procgen-ppo/PPO_flip_procgen_env_0_2020-09-02_14-55-35ns3s9onb/checkpoint_2/checkpoint-2
+# export EPISODES=5
 
 if [[ -z $AICROWD_IS_GRADING ]]; then
   ##########################################################################
@@ -15,10 +19,28 @@ if [[ -z $AICROWD_IS_GRADING ]]; then
   # variable is set, due to which this block will be skipped.              #
   ##########################################################################
 
+#will: https://discourse.aicrowd.com/t/aws-instance-setup/3380
+  # export OUTPUTS_DIR=./outputs
+  # export RAY_MEMORY_LIMIT=480000000000
+  # export RAY_CPUS=64
+  # export RAY_GPUS=8
+  # export RAY_STORE_MEMORY=240000000000
+
+  # export OUTPUTS_DIR=./outputs
+  # export RAY_MEMORY_LIMIT=240000000000
+  # export RAY_CPUS=32
+  # export RAY_GPUS=4
+  # export RAY_STORE_MEMORY=120000000000
+  
   export OUTPUTS_DIR=./outputs
-  export RAY_MEMORY_LIMIT=1500000000
-  export RAY_CPUS=2
-  export RAY_STORE_MEMORY=1000000000
+  export RAY_MEMORY_LIMIT=60129542144
+  export RAY_CPUS=8
+  export RAY_STORE_MEMORY=30000000000
+
+  # export OUTPUTS_DIR=./outputs
+  # export RAY_MEMORY_LIMIT=6012954214
+  # export RAY_CPUS=2
+  # export RAY_STORE_MEMORY=3000000000
 
   # Cleaning output directory between multiple runs
   rm -rf ${OUTPUTS_DIR}
@@ -69,8 +91,8 @@ print_banner
 
 if [[ " $@ " =~ " --train " ]]; then
   export VALID_RUN=true
-  echo "Executing: python train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}"
-  python train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
+  echo "Executing: python3 train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-num-gpus ${RAY_GPUS:-1} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}"
+  python3 train.py -f ${EXPERIMENT} --ray-memory ${RAY_MEMORY_LIMIT:-1500000000} --ray-num-cpus ${RAY_CPUS:-2} --ray-num-gpus ${RAY_GPUS:-1} --ray-object-store-memory ${RAY_STORE_MEMORY:-1000000000}
   STATUS_CODE=$?
 fi
 
@@ -84,8 +106,8 @@ if [[ " $@ " =~ " --rollout " ]]; then
     detect_latest_checkpoint
   fi
   echo "Rollout with checkpoint: $CHECKPOINT"
-  echo "Executing: python ./rollout.py $CHECKPOINT --episodes ${EPISODES:-5} --run $ROLLOUT_RUN --env $ROLLOUT_ENV"
-  python ./rollout.py $CHECKPOINT --episodes ${EPISODES:-5} --run $ROLLOUT_RUN --env $ROLLOUT_ENV
+  echo "Executing: python3 ./rollout.py $CHECKPOINT --episodes ${EPISODES:-5} --run $ROLLOUT_RUN --env $ROLLOUT_ENV"
+  python3 ./rollout.py $CHECKPOINT --episodes ${EPISODES:-5} --run $ROLLOUT_RUN --env $ROLLOUT_ENV
   STATUS_CODE=$?
 fi
 

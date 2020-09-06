@@ -10,6 +10,9 @@ from ray.rllib.agents.callbacks import DefaultCallbacks
 
 import numpy as np
 
+from pprint import pprint
+
+
 class CustomCallbacks(DefaultCallbacks):
     """
     Please refer to : 
@@ -59,6 +62,7 @@ class CustomCallbacks(DefaultCallbacks):
     def on_episode_end(self, worker: RolloutWorker, base_env: BaseEnv,
                        policies: Dict[str, Policy],
                        episode: MultiAgentEpisode, **kwargs):
+        # print("an episode is done")
         """Runs when an episode is done.
         Args:
             worker (RolloutWorker): Reference to the current rollout worker.
@@ -79,7 +83,6 @@ class CustomCallbacks(DefaultCallbacks):
         # last_obs_object_from_episode = episode.last_observation_for()
         # We define a dummy custom metric, observation_mean
         # episode.custom_metrics["observation_mean"] = last_obs_object_from_episode.mean()
-        pass
 
     def on_postprocess_trajectory(
             self, worker: RolloutWorker, episode: MultiAgentEpisode,
@@ -130,4 +133,5 @@ class CustomCallbacks(DefaultCallbacks):
         # print("=============================================================")
         # print(" Timesteps Throughput : {} ts/sec".format(TBD))
         # print("=============================================================")
-        pass
+        print("ON TRAIN RESULT", result['episode_reward_mean'])
+        trainer._policy._update_ucb_values(result['episode_reward_mean'])
