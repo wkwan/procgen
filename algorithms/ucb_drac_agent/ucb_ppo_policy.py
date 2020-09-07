@@ -202,6 +202,7 @@ class Flip(object):
         images = images.cpu().numpy()
         self.batch_size = images.shape[0]
         self.change_randomization_params_all()
+        print("images shape", images.shape)
         if self.random_inds.sum() > 0:
             images = images.transpose(0,3,1,2)
             images[self.random_inds] = np.flip(images[self.random_inds], 2)
