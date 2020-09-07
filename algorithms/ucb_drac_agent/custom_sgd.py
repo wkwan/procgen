@@ -115,8 +115,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     MultiAgentBatch({
                         policy_id: minibatch
                     }, minibatch.count)))[policy_id]
-                if batch_fetches is None:	
-                    return
+                if batch_fetches is None:
+                    continue
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
