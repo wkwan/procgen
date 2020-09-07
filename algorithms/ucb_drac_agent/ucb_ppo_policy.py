@@ -750,31 +750,34 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
     # aug_train_batch["obs"] = current_aug_func.do_augmentation(aug_train_batch["obs"]).cuda()
 
-    #should update the ucb vals at end of every "step" (is that an episode?)
+    # #should update the ucb vals at end of every "step" (is that an episode?)
 
-    aug_logits, aug_state = model.from_batch(aug_train_batch)
-    # aug_action_dist = dist_class(aug_logits, aug_state)
+    # aug_logits, aug_state = model.from_batch(aug_train_batch)
+    # # aug_action_dist = dist_class(aug_logits, aug_state)
 
-    action_loss_aug = - torch.mean(aug_logits)
+    # action_loss_aug = - torch.mean(aug_logits)
 
-    # print("ACTION LOSS AUG", action_loss_aug)
+    # # print("ACTION LOSS AUG", action_loss_aug)
 
-    global prev_ppo_loss
-    global prev_value_fn
-    # print("prev ppos loss", prev_ppo_loss)
-    # print("prev value fun", prev_value_fn)
+    # global prev_ppo_loss
+    # global prev_value_fn
+    # # print("prev ppos loss", prev_ppo_loss)
+    # # print("prev value fun", prev_value_fn)
 
-    if prev_ppo_loss is None:
-        prev_ppo_loss = policy.loss_obj.loss
-        prev_value_fn = model.value_function()
-        return None
+    # if prev_ppo_loss is None:
+    #     prev_ppo_loss = policy.loss_obj.loss
+    #     prev_value_fn = model.value_function()
+    #     return None
 
-    # print("PREV VALUE FN", prev_value_fn)
-    value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
-    
+    # # print("PREV VALUE FN", prev_value_fn)
     # value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
+    
+    # # value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
 
-    regularized_loss = prev_ppo_loss + 0.1 * (value_loss_aug + action_loss_aug) 
+    # regularized_loss = prev_ppo_loss + 0.1 * (value_loss_aug + action_loss_aug) 
+
+
+    regularized_loss = prev_ppo_loss
 
     # print("prev ppo loss", policy.loss_obj.loss)
     # print("value loss aug", value_loss_aug)
