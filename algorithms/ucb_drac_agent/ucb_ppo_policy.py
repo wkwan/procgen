@@ -202,10 +202,11 @@ class Flip(object):
         images = images.cpu().numpy()
         self.batch_size = images.shape[0]
         self.change_randomization_params_all()
-        print("images shape", images.shape)
         if self.random_inds.sum() > 0:
             images = images.transpose(0,3,1,2)
+            print("before flip", images[self.random_inds][0])
             images[self.random_inds] = np.flip(images[self.random_inds], 3)
+            print("after flip", images[self.random_inds][0])
             images = images.transpose(0,2,3,1)
         images = torch.tensor(images, device=device)
         if self.random_inds.sum() > 0:
