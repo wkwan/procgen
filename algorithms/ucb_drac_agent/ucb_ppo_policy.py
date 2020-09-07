@@ -11,6 +11,8 @@ from .torch_policy_template import build_torch_policy
 from ray.rllib.utils.explained_variance import explained_variance
 from ray.rllib.utils.torch_ops import sequence_mask
 from ray.rllib.utils import try_import_torch
+from torchvision.utils import save_image
+
 
 torch, nn = try_import_torch()
 
@@ -46,6 +48,7 @@ class Grayscale(object):
         x_copy = self.transform(x_copy)
         x_copy = x_copy.repeat([1,3,1,1])
         x_copy = x_copy.permute(0,2,3,1)
+        save_image(x_copy[0], 'grayscale.png')
         return x_copy
 
     def change_randomization_params(self, index_):
@@ -98,6 +101,7 @@ class Cutout(object):
             cutouts[i] = cut_img
         # cutouts = cutouts.transpose(0,2,3,1)
         cutouts = cutouts.permute(0,2,3,1)
+        save_image(x_copy[0], 'cutouts.png')
         return cutouts
     
     def change_randomization_params(self, index_):
