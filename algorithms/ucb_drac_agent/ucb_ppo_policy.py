@@ -101,7 +101,7 @@ class Cutout(object):
             cutouts[i] = cut_img
         # cutouts = cutouts.transpose(0,2,3,1)
         cutouts = cutouts.permute(0,2,3,1)
-        save_image(x_copy[0], 'cutouts.png')
+        # save_image(cutouts[0], 'cutouts.png')
         return cutouts
     
     def change_randomization_params(self, index_):
