@@ -181,7 +181,7 @@ def validate_config(config):
             "reduce performance, consider simple_optimizer=False.")
     # elif config["use_pytorch"] or (tf and tf.executing_eagerly()):
     #     config["simple_optimizer"] = True  # multi-gpu not supported
-     elif config["framework"] in ["tfe", "torch"]:
+    elif config["framework"] in ["tfe", "torch"]:
         config["simple_optimizer"] = True
 
 
