@@ -248,7 +248,7 @@ class Rotate(object):
         images = images.permute(0,2,3,1)
 
         print("to write shape",tot_imgs[self.random_inds][0].shape)
-        imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', tot_imgs[self.random_inds][0])
+        imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', images[self.random_inds][0])
         return images
     
     def change_randomization_params(self, index_):
