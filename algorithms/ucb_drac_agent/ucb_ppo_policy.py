@@ -267,6 +267,7 @@ class Crop(object):
                             kornia.augmentation.RandomCrop((64, 64)))
         x = aug_trans(x)
         x = x.permute(0,2,3,1)
+        print("about to save crop image")
         save_image(x[0], './crop.png')
         return x
 
