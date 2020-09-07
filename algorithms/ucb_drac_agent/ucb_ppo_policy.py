@@ -212,7 +212,7 @@ class Flip(object):
         images = torch.tensor(images, device=device)
         if self.random_inds.sum() > 0:
             # print("flipped image shape", images[self.random_inds])
-            imageio.imwrite('/home/ubuntu/procgen-competition/flip.png', images[self.random_inds].cpu().numpy())
+            imageio.imwrite('/home/ubuntu/procgen-competition/flip.png', images[self.random_inds][0].cpu().numpy())
         return images
     
     def change_randomization_params(self, index_):
