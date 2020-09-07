@@ -48,7 +48,8 @@ class Grayscale(object):
         x_copy = self.transform(x_copy)
         x_copy = x_copy.repeat([1,3,1,1])
         x_copy = x_copy.permute(0,2,3,1)
-        save_image(x_copy[0], fp='./grayscale.png')
+        print("image to save shape", x_copy[0].shape)
+        save_image(x_copy[0], './grayscale.png')
         return x_copy
 
     def change_randomization_params(self, index_):
