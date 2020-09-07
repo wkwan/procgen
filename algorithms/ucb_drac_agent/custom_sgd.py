@@ -13,7 +13,7 @@ from ray.rllib.policy.sample_batch import SampleBatch, DEFAULT_POLICY_ID, \
 logger = logging.getLogger(__name__)
 
 
-def averaged(kv):
+def averaged(kv, axis=None):
     """Average the value lists of a dictionary.
 
     For non-scalar values, we simply pick the first value.
@@ -27,7 +27,7 @@ def averaged(kv):
     out = {}
     for k, v in kv.items():
         if v[0] is not None and not isinstance(v[0], dict):
-            out[k] = np.mean(v)
+            out[k] = np.mean(v, axis=axis)
         else:
             out[k] = v[0]
     return out
@@ -115,7 +115,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     MultiAgentBatch({
                         policy_id: minibatch
                     }, minibatch.count)))[policy_id]
-                if batch_fetches is None:
+                if batch_fetches is None:	
                     return
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)

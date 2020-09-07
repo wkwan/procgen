@@ -5,15 +5,16 @@ from ray.rllib.optimizers.policy_optimizer import PolicyOptimizer
 from ray.rllib.policy.sample_batch import SampleBatch, DEFAULT_POLICY_ID
 from ray.rllib.utils.annotations import override
 from ray.rllib.utils.filter import RunningStat
+# from ray.rllib.utils.sgd import do_minibatch_sgd
 from .custom_sgd import do_minibatch_sgd
 from ray.rllib.utils.timer import TimerStat
-from ray.rllib.utils.memory import ray_get_and_free
 
 logger = logging.getLogger(__name__)
 
 
 class SyncSamplesOptimizer(PolicyOptimizer):
     """A simple synchronous RL optimizer.
+
     In each step, this optimizer pulls samples from a number of remote
     workers, concatenates them, and then updates a local model. The updated
     model weights are then broadcast to all remote workers.
@@ -40,9 +41,6 @@ class SyncSamplesOptimizer(PolicyOptimizer):
                              .foreach_trainable_policy(lambda p, i: (i, p)))
         logger.debug("Policies to train: {}".format(self.policies))
 
-    def get_ucb_values():
-        print("get ucb values")
-        
     @override(PolicyOptimizer)
     def step(self):
         with self.update_weights_timer:
@@ -56,7 +54,7 @@ class SyncSamplesOptimizer(PolicyOptimizer):
             while sum(s.count for s in samples) < self.train_batch_size:
                 if self.workers.remote_workers():
                     samples.extend(
-                        ray_get_and_free([
+                        ray.get([
                             e.sample.remote()
                             for e in self.workers.remote_workers()
                         ]))
@@ -71,8 +69,6 @@ class SyncSamplesOptimizer(PolicyOptimizer):
                                        self.num_sgd_iter,
                                        self.sgd_minibatch_size,
                                        self.standardize_fields)
-            if fetches is None:
-                return
         self.grad_timer.push_units_processed(samples.count)
 
         if len(fetches) == 1 and DEFAULT_POLICY_ID in fetches:
