@@ -234,7 +234,7 @@ class Rotate(object):
         self.random_inds = np.random.randint(4, size=batch_size) * batch_size + np.arange(batch_size)
         
     def do_augmentation(self, imgs):
-        # imgs = imgs.permute(0,3,1,2)
+        imgs = imgs.permute(0,3,1,2)
 
         device = imgs.device
         imgs = imgs.cpu().numpy()
@@ -244,7 +244,7 @@ class Rotate(object):
         for k in range(3):
             rot_imgs = np.ascontiguousarray(np.rot90(imgs,k=(k+1),axes=(2, 3)))
             tot_imgs = np.concatenate((tot_imgs, rot_imgs), 0)
-        images = torch.tensor(tot_imgs[self.random_inds])
+        images = torch.tensor(tot_imgs[self.random_inds], device=device)
         images = images.permute(0,2,3,1)
         imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', images[self.random_inds][0].cpu().numpy())
         return images
