@@ -14,6 +14,7 @@ from ray.rllib.utils.tracking_dict import UsageTrackingDict
 
 torch, _ = try_import_torch()
 
+
 class TorchPolicy(Policy):
     """Template for a PyTorch policy and loss to use with RLlib.
 
@@ -104,6 +105,7 @@ class TorchPolicy(Policy):
                         explore=None,
                         timestep=None,
                         **kwargs):
+
         explore = explore if explore is not None else self.config["explore"]
         timestep = timestep if timestep is not None else self.global_timestep
 
@@ -227,15 +229,15 @@ class TorchPolicy(Policy):
             batch_divisibility_req=self.batch_divisibility_req)
 
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
-        # print("before get ucb values")
-        # self._optimizers[0].get_ucb_values()
-        loss_out = self._loss(self, self.model, self.dist_class, train_batch)
-        if loss_out is None:
-            return
-        loss_out = force_list(loss_out)
-        # print("TRAIN BATCH SHAPE", train_batch["new_obs"].shape)
-        # print("loss out len is", len(loss_out), loss_out)
+        # loss_out = force_list(
+        #     self._loss(self, self.model, self.dist_class, train_batch))
+        loss_out = self._loss(self, self.model, self.dist_class, train_batch)	
+        if loss_out is None:	
+            return	
+        loss_out = force_list(loss_out)	
+
         assert len(loss_out) == len(self._optimizers)
+        # assert not any(torch.isnan(l) for l in loss_out)
 
         # Loop through all optimizers.
         grad_info = {"allreduce_latency": 0.0}
@@ -243,10 +245,8 @@ class TorchPolicy(Policy):
             # Erase gradients in all vars of this optimizer.
             opt.zero_grad()
             # Recompute gradients of loss over all variables.
-            # print("loss out is", i, loss_out[i])
             # loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
-            loss_out[i].backward(retain_graph=True)
-
+            loss_out[i].backward(retain_graph=True) #Will: should we do this?
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
             if self.distributed_world_size:
@@ -328,6 +328,26 @@ class TorchPolicy(Policy):
     def set_weights(self, weights):
         weights = convert_to_torch_tensor(weights, device=self.device)
         self.model.load_state_dict(weights)
+
+    @override(Policy)
+    def get_state(self):
+        state = super().get_state()
+        state["_optimizer_variables"] = []
+        for i, o in enumerate(self._optimizers):
+            state["_optimizer_variables"].append(o.state_dict())
+        return state
+
+    @override(Policy)
+    def set_state(self, state):
+        state = state.copy()  # shallow copy
+        # Set optimizer vars first.
+        optimizer_vars = state.pop("_optimizer_variables", None)
+        if optimizer_vars:
+            assert len(optimizer_vars) == len(self._optimizers)
+            for o, s in zip(self._optimizers, optimizer_vars):
+                o.load_state_dict(s)
+        # Then the Policy's (NN) weights.
+        super().set_state(state)
 
     @override(Policy)
     def is_recurrent(self):
