@@ -200,10 +200,12 @@ class Flip(object):
     def do_augmentation(self, images):
         device = images.device
         images = images.cpu().numpy()
+        imgs = imgs.transpose(0,3,1,2)
         self.batch_size = images.shape[0]
         self.change_randomization_params_all()
         if self.random_inds.sum() > 0:
-            images[self.random_inds] = np.flip(images[self.random_inds], 1)
+            images[self.random_inds] = np.flip(images[self.random_inds], 2)
+        imgs = imgs.transpose(0,2,3,1)
         images = torch.tensor(images, device=device)
         if self.random_inds.sum() > 0:
             print("flipped image shape", images[self.random_inds])
