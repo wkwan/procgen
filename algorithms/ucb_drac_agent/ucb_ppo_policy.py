@@ -246,7 +246,7 @@ class Rotate(object):
             tot_imgs = np.concatenate((tot_imgs, rot_imgs), 0)
         images = torch.tensor(tot_imgs[self.random_inds], device=device)
         # images = images.permute(0,2,3,1)
-        imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', tot_imgs[self.random_inds][0])
+        # imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', tot_imgs[self.random_inds][0])
         return images
     
     def change_randomization_params(self, index_):
@@ -588,14 +588,14 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        # 'crop': Crop, #works
-        # 'random-conv': RandomConv,
-        # 'grayscale': Grayscale, #works
-        # 'flip': Flip, #works
-        'rotate': Rotate, #works
-        # 'cutout': Cutout, #works
-        # 'cutout-color': CutoutColor, #works
-        # 'color-jitter': ColorJitter #works
+        'crop': Crop, #works
+        'random-conv': RandomConv,
+        'grayscale': Grayscale, #works
+        'flip': Flip, #works
+        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+        'cutout': Cutout, #works
+        'cutout-color': CutoutColor, #works
+        'color-jitter': ColorJitter #works
 }
 
 aug_list = [aug_to_func[t](batch_size=2048) 
