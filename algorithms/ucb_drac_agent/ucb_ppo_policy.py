@@ -246,9 +246,7 @@ class Rotate(object):
             tot_imgs = np.concatenate((tot_imgs, rot_imgs), 0)
         images = torch.tensor(tot_imgs[self.random_inds], device=device)
         images = images.permute(0,2,3,1)
-
-        print("to write shape",tot_imgs[self.random_inds][0].shape)
-        imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', images[self.random_inds][0])
+        imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', images[self.random_inds][0].cpu().numpy())
         return images
     
     def change_randomization_params(self, index_):
