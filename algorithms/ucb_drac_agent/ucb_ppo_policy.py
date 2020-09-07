@@ -593,8 +593,8 @@ aug_to_func = {
         # 'grayscale': Grayscale, #works
         # 'flip': Flip, #works fix saving
         # 'rotate': Rotate, #works
-        'cutout': Cutout, #works
-        # 'cutout-color': CutoutColor, #works
+        # 'cutout': Cutout, #works
+        'cutout-color': CutoutColor, #works
         # 'color-jitter': ColorJitter #works
 }
 
