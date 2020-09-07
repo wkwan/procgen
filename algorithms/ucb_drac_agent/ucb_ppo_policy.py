@@ -205,13 +205,10 @@ class Flip(object):
         print("images shape", images.shape)
         if self.random_inds.sum() > 0:
             images = images.transpose(0,3,1,2)
-            print("random inds is", self.random_inds)
-            print("to flip shape is", images[self.random_inds].shape)
-            images[self.random_inds] = np.flip(images[self.random_inds], 2)
+            images[self.random_inds] = np.flip(images[self.random_inds], 3)
             images = images.transpose(0,2,3,1)
         images = torch.tensor(images, device=device)
         if self.random_inds.sum() > 0:
-            # print("flipped image shape", images[self.random_inds])
             imageio.imwrite('/home/ubuntu/procgen-competition/flip.png', images[self.random_inds][0].cpu().numpy())
         return images
     
