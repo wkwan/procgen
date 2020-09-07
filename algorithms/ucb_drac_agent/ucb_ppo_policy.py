@@ -592,10 +592,10 @@ aug_to_func = {
         'random-conv': RandomConv, #works
         'cutout-color': CutoutColor, #works
         'color-jitter': ColorJitter, #works
+        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
         'flip': Flip, #works
         'cutout': Cutout, #works
         'grayscale': Grayscale, #works
-        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
 
 }
 
