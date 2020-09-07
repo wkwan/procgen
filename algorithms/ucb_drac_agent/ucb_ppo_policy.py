@@ -744,6 +744,8 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
         use_gae=policy.config["use_gae"]
     )
 
+    return policy.loss_obj.loss
+
     aug_train_batch = train_batch
 
     current_aug_func = aug_list[ucb_aug_id]
