@@ -748,7 +748,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
     current_aug_func = aug_list[ucb_aug_id]
 
-    aug_train_batch["obs"] = current_aug_func.do_augmentation(aug_train_batch["obs"]).cuda()
+    # aug_train_batch["obs"] = current_aug_func.do_augmentation(aug_train_batch["obs"]).cuda()
 
     #should update the ucb vals at end of every "step" (is that an episode?)
 
