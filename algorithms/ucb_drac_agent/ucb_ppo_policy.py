@@ -589,13 +589,14 @@ def Identity(x):
 
 aug_to_func = {    
         'crop': Crop, #works
-        'random-conv': RandomConv,
-        'grayscale': Grayscale, #works
-        'flip': Flip, #works
-        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
-        'cutout': Cutout, #works
+        'random-conv': RandomConv, #works
         'cutout-color': CutoutColor, #works
-        'color-jitter': ColorJitter #works
+        'color-jitter': ColorJitter, #works
+        'flip': Flip, #works
+        'cutout': Cutout, #works
+        'grayscale': Grayscale, #works
+        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+
 }
 
 aug_list = [aug_to_func[t](batch_size=2048) 
