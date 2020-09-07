@@ -470,9 +470,10 @@ class ColorJitter(nn.Module):
         self.batch_size = imgs_copy.shape[0]
         self.change_randomization_params_all()
         outputs = self.forward(imgs_copy)
+        outputs = outputs.permute(0,2,3,1)
         imageio.imwrite('/home/ubuntu/procgen-competition/colorjitter.png', outputs[0].cpu().numpy())
-        return outputs.permute(0,2,3,1)
-    
+        return outputs
+        
     def change_randomization_params(self, index_):
         self.factor_contrast[index_] = torch.empty(1, device=self._device).uniform_(*self.contrast)
         self.factor_hue[index_] = torch.empty(1, device=self._device).uniform_(*self.hue)
@@ -594,8 +595,8 @@ aug_to_func = {
         # 'flip': Flip, #works fix saving
         # 'rotate': Rotate, #works
         # 'cutout': Cutout, #works
-        'cutout-color': CutoutColor, #works
-        # 'color-jitter': ColorJitter #works
+        # 'cutout-color': CutoutColor, #works
+        'color-jitter': ColorJitter #works
 }
 
 aug_list = [aug_to_func[t](batch_size=2048) 
