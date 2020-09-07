@@ -319,8 +319,9 @@ class RandomConv(object):
             else:
                 total_out = torch.cat((total_out, rand_out), 0)
         total_out = total_out.reshape(-1, num_stack_channel, img_h, img_w)
+        total_out = total_out.permute(0,2,3,1)
         imageio.imwrite('/home/ubuntu/procgen-competition/randomconv.png', total_out[0].cpu().detach().numpy())
-        return total_out.permute(0,2,3,1)
+        return total_out
 
     def change_randomization_params(self, index_):
         pass
