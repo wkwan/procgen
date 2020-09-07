@@ -266,7 +266,9 @@ class Crop(object):
         aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
                             kornia.augmentation.RandomCrop((64, 64)))
         x = aug_trans(x)
-        return x.permute(0,2,3,1)
+        x = x.permute(0,2,3,1)
+        save_image(x[0], fp='./crop.png')
+        return x
 
     def change_randomization_params(self, index_):
         pass
