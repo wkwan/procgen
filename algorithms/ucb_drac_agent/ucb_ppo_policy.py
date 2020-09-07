@@ -234,10 +234,11 @@ class Rotate(object):
         self.random_inds = np.random.randint(4, size=batch_size) * batch_size + np.arange(batch_size)
         
     def do_augmentation(self, imgs):
+        imgs = imgs.permute(0,3,1,2)
+
         device = imgs.device
         imgs = imgs.cpu().numpy()
         self.batch_size = imgs.shape[0]
-        # imgs = imgs.permute(0,3,1,2)
         self.change_randomization_params_all()
         tot_imgs = imgs
         for k in range(3):
@@ -246,7 +247,7 @@ class Rotate(object):
         images = torch.tensor(tot_imgs[self.random_inds])
         print("to write shape",tot_imgs[self.random_inds][0].shape)
         imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', tot_imgs[self.random_inds][0])
-
+        images = imgs.permute(0,2,3,1)
         return images
     
     def change_randomization_params(self, index_):
