@@ -48,9 +48,7 @@ class Grayscale(object):
         x_copy = self.transform(x_copy)
         x_copy = x_copy.repeat([1,3,1,1])
         x_copy = x_copy.permute(0,2,3,1)
-        # print("image to save shape", x_copy[0].shape)
-        # save_image(x_copy[0], './grayscale.png')
-        imageio.imwrite('/home/ubuntu/procgen-competition/grayscale.png', x_copy[0].cpu().numpy())
+        # imageio.imwrite('/home/ubuntu/procgen-competition/grayscale.png', x_copy[0].cpu().numpy())
         return x_copy
 
     def change_randomization_params(self, index_):
@@ -103,7 +101,7 @@ class Cutout(object):
             cutouts[i] = cut_img
         # cutouts = cutouts.transpose(0,2,3,1)
         cutouts = cutouts.permute(0,2,3,1)
-        imageio.imwrite('/home/ubuntu/procgen-competition/cutout.png', cutouts[0].cpu().numpy())
+        # imageio.imwrite('/home/ubuntu/procgen-competition/cutout.png', cutouts[0].cpu().numpy())
         return cutouts
     
     def change_randomization_params(self, index_):
@@ -144,7 +142,7 @@ class CutoutColor(object):
         self.obs_dtype = obs_dtype
         
     def do_augmentation(self, imgs):
-        # device = imgs.device
+        device = imgs.device
         imgs = imgs.cpu().numpy()
         imgs = imgs.transpose(0,3,1,2)
         n, c, h, w = imgs.shape
@@ -161,9 +159,8 @@ class CutoutColor(object):
                 (1,) + cut_img[:, self.pivot_h+h11:self.pivot_h+h11+h11, self.pivot_w+w11:self.pivot_w+w11+w11].shape[1:])
             cutouts[i] = cut_img
         cutouts = cutouts.transpose(0,2,3,1)
-        cutouts = torch.tensor(cutouts)
-        # cutouts = torch.tensor(cutouts, device=device)
-        imageio.imwrite('/home/ubuntu/procgen-competition/cutoutcolor.png', cutouts[0].cpu().numpy())
+        cutouts = torch.tensor(cutouts, device=device)
+        # imageio.imwrite('/home/ubuntu/procgen-competition/cutoutcolor.png', cutouts[0].cpu().numpy())
         return cutouts
         
     def change_randomization_params(self, index_):
@@ -204,13 +201,11 @@ class Flip(object):
         self.change_randomization_params_all()
         if self.random_inds.sum() > 0:
             images = images.transpose(0,3,1,2)
-            print("before flip", images[self.random_inds][0])
             images[self.random_inds] = np.flip(images[self.random_inds], 2)
-            print("after flip", images[self.random_inds][0])
             images = images.transpose(0,2,3,1)
         images = torch.tensor(images, device=device)
-        if self.random_inds.sum() > 0:
-            imageio.imwrite('/home/ubuntu/procgen-competition/flip.png', images[self.random_inds][0].cpu().numpy())
+        # if self.random_inds.sum() > 0:
+        #     imageio.imwrite('/home/ubuntu/procgen-competition/flip.png', images[self.random_inds][0].cpu().numpy())
         return images
     
     def change_randomization_params(self, index_):
@@ -245,9 +240,8 @@ class Rotate(object):
         for k in range(3):
             rot_imgs = np.ascontiguousarray(np.rot90(imgs,k=(k+1),axes=(1, 2)))
             tot_imgs = np.concatenate((tot_imgs, rot_imgs), 0)
-        imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', tot_imgs[self.random_inds][0].cpu().detach().numpy())
+        # imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', tot_imgs[self.random_inds][0].cpu().detach().numpy())
         images = torch.tensor(tot_imgs[self.random_inds])
-        # imageio.imwrite('/home/ubuntu/procgen-competition/rotate.png', images[0].cpu().numpy())
         return images
     
     def change_randomization_params(self, index_):
@@ -278,7 +272,7 @@ class Crop(object):
                             kornia.augmentation.RandomCrop((64, 64)))
         x = aug_trans(x)
         x = x.permute(0,2,3,1)
-        imageio.imwrite('/home/ubuntu/procgen-competition/crop.png', x[0].cpu().numpy())
+        # imageio.imwrite('/home/ubuntu/procgen-competition/crop.png', x[0].cpu().numpy())
         return x
 
     def change_randomization_params(self, index_):
@@ -326,7 +320,7 @@ class RandomConv(object):
                 total_out = torch.cat((total_out, rand_out), 0)
         total_out = total_out.reshape(-1, num_stack_channel, img_h, img_w)
         total_out = total_out.permute(0,2,3,1)
-        imageio.imwrite('/home/ubuntu/procgen-competition/randomconv.png', total_out[0].cpu().detach().numpy())
+        # imageio.imwrite('/home/ubuntu/procgen-competition/randomconv.png', total_out[0].cpu().detach().numpy())
         return total_out
 
     def change_randomization_params(self, index_):
@@ -471,7 +465,7 @@ class ColorJitter(nn.Module):
         self.change_randomization_params_all()
         outputs = self.forward(imgs_copy)
         outputs = outputs.permute(0,2,3,1)
-        imageio.imwrite('/home/ubuntu/procgen-competition/colorjitter.png', outputs[0].cpu().numpy())
+        # imageio.imwrite('/home/ubuntu/procgen-competition/colorjitter.png', outputs[0].cpu().numpy())
         return outputs
 
     def change_randomization_params(self, index_):
@@ -592,10 +586,10 @@ aug_to_func = {
         # 'crop': Crop, #works
         # 'random-conv': RandomConv,
         # 'grayscale': Grayscale, #works
-        'flip': Flip, #works
+        # 'flip': Flip, #works
         # 'rotate': Rotate, #works
         # 'cutout': Cutout, #works
-        # 'cutout-color': CutoutColor, #works
+        'cutout-color': CutoutColor, #works
         # 'color-jitter': ColorJitter #works
 }
 
