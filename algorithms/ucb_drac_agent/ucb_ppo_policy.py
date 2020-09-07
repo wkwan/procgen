@@ -205,7 +205,7 @@ class Flip(object):
         if self.random_inds.sum() > 0:
             images = images.transpose(0,3,1,2)
             print("before flip", images[self.random_inds][0])
-            images[self.random_inds] = np.flip(images[self.random_inds], 3)
+            images[self.random_inds] = np.flip(images[self.random_inds], 2)
             print("after flip", images[self.random_inds][0])
             images = images.transpose(0,2,3,1)
         images = torch.tensor(images, device=device)
