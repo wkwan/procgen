@@ -759,15 +759,15 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
     # # print("ACTION LOSS AUG", action_loss_aug)
 
-    # global prev_ppo_loss
-    # global prev_value_fn
-    # # print("prev ppos loss", prev_ppo_loss)
-    # # print("prev value fun", prev_value_fn)
+    global prev_ppo_loss
+    global prev_value_fn
+    # print("prev ppos loss", prev_ppo_loss)
+    # print("prev value fun", prev_value_fn)
 
-    # if prev_ppo_loss is None:
-    #     prev_ppo_loss = policy.loss_obj.loss
-    #     prev_value_fn = model.value_function()
-    #     return None
+    if prev_ppo_loss is None:
+        prev_ppo_loss = policy.loss_obj.loss
+        prev_value_fn = model.value_function()
+        return None
 
     # # print("PREV VALUE FN", prev_value_fn)
     # value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
