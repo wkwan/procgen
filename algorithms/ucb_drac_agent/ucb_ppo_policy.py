@@ -583,14 +583,14 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        # 'crop': Crop, #works
-        # 'random-conv': RandomConv,
-        # 'grayscale': Grayscale, #works
-        # 'flip': Flip, #works
-        # 'rotate': Rotate, #works
-        # 'cutout': Cutout, #works
+        'crop': Crop, #works
+        'random-conv': RandomConv,
+        'grayscale': Grayscale, #works
+        'flip': Flip, #works
+        'rotate': Rotate, #works
+        'cutout': Cutout, #works
         'cutout-color': CutoutColor, #works
-        # 'color-jitter': ColorJitter #works
+        'color-jitter': ColorJitter #works
 }
 
 aug_list = [aug_to_func[t](batch_size=2048) 
