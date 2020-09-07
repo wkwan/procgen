@@ -590,10 +590,10 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        'crop': Crop, #works fix saving
+        # 'crop': Crop, #works
         # 'random-conv': RandomConv,
         # 'grayscale': Grayscale, #works
-        # 'flip': Flip, #works fix saving
+        'flip': Flip, #works
         # 'rotate': Rotate, #works
         # 'cutout': Cutout, #works
         # 'cutout-color': CutoutColor, #works
