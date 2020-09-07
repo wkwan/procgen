@@ -754,6 +754,11 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     # value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
 
     regularized_loss = prev_ppo_loss + 0.1 * (value_loss_aug + action_loss_aug) 
+
+    print("prev ppo loss", policy.loss_obj.loss)
+    print("value loss aug", value_loss_aug)
+    print("action loss aug", action_loss_aug)
+    print("regularized_loss", regularized_loss)
     
     # print()
     # print("REGULARIZED", regularized_loss)
