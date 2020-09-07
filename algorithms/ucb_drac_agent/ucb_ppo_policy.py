@@ -203,9 +203,10 @@ class Flip(object):
         self.batch_size = images.shape[0]
         self.change_randomization_params_all()
         if self.random_inds.sum() > 0:
-            images[self.random_inds] = np.flip(images[self.random_inds], 2)
+            images[self.random_inds] = np.flip(images[self.random_inds], 1)
         images = torch.tensor(images, device=device)
-        imageio.imwrite('/home/ubuntu/procgen-competition/flip.png', images[0].cpu().numpy())
+        if self.random_inds.sum() > 0:
+            imageio.imwrite('/home/ubuntu/procgen-competition/flip.png', images[self.random_inds].cpu().numpy())
         return images
     
     def change_randomization_params(self, index_):
