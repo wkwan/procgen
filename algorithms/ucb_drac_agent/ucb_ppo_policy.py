@@ -235,6 +235,7 @@ class Rotate(object):
         
     def do_augmentation(self, imgs):
         self.batch_size = imgs.shape[0]
+        # imgs = imgs.permute(0,3,1,2)
         self.change_randomization_params_all()
         tot_imgs = imgs
         for k in range(3):
@@ -583,14 +584,14 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        'crop': Crop, #works
-        'random-conv': RandomConv,
-        'grayscale': Grayscale, #works
-        'flip': Flip, #works
+        # 'crop': Crop, #works
+        # 'random-conv': RandomConv,
+        # 'grayscale': Grayscale, #works
+        # 'flip': Flip, #works
         'rotate': Rotate, #works
-        'cutout': Cutout, #works
-        'cutout-color': CutoutColor, #works
-        'color-jitter': ColorJitter #works
+        # 'cutout': Cutout, #works
+        # 'cutout-color': CutoutColor, #works
+        # 'color-jitter': ColorJitter #works
 }
 
 aug_list = [aug_to_func[t](batch_size=2048) 
