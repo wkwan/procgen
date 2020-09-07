@@ -12,7 +12,7 @@ from ray.rllib.utils.explained_variance import explained_variance
 from ray.rllib.utils.torch_ops import sequence_mask
 from ray.rllib.utils import try_import_torch
 from torchvision.utils import save_image
-
+import scipy.misc
 
 torch, nn = try_import_torch()
 
@@ -48,8 +48,9 @@ class Grayscale(object):
         x_copy = self.transform(x_copy)
         x_copy = x_copy.repeat([1,3,1,1])
         x_copy = x_copy.permute(0,2,3,1)
-        print("image to save shape", x_copy[0].shape)
+        # print("image to save shape", x_copy[0].shape)
         # save_image(x_copy[0], './grayscale.png')
+        scipy.misc.toimage(x_copy[0].cpu().numpy()).save('grayscale.png')
         return x_copy
 
     def change_randomization_params(self, index_):
