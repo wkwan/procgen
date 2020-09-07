@@ -50,7 +50,7 @@ class Grayscale(object):
         x_copy = x_copy.permute(0,2,3,1)
         # print("image to save shape", x_copy[0].shape)
         # save_image(x_copy[0], './grayscale.png')
-        imageio.imwrite('grayscale.png', x_copy[0].cpu().numpy())
+        imageio.imwrite('/home/ubuntu/procgen-competition/grayscale.png', x_copy[0].cpu().numpy())
         return x_copy
 
     def change_randomization_params(self, index_):
