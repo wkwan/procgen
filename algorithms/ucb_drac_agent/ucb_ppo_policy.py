@@ -205,6 +205,7 @@ class Flip(object):
         print("images shape", images.shape)
         if self.random_inds.sum() > 0:
             images = images.transpose(0,3,1,2)
+            print("random inds is", self.random_inds)
             images[self.random_inds] = np.flip(images[self.random_inds], 2)
             images = images.transpose(0,2,3,1)
         images = torch.tensor(images, device=device)
@@ -473,7 +474,7 @@ class ColorJitter(nn.Module):
         outputs = outputs.permute(0,2,3,1)
         imageio.imwrite('/home/ubuntu/procgen-competition/colorjitter.png', outputs[0].cpu().numpy())
         return outputs
-        
+
     def change_randomization_params(self, index_):
         self.factor_contrast[index_] = torch.empty(1, device=self._device).uniform_(*self.contrast)
         self.factor_hue[index_] = torch.empty(1, device=self._device).uniform_(*self.hue)
@@ -592,11 +593,11 @@ aug_to_func = {
         # 'crop': Crop, #works fix saving
         # 'random-conv': RandomConv,
         # 'grayscale': Grayscale, #works
-        # 'flip': Flip, #works fix saving
+        'flip': Flip, #works fix saving
         # 'rotate': Rotate, #works
         # 'cutout': Cutout, #works
         # 'cutout-color': CutoutColor, #works
-        'color-jitter': ColorJitter #works
+        # 'color-jitter': ColorJitter #works
 }
 
 aug_list = [aug_to_func[t](batch_size=2048) 
