@@ -268,7 +268,7 @@ class Crop(object):
         x = aug_trans(x)
         x = x.permute(0,2,3,1)
         print("about to save crop image")
-        save_image(x[0], './crop.png')
+        save_image(x, './crop.png')
         return x
 
     def change_randomization_params(self, index_):
