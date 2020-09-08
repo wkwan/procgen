@@ -754,7 +754,8 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
     #should update the ucb vals at end of every "step" (is that an episode?)
 
-    aug_logits, aug_state = model.from_batch(aug_train_batch)
+    # aug_logits, aug_state = model.from_batch(aug_train_batch)
+    aug_logits, aug_state = model.from_batch(train_batch)
     # aug_action_dist = dist_class(aug_logits, aug_state)
 
     action_loss_aug = - torch.mean(aug_logits)
