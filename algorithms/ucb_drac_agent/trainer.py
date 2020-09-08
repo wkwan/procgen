@@ -159,6 +159,7 @@ class UpdateKL:
 
     def __call__(self, fetches):
         def update(pi, pi_id):
+            print("update the kl")
             if fetches is None: #Will: this is for the first batch when we don't have the aug loss
                 print("fetches is none in trainer")
                 return
