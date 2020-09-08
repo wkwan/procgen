@@ -769,6 +769,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
     if prev_ppo_loss is None:
         prev_ppo_loss = policy.loss_obj.loss.clone()
+        prev_ppo_loss.retain_grad()
         prev_value_fn = model.value_function()
         print("return nothing")
         return None
@@ -791,6 +792,8 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     # print("VALUE LOSS AUG", value_loss_aug)
     # print("ACTION LOSS AUG", action_loss_aug)
     prev_ppo_loss = policy.loss_obj.loss.clone()
+    prev_ppo_loss.retain_grad()
+
     prev_value_fn = model.value_function()
     print("return regularized", regularized_loss)
     # return prev_ppo_loss #works
