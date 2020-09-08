@@ -116,6 +116,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                         policy_id: minibatch
                     }, minibatch.count)))[policy_id]
                 if batch_fetches is None:
+                    print("skip the k v in batch fetches")
                     continue
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)

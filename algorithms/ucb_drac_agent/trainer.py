@@ -160,6 +160,7 @@ class UpdateKL:
     def __call__(self, fetches):
         def update(pi, pi_id):
             if fetches is None: #Will: this is for the first batch when we don't have the aug loss
+                print("fetches is none in trainer")
                 return
             assert "kl" not in fetches, (
                 "kl should be nested under policy id key", fetches)
