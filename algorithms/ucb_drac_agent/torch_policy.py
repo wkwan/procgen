@@ -246,6 +246,7 @@ class TorchPolicy(Policy):
             opt.zero_grad()
             # Recompute gradients of loss over all variables.
             # loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
+            print("do a backward pass")
             loss_out[i].backward(retain_graph=True) #Will: should we do this?
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
