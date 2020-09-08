@@ -190,7 +190,8 @@ def run(args, parser):
         if args.eager:
             exp["config"]["eager"] = True
         if args.torch:
-            exp["config"]["use_pytorch"] = True
+            # exp["config"]["use_pytorch"] = True
+            exp["config"]["framework"] = "torch"
         if args.v:
             exp["config"]["log_level"] = "INFO"
             verbose = 2
