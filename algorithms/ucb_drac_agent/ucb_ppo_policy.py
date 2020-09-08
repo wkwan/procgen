@@ -790,10 +790,11 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     # print("JUST PPO", prev_ppo_loss)
     # print("VALUE LOSS AUG", value_loss_aug)
     # print("ACTION LOSS AUG", action_loss_aug)
+    return prev_ppo_loss
     prev_ppo_loss = policy.loss_obj.loss
     prev_value_fn = model.value_function()
     print("return regularized", regularized_loss)
-    return prev_ppo_loss
+    # return prev_ppo_loss #works
     # return regularized_loss
 
 def update_ucb_values(rollout_reward_mean):
