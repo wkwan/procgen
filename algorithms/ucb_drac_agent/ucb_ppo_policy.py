@@ -768,7 +768,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     # print("prev value fun", prev_value_fn)
 
     if prev_ppo_loss is None:
-        prev_ppo_loss = policy.loss_obj.loss
+        prev_ppo_loss = policy.loss_obj.loss.clone()
         prev_value_fn = model.value_function()
         print("return nothing")
         return None
@@ -777,8 +777,8 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
     
 
-    # regularized_loss = prev_ppo_loss + 0.1 * (value_loss_aug + action_loss_aug) 
-    regularized_loss = 0.1 * (value_loss_aug + action_loss_aug)
+    regularized_loss = prev_ppo_loss + 0.1 * (value_loss_aug + action_loss_aug) 
+    # regularized_loss = 0.1 * (value_loss_aug + action_loss_aug)
 
     # print("prev ppo loss", policy.loss_obj.loss)
     # print("value loss aug", value_loss_aug)
@@ -790,7 +790,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     # print("JUST PPO", prev_ppo_loss)
     # print("VALUE LOSS AUG", value_loss_aug)
     # print("ACTION LOSS AUG", action_loss_aug)
-    prev_ppo_loss = policy.loss_obj.loss
+    prev_ppo_loss = policy.loss_obj.loss.clone()
     prev_value_fn = model.value_function()
     print("return regularized", regularized_loss)
     # return prev_ppo_loss #works
