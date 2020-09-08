@@ -191,7 +191,7 @@ procgen-ppo:
             # https://github.com/ray-project/ray/blob/master/rllib/examples/custom_keras_model.py
             custom_model: impala_cnn_torch
             # Extra options to pass to custom class
-            custom_options: {}
+            custom_model_config: {}
 
         ################################################
         ################################################
