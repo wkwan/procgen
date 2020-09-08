@@ -16,8 +16,6 @@ import imageio
 
 torch, nn = try_import_torch()
 
-torch.autograd.set_detect_anomaly(True)
-
 logger = logging.getLogger(__name__)
 
 import numpy as np
