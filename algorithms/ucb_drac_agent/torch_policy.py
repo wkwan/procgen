@@ -248,8 +248,9 @@ class TorchPolicy(Policy):
             # loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
             print("do a backward pass")
             loss_out[i].backward(retain_graph=True) #Will: should we do this?
+            print("do the backward")
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
-
+            print("updated grad info")
             if self.distributed_world_size:
                 grads = []
                 for param_group in opt.param_groups:
