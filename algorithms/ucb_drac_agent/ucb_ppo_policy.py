@@ -750,15 +750,15 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
     current_aug_func = aug_list[ucb_aug_id]
     
-    aug_train_batch["obs"] = current_aug_func.do_augmentation(aug_train_batch["obs"]).cuda()
+    # aug_train_batch["obs"] = current_aug_func.do_augmentation(aug_train_batch["obs"]).cuda()
 
-    #should update the ucb vals at end of every "step" (is that an episode?)
+    # #should update the ucb vals at end of every "step" (is that an episode?)
 
-    # aug_logits, aug_state = model.from_batch(aug_train_batch)
-    aug_logits, aug_state = model.from_batch(train_batch)
-    # aug_action_dist = dist_class(aug_logits, aug_state)
+    # # aug_logits, aug_state = model.from_batch(aug_train_batch)
+    # aug_logits, aug_state = model.from_batch(train_batch)
+    # # aug_action_dist = dist_class(aug_logits, aug_state)
 
-    action_loss_aug = - torch.mean(aug_logits)
+    # action_loss_aug = - torch.mean(aug_logits)
 
     # print("ACTION LOSS AUG", action_loss_aug)
 
