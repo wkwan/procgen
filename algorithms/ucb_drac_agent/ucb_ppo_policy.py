@@ -739,7 +739,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
         vf_loss_coeff=policy.config["vf_loss_coeff"],
         use_gae=policy.config["use_gae"]
     )
-    print("policy loss", policy.loss_obj.loss)
+    # print("policy loss", policy.loss_obj.loss)
     # return policy.loss_obj.loss
 
     aug_train_batch = train_batch
@@ -751,14 +751,14 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     aug_train_batch["obs"] = current_aug_func.do_augmentation(aug_train_batch["obs"]).cuda()
 
     aug_logits, aug_state = model.from_batch(aug_train_batch)
-    print("aug logits", aug_logits)
+    # print("aug logits", aug_logits)
     action_loss_aug = - torch.mean(aug_logits)
     print("action_loss_aug", action_loss_aug)
     value_loss_aug = 0.5 * (prev_value_function_result - model.value_function()).pow(2).mean()
     print("value loss aug", value_loss_aug)
     regularized_loss = policy.loss_obj.loss + 0.1 * (value_loss_aug + action_loss_aug) 
     print("policy loss", policy.loss_obj.loss)
-    print("aug loss", 0.1 * (value_loss_aug + action_loss_aug))
+    # print("aug loss", 0.1 * (value_loss_aug + action_loss_aug))
     print("regularized loss", regularized_loss)
     return regularized_loss
 
