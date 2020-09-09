@@ -739,6 +739,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
         vf_loss_coeff=policy.config["vf_loss_coeff"],
         use_gae=policy.config["use_gae"]
     )
+    print("policy loss", policy.loss_obj.loss)
 
     aug_train_batch = train_batch
 
