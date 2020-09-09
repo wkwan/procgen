@@ -133,5 +133,6 @@ class CustomCallbacks(DefaultCallbacks):
         # print("=============================================================")
         # print(" Timesteps Throughput : {} ts/sec".format(TBD))
         # print("=============================================================")
-        print("ON TRAIN RESULT", result['episode_reward_mean'])
-        trainer._policy._update_ucb_values(result['episode_reward_mean'])
+        if 'episode_reward_mean' in result:
+            print("ON TRAIN RESULT", result['episode_reward_mean'])
+            trainer._policy._update_ucb_values(result['episode_reward_mean'])
