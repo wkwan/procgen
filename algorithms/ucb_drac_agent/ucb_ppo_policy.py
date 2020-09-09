@@ -775,6 +775,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
         return None
 
     # print("PREV VALUE FN", prev_value_fn)
+    return prev_ppo_loss
     value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
     
     # return 0.1 * (value_loss_aug + action_loss_aug)
@@ -796,7 +797,6 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
     prev_value_fn = model.value_function()
     print("return regularized", regularized_loss)
-    return prev_ppo_loss #works
     return regularized_loss
 
 def update_ucb_values(rollout_reward_mean):
