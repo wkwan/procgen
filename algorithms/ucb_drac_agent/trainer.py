@@ -87,9 +87,6 @@ def warn_about_bad_reward_scales(config, result):
 
     # Warn about excessively high VF loss.
     learner_stats = result["info"]["learner"]
-    if learner_stats is None:
-        print("no learner stats")
-        return {}
     if "default_policy" in learner_stats:
         scaled_vf_loss = (config["vf_loss_coeff"] *
                           learner_stats["default_policy"]["vf_loss"])
@@ -162,10 +159,6 @@ class UpdateKL:
 
     def __call__(self, fetches):
         def update(pi, pi_id):
-            print("update the kl")
-            if fetches is None: #Will: this is for the first batch when we don't have the aug loss
-                print("fetches is none in trainer")
-                return
             assert "kl" not in fetches, (
                 "kl should be nested under policy id key", fetches)
             if pi_id in fetches:
