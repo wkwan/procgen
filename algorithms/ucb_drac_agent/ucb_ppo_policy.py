@@ -753,7 +753,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     aug_train_batch[SampleBatch.PREV_ACTIONS] = aug_train_batch[SampleBatch.ACTIONS]
     aug_train_batch[SampleBatch.PREV_REWARDS] = aug_train_batch[SampleBatch.PREV_REWARDS]
 
-    aug_logits, aug_state = model.forward(aug_train_batch)
+    aug_logits, aug_state = model.forward(aug_train_batch, None, None)
     # aug_action_dist = dist_class(aug_logits, model)
     # aug_actions_sample = aug_action_dist.sample()
     # aug_train_batch[SampleBatch.ACTION_DIST_INPUTS] = aug_actions_sample
