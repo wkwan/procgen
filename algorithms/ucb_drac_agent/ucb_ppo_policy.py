@@ -588,13 +588,13 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        # 'crop': Crop, #works
-        # 'random-conv': RandomConv, #works
-        # 'cutout-color': CutoutColor, #works
-        # 'color-jitter': ColorJitter, #works
-        # 'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
-        # 'flip': Flip, #works
-        # 'cutout': Cutout, #works
+        'crop': Crop, #works
+        'random-conv': RandomConv, #works
+        'cutout-color': CutoutColor, #works
+        'color-jitter': ColorJitter, #works
+        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+        'flip': Flip, #works
+        'cutout': Cutout, #works
         'grayscale': Grayscale, #works
 
 }
