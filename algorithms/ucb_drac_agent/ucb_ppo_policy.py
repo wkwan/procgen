@@ -774,7 +774,8 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     #     return None
 
 
-    value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
+    # value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
+    value_loss_aug = 0.5 * (model.value_function()).pow(2).mean() #wrong, need to get current value after doing action on augmented state
     
     regularized_loss = policy.loss_obj.loss + 0.1 * (value_loss_aug + action_loss_aug) 
 
