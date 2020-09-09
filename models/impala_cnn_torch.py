@@ -84,6 +84,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         logits = self.logits_fc(x)
         value = self.value_fc(x)
         self._value = value.squeeze(1)
+        print("logits", logits)
         return logits, state
 
     @override(TorchModelV2)
