@@ -713,6 +713,8 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
 
+    print("logits from actual", logits)
+
     mask = None
     if state:
         max_seq_len = torch.max(train_batch["seq_lens"])
@@ -758,16 +760,17 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     # aug_actions_sample = aug_action_dist.sample()
     # aug_train_batch[SampleBatch.ACTION_DIST_INPUTS] = aug_actions_sample
     # print("sample aug actions log p", aug_train_batch[SampleBatch.ACTION_LOGP])
+    print("aug logits", aug_logits)
 
     # print("aug action sample", aug_actions_sample)
     action_loss_aug = - torch.mean(aug_logits)
-    print("action_loss_aug", action_loss_aug)
+    # print("action_loss_aug", action_loss_aug)
     value_loss_aug = 0.5 * (prev_value_function_result - model.value_function()).pow(2).mean()
-    print("value loss aug", value_loss_aug)
+    # print("value loss aug", value_loss_aug)
     regularized_loss = policy.loss_obj.loss + 0.1 * (value_loss_aug + action_loss_aug) 
-    print("policy loss", policy.loss_obj.loss)
-    print("aug loss", 0.1 * (value_loss_aug + action_loss_aug))
-    print("regularized loss", regularized_loss)
+    # print("policy loss", policy.loss_obj.loss)
+    # print("aug loss", 0.1 * (value_loss_aug + action_loss_aug))
+    # print("regularized loss", regularized_loss)
     return regularized_loss
 
 def update_ucb_values(rollout_reward_mean):
