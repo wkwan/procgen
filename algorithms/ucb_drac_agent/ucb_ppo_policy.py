@@ -750,13 +750,13 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     prev_value_function_result = model.value_function()
     
     aug_train_batch["obs"] = current_aug_func.do_augmentation(aug_train_batch["obs"]).cuda()
-
+    print("aug train batch keys", aug_train_batch.keys)
     aug_logits, aug_state = model.from_batch(aug_train_batch)
     aug_action_dist = dist_class(aug_logits, model)
-
+    aug_actions_sample = aug_action_dist.sample()
+    aug_train_batch[SampleBatch.ACTION_DIST_INPUTS] = aug_actions_sample
     # print("sample aug actions log p", aug_train_batch[SampleBatch.ACTION_LOGP])
 
-    aug_actions_sample = aug_action_dist.sample()
     print("aug action sample", aug_actions_sample)
     action_loss_aug = - torch.mean(aug_actions_sample)
     print("action_loss_aug", action_loss_aug)
