@@ -231,7 +231,7 @@ class TorchPolicy(Policy):
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         # loss_out = force_list(
         #     self._loss(self, self.model, self.dist_class, train_batch))
-        loss_out = self._loss(self, self.model, self.dist_class, train_batch)	
+        loss_out = self._loss(self, self.model, self.dist_class, train_batch, self._lazy_tensor_dict)	
         if loss_out is None:	
             return	
         loss_out = force_list(loss_out)	
