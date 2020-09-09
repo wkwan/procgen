@@ -87,6 +87,9 @@ def warn_about_bad_reward_scales(config, result):
 
     # Warn about excessively high VF loss.
     learner_stats = result["info"]["learner"]
+    if learner_stats is None:
+        print("no learner stats")
+        return
     if "default_policy" in learner_stats:
         scaled_vf_loss = (config["vf_loss_coeff"] *
                           learner_stats["default_policy"]["vf_loss"])
