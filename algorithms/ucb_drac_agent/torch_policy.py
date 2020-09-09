@@ -246,10 +246,7 @@ class TorchPolicy(Policy):
             opt.zero_grad()
             # Recompute gradients of loss over all variables.
             loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
-            print("did backward pass")
-            # loss_out[i].backward(retain_graph=True) #Will: should we do this?
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
-            print("updated grad info")
             if self.distributed_world_size:
                 grads = []
                 for param_group in opt.param_groups:
