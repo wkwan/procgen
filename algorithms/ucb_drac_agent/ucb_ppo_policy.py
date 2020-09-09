@@ -616,8 +616,8 @@ for i in range(num_aug_types):
 
 ucb_aug_id = np.argmax(ucb_action)
 
-prev_value_fn = None
-prev_ppo_loss = None
+# prev_value_fn = None
+# prev_ppo_loss = None
 
 class PPOLoss:
     def __init__(self,
@@ -761,22 +761,22 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
     # print("ACTION LOSS AUG", action_loss_aug)
 
-    global prev_ppo_loss
-    global prev_value_fn
-    # print("prev ppos loss", prev_ppo_loss)
-    # print("prev value fun", prev_value_fn)
+    # global prev_ppo_loss
+    # global prev_value_fn
+    # # print("prev ppos loss", prev_ppo_loss)
+    # # print("prev value fun", prev_value_fn)
 
-    if prev_ppo_loss is None:
-        prev_ppo_loss = policy.loss_obj.loss
-        # prev_ppo_loss.retain_grad()
-        prev_value_fn = model.value_function()
-        print("return nothing")
-        return None
+    # if prev_ppo_loss is None:
+    #     prev_ppo_loss = policy.loss_obj.loss
+    #     # prev_ppo_loss.retain_grad()
+    #     prev_value_fn = model.value_function()
+    #     print("return nothing")
+    #     return None
 
 
     value_loss_aug = 0.5 * (prev_value_fn - model.value_function()).pow(2).mean()
     
-    regularized_loss = prev_ppo_loss + 0.1 * (value_loss_aug + action_loss_aug) 
+    regularized_loss = policy.loss_obj.loss + 0.1 * (value_loss_aug + action_loss_aug) 
 
     # print("prev ppo loss", policy.loss_obj.loss)
     # print("value loss aug", value_loss_aug)
@@ -788,11 +788,11 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     # print("JUST PPO", prev_ppo_loss)
     # print("VALUE LOSS AUG", value_loss_aug)
     # print("ACTION LOSS AUG", action_loss_aug)
-    prev_ppo_loss = policy.loss_obj.loss
-    # prev_ppo_loss.retain_grad()
+    # prev_ppo_loss = policy.loss_obj.loss
+    # # prev_ppo_loss.retain_grad()
 
-    prev_value_fn = model.value_function()
-    print("return regularized", regularized_loss)
+    # prev_value_fn = model.value_function()
+    # print("return regularized", regularized_loss)
     return regularized_loss
 
 def update_ucb_values(rollout_reward_mean):
