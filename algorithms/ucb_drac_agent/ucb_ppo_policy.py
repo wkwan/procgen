@@ -588,13 +588,13 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        # 'crop': Crop, #works
-        # 'random-conv': RandomConv, #works
-        # 'cutout-color': CutoutColor, #works
-        # 'color-jitter': ColorJitter, #works
-        # 'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
-        # 'flip': Flip, #works
-        # 'cutout': Cutout, #works
+        'crop': Crop, #works
+        'random-conv': RandomConv, #works
+        'cutout-color': CutoutColor, #works
+        'color-jitter': ColorJitter, #works
+        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+        'flip': Flip, #works
+        'cutout': Cutout, #works
         'grayscale': Grayscale, #works
 
 }
@@ -713,7 +713,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
 
-    print("logits from actual", logits)
+    # print("logits from actual", logits)
 
     mask = None
     if state:
@@ -760,7 +760,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     # aug_actions_sample = aug_action_dist.sample()
     # aug_train_batch[SampleBatch.ACTION_DIST_INPUTS] = aug_actions_sample
     # print("sample aug actions log p", aug_train_batch[SampleBatch.ACTION_LOGP])
-    print("aug logits", aug_logits)
+    # print("aug logits", aug_logits)
 
     # print("aug action sample", aug_actions_sample)
     action_loss_aug = - torch.mean(aug_logits)
