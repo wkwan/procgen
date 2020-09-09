@@ -42,7 +42,7 @@ DEFAULT_CONFIG = with_common_config({
     # execute per train batch).
     "num_sgd_iter": 3,
     # Stepsize of SGD.
-    "lr": 5e-4,
+    "lr": 5e-5,
     # Learning rate schedule.
     "lr_schedule": None,
     # Share layers for value function. If you set this to True, it's important
