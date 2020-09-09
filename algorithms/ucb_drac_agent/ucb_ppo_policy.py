@@ -742,7 +742,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     # print("policy loss", policy.loss_obj.loss)
     # return policy.loss_obj.loss
 
-    print("sample actions", train_batch[SampleBatch.ACTIONS])
+    print("sample actions log p", train_batch[SampleBatch.ACTION_LOGP])
     aug_train_batch = train_batch
 
     current_aug_func = aug_list[ucb_aug_id]
@@ -754,7 +754,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     aug_logits, aug_state = model.from_batch(aug_train_batch)
     # aug_action_dist = dist_class(aug_logits, model)
 
-    print("sample aug actions", aug_train_batch[SampleBatch.ACTIONS])
+    print("sample aug actions log p", aug_train_batch[SampleBatch.ACTION_LOGP])
 
     # print("aug logits", aug_logits)
     action_loss_aug = - torch.mean(aug_logits)
