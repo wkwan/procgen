@@ -750,8 +750,8 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     prev_value_function_result = model.value_function()
     
     aug_train_batch[SampleBatch.CUR_OBS] = current_aug_func.do_augmentation(aug_train_batch[SampleBatch.CUR_OBS]).cuda()
-    aug_train_batch[SampleBatch.PREV_ACTIONS] = aug_train_batch[SampleBatch.ACTION]
-    aug_train_batch[SampleBatch.PREV_REWARD] = aug_train_batch[SampleBatch.REWARD]
+    aug_train_batch[SampleBatch.PREV_ACTIONS] = aug_train_batch[SampleBatch.ACTIONS]
+    aug_train_batch[SampleBatch.PREV_REWARDS] = aug_train_batch[SampleBatch.PREV_REWARDS]
 
     aug_logits, aug_state = model.from_batch(aug_train_batch)
     # aug_action_dist = dist_class(aug_logits, model)
