@@ -616,8 +616,6 @@ for i in range(num_aug_types):
 
 ucb_aug_id = np.argmax(ucb_action)
 
-# prev_value_fn = None
-# prev_ppo_loss = None
 
 class PPOLoss:
     def __init__(self,
@@ -710,8 +708,6 @@ class PPOLoss:
                                      entropy_coeff * curr_entropy)
         self.loss = loss
 
-        # cur_obs_aug = current_aug_func.do_augmentation(cur_obs)
-        # print("we did the augmentation yo")
 
 def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     logits, state = model.from_batch(train_batch)
@@ -744,8 +740,6 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
         use_gae=policy.config["use_gae"]
     )
 
-    # return policy.loss_obj.loss
-
     aug_train_batch = train_batch
 
     current_aug_func = aug_list[ucb_aug_id]
@@ -754,48 +748,13 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     
     aug_train_batch["obs"] = current_aug_func.do_augmentation(aug_train_batch["obs"]).cuda()
 
-    #should update the ucb vals at end of every "step" (is that an episode?)
-
     aug_logits, aug_state = model.from_batch(aug_train_batch)
-    # aug_action_dist = dist_class(aug_logits, aug_state)
 
     action_loss_aug = - torch.mean(aug_logits)
 
-    # print("ACTION LOSS AUG", action_loss_aug)
-
-    # global prev_ppo_loss
-    # global prev_value_fn
-    # # print("prev ppos loss", prev_ppo_loss)
-    # # print("prev value fun", prev_value_fn)
-
-    # if prev_ppo_loss is None:
-    #     prev_ppo_loss = policy.loss_obj.loss
-    #     # prev_ppo_loss.retain_grad()
-    #     prev_value_fn = model.value_function()
-    #     print("return nothing")
-    #     return None
-
-    # print("prev value function result", prev_value_function_result)
-    # print("current value function result", model.value_function())
     value_loss_aug = 0.5 * (prev_value_function_result - model.value_function()).pow(2).mean()
     
     regularized_loss = policy.loss_obj.loss + 0.1 * (value_loss_aug + action_loss_aug) 
-
-    # print("prev ppo loss", policy.loss_obj.loss)
-    # print("value loss aug", value_loss_aug)
-    # print("action loss aug", action_loss_aug)
-    # print("regularized_loss", regularized_loss)
-    
-    # print()
-    # print("REGULARIZED", regularized_loss)
-    # print("JUST PPO", prev_ppo_loss)
-    # print("VALUE LOSS AUG", value_loss_aug)
-    # print("ACTION LOSS AUG", action_loss_aug)
-    # prev_ppo_loss = policy.loss_obj.loss
-    # # prev_ppo_loss.retain_grad()
-
-    # prev_value_fn = model.value_function()
-    # print("return regularized", regularized_loss)
     return regularized_loss
 
 def update_ucb_values(rollout_reward_mean):
