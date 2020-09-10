@@ -712,7 +712,8 @@ class PPOLoss:
 def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batch_fn):
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
-    print("do the logits right away", - torch.mean(logits)) #something is wrong with this
+    
+    print("do the log prob right away", - torch.mean(action_dist.log_prob)) #something is wrong with this
     # print("logits from actual", logits)
 
     mask = None
