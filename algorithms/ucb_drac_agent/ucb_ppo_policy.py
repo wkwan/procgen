@@ -713,7 +713,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
     
-    print("action probs", action_dist.probs) #something is wrong with this
+    print("action probs", action_dist.logp(action_dist.sample())) #something is wrong with this
     # print("logits from actual", logits)
 
     mask = None
