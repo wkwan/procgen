@@ -713,7 +713,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
     
-    print("action probs", action_dist.logp(action_dist.sample())) #something is wrong with this
+    # print("action probs", action_dist.logp(action_dist.sample())) #something is wrong with this
     # print("logits from actual", logits)
 
     mask = None
@@ -743,7 +743,6 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
         use_gae=policy.config["use_gae"]
     )
     # print("policy loss", policy.loss_obj.loss)
-    return policy.loss_obj.loss
 
     # print("sample actions log p", train_batch[SampleBatch.ACTION_LOGP])
     # aug_train_batch = train_batch
@@ -756,18 +755,15 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     # aug_train_batch[SampleBatch.PREV_ACTIONS] = aug_train_batch[SampleBatch.ACTIONS]
     # aug_train_batch[SampleBatch.PREV_REWARDS] = aug_train_batch[SampleBatch.PREV_REWARDS]
 
-    # aug_logits, aug_state = model.forward({"obs": train_batch[SampleBatch.CUR_OBS].cuda()}, None, None)
-
     aug_logits, aug_state = model.forward({"obs": current_aug_func.do_augmentation(train_batch[SampleBatch.CUR_OBS]).cuda()}, None, None)
-    # aug_action_dist = dist_class(aug_logits, model)
-    # aug_actions_sample = aug_action_dist.sample()
+    aug_action_dist = dist_class(aug_logits, model)
     # aug_train_batch[SampleBatch.ACTION_DIST_INPUTS] = aug_actions_sample
     # print("sample aug actions log p", aug_train_batch[SampleBatch.ACTION_LOGP])
     # print("aug logits", aug_logits)
 
     # print("aug action sample", aug_actions_sample)
     # action_loss_aug = - torch.mean(aug_logits)
-    action_loss_aug = - torch.mean(logits) #try the original logits to see if good result
+    action_loss_aug = - torch.mean(aug_action_dist.logp(aug_action_dist.sample())) #try the original logits to see if good result
 
     print("action_loss_aug", action_loss_aug)
     value_loss_aug = 0.5 * (prev_value_function_result - model.value_function()).pow(2).mean()
