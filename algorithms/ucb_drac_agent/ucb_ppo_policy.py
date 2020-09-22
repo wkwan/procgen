@@ -765,13 +765,13 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     # action_loss_aug = - torch.mean(aug_logits)
     action_loss_aug = - torch.mean(aug_action_dist.logp(aug_action_dist.sample())) #try the original logits to see if good result
 
-    print("action_loss_aug", action_loss_aug)
+    # print("action_loss_aug", action_loss_aug)
     value_loss_aug = 0.5 * (prev_value_function_result - model.value_function()).pow(2).mean()
     # print("value loss aug", value_loss_aug)
     regularized_loss = policy.loss_obj.loss + 0.1 * (value_loss_aug + action_loss_aug) 
     # print("policy loss", policy.loss_obj.loss)
     # print("aug loss", 0.1 * (value_loss_aug + action_loss_aug))
-    print("regularized loss", regularized_loss)
+    # print("regularized loss", regularized_loss)
     return regularized_loss
 
 def update_ucb_values(rollout_reward_mean):
