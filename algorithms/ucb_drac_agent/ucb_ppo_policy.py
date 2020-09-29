@@ -277,7 +277,7 @@ class Crop(object):
                             kornia.augmentation.RandomCrop((64, 64)))
         x = aug_trans(x)
         x = x.permute(0,2,3,1)
-        # imageio.imwrite('/home/ubuntu/procgen-competition/crop.png', x[0].cpu().numpy())
+        imageio.imwrite('/home/ubuntu/procgen-competition/crop.png', x[0].cpu().numpy())
         return x
 
     def change_randomization_params(self, index_):
