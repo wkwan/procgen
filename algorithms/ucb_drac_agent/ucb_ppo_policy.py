@@ -277,7 +277,7 @@ class Crop(object):
                             kornia.augmentation.RandomCrop((64, 64)))
         x = aug_trans(x)
         x = x.permute(0,2,3,1)
-        imageio.imwrite('/home/ubuntu/procgen-competition/crop-noclone.png', x[0].cpu().numpy())
+        # imageio.imwrite('/home/ubuntu/procgen-competition/crop-noclone.png', x[0].cpu().numpy())
         return x
 
     def change_randomization_params(self, index_):
@@ -796,10 +796,10 @@ def update_ucb_values(rollout_reward_mean):
     for i in range(num_aug_types):
         expl_action[i] = ucb_exploration_coef * np.sqrt(np.log(total_num) / num_action[i])
         ucb_action[i] = qval_action[i] + expl_action[i]
-    print(ucb_action)
+    # print(ucb_action)
     ucb_aug_id = np.argmax(ucb_action)
 
-    print("select the aug", ucb_aug_id)
+    # print("select the aug", ucb_aug_id)
 
 
 def kl_and_loss_stats(policy, train_batch):
