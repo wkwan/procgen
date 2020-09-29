@@ -271,7 +271,7 @@ class Crop(object):
         self.batch_size = batch_size 
 
     def do_augmentation(self, x):
-        x = x.clone()
+        # x = x.clone()
         x = x.permute(0,3,1,2).to(device=x.device, dtype=torch.float32)
         aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
                             kornia.augmentation.RandomCrop((64, 64)))
@@ -589,13 +589,13 @@ def Identity(x):
 
 aug_to_func = {    
         'crop': Crop, #works
-        'random-conv': RandomConv, #works
-        'cutout-color': CutoutColor, #works
-        'color-jitter': ColorJitter, #works
-        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
-        'flip': Flip, #works
-        'cutout': Cutout, #works
-        'grayscale': Grayscale, #works
+        # 'random-conv': RandomConv, #works
+        # 'cutout-color': CutoutColor, #works
+        # 'color-jitter': ColorJitter, #works
+        # 'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+        # 'flip': Flip, #works
+        # 'cutout': Cutout, #works
+        # 'grayscale': Grayscale, #works
 
 }
 
