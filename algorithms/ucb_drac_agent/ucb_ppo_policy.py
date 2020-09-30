@@ -589,13 +589,13 @@ def Identity(x):
 
 aug_to_func = {    
         'crop': Crop, #works
-        # 'random-conv': RandomConv, #works
-        # 'cutout-color': CutoutColor, #works
-        # 'color-jitter': ColorJitter, #works
-        # 'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
-        # 'flip': Flip, #works
-        # 'cutout': Cutout, #works
-        # 'grayscale': Grayscale, #works
+        'random-conv': RandomConv, #works
+        'cutout-color': CutoutColor, #works
+        'color-jitter': ColorJitter, #works
+        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+        'flip': Flip, #works
+        'cutout': Cutout, #works
+        'grayscale': Grayscale, #works
 
 }
 
@@ -775,32 +775,33 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     return regularized_loss
 
 def update_ucb_values(rollout_reward_mean):
-    return
-    # global num_aug_types
-    # global expl_action
-    # global ucb_action
-    # global total_num
-    # global num_action
-    # global qval_action
-    # global ucb_exploration_coef
-    # global ucb_window_length
-    # global return_action
-    # global total_num
-    # global ucb_aug_id
+    global num_aug_types
+    global expl_action
+    global ucb_action
+    global total_num
+    global num_action
+    global qval_action
+    global ucb_exploration_coef
+    global ucb_window_length
+    global return_action
+    global total_num
+    global ucb_aug_id
     
-    # total_num += 1
-    # num_action[ucb_aug_id] += 1
-    # return_action[ucb_aug_id].append(rollout_reward_mean)
-    # qval_action[ucb_aug_id] = np.mean(return_action[ucb_aug_id])
+    total_num += 1
+    num_action[ucb_aug_id] += 1
+    return_action[ucb_aug_id].append(rollout_reward_mean)
 
-    # # select aug
-    # for i in range(num_aug_types):
-    #     expl_action[i] = ucb_exploration_coef * np.sqrt(np.log(total_num) / num_action[i])
-    #     ucb_action[i] = qval_action[i] + expl_action[i]
-    # print(ucb_action)
-    # ucb_aug_id = np.argmax(ucb_action)
+    print(return_action)
+    qval_action[ucb_aug_id] = np.mean(return_action[ucb_aug_id])
 
-    # print("select the aug", ucb_aug_id)
+    # select aug
+    for i in range(num_aug_types):
+        expl_action[i] = ucb_exploration_coef * np.sqrt(np.log(total_num) / num_action[i])
+        ucb_action[i] = qval_action[i] + expl_action[i]
+    print(ucb_action)
+    ucb_aug_id = np.argmax(ucb_action)
+
+    print("select the aug", ucb_aug_id)
 
 
 def kl_and_loss_stats(policy, train_batch):
