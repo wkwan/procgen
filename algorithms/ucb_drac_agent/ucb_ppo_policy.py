@@ -599,7 +599,7 @@ aug_to_func = {
 
 }
 
-aug_list = [aug_to_func[t](batch_size=2048) 
+aug_list = [aug_to_func[t](batch_size=16384) 
             for t in list(aug_to_func.keys())]
 
 num_aug_types = len(aug_list)
