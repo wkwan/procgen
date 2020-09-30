@@ -587,17 +587,30 @@ def Identity(x):
     """
     return x
 
+# aug_to_func = {    
+#         'crop': Crop, #works
+#         'random-conv': RandomConv, #works
+#         'cutout-color': CutoutColor, #works
+#         'color-jitter': ColorJitter, #works
+#         'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+#         'flip': Flip, #works
+#         'cutout': Cutout, #works
+#         'grayscale': Grayscale, #works
+
+# }
+
+#in order from paper
 aug_to_func = {    
         'crop': Crop, #works
         'random-conv': RandomConv, #works
+        'grayscale': Grayscale, #works
+        'flip': Flip, #works
+        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+        'cutout': Cutout, #works
         'cutout-color': CutoutColor, #works
         'color-jitter': ColorJitter, #works
-        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
-        'flip': Flip, #works
-        'cutout': Cutout, #works
-        'grayscale': Grayscale, #works
-
 }
+
 
 aug_list = [aug_to_func[t](batch_size=256) 
             for t in list(aug_to_func.keys())]
