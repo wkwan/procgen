@@ -310,6 +310,8 @@ class RandomConv(object):
         num_batch = x.shape[0]
         num_trans = num_batch
         batch_size = int(num_batch / num_trans)
+
+        print(num_batch, num_trans, batch_size)
         
         # initialize random covolution
         rand_conv = nn.Conv2d(3, 3, kernel_size=3, bias=False, padding=1).to(_device)
@@ -588,7 +590,7 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        'crop': Crop, #works
+        # 'crop': Crop, #works
         'random-conv': RandomConv, #works
         'cutout-color': CutoutColor, #works
         'color-jitter': ColorJitter, #works
@@ -608,7 +610,7 @@ ucb_action = [0.] * num_aug_types
 total_num = 1
 num_action = [1.] * num_aug_types
 qval_action = [0.] * num_aug_types
-ucb_exploration_coef = 1.0
+ucb_exploration_coef = 0.5
 ucb_window_length = 10
 return_action = []
 for i in range(num_aug_types):

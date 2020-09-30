@@ -40,7 +40,7 @@ DEFAULT_CONFIG = with_common_config({
     "shuffle_sequences": True,
     # Number of SGD iterations in each outer loop (i.e., number of epochs to
     # execute per train batch).
-    "num_sgd_iter": 1,
+    "num_sgd_iter": 2,
     # Stepsize of SGD.
     "lr": 5e-4,
     # Learning rate schedule.
