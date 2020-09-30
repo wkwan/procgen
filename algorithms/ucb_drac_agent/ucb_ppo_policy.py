@@ -273,9 +273,9 @@ class Crop(object):
     def do_augmentation(self, x):
         x = x.clone()
         x = x.permute(0,3,1,2).to(device=x.device, dtype=torch.float32)
-        # aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
-        #                     kornia.augmentation.RandomCrop((64, 64)))
-        # x = aug_trans(x)
+        aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
+                            kornia.augmentation.RandomCrop((64, 64)))
+        x = aug_trans(x)
         x = x.permute(0,2,3,1)
         # imageio.imwrite('/home/ubuntu/procgen-competition/crop-noclone.png', x[0].cpu().numpy())
         return x
