@@ -274,7 +274,8 @@ class Crop(object):
 
         print(x.device)
         x = x.clone()
-        x = x.permute(0,3,1,2).to(device=x.device, dtype=torch.float32)
+        # x = x.permute(0,3,1,2).to(device=x.device, dtype=torch.float32)
+        x = x.permute(0,3,1,2)
         aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
                             kornia.augmentation.RandomCrop((64, 64)))
         x = aug_trans(x)
