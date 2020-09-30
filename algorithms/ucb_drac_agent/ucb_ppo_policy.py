@@ -609,7 +609,7 @@ total_num = 1
 num_action = [1.] * num_aug_types
 qval_action = [0.] * num_aug_types
 ucb_exploration_coef = 0.5
-ucb_window_length = 10
+ucb_window_length = 3
 return_action = []
 for i in range(num_aug_types):
     return_action.append(deque(maxlen=ucb_window_length))
