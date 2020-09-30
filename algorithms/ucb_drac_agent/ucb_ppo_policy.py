@@ -310,8 +310,6 @@ class RandomConv(object):
         num_batch = x.shape[0]
         num_trans = num_batch
         batch_size = int(num_batch / num_trans)
-
-        print(num_batch, num_trans, batch_size)
         
         # initialize random covolution
         rand_conv = nn.Conv2d(3, 3, kernel_size=3, bias=False, padding=1).to(_device)
@@ -469,6 +467,7 @@ class ColorJitter(nn.Module):
         imgs_copy = imgs.clone().to(self._device, dtype=torch.float32)
         imgs_copy = imgs_copy.permute(0,3,1,2)
         self.batch_size = imgs_copy.shape[0]
+        print(self.batch_size)
         self.change_randomization_params_all()
         outputs = self.forward(imgs_copy)
         outputs = outputs.permute(0,2,3,1)
@@ -591,13 +590,13 @@ def Identity(x):
 
 aug_to_func = {    
         # 'crop': Crop, #works
-        'random-conv': RandomConv, #works
-        'cutout-color': CutoutColor, #works
+        # 'random-conv': RandomConv, #works
+        # 'cutout-color': CutoutColor, #works
         'color-jitter': ColorJitter, #works
-        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
-        'flip': Flip, #works
-        'cutout': Cutout, #works
-        'grayscale': Grayscale, #works
+        # 'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+        # 'flip': Flip, #works
+        # 'cutout': Cutout, #works
+        # 'grayscale': Grayscale, #works
 
 }
 
