@@ -467,7 +467,6 @@ class ColorJitter(nn.Module):
         imgs_copy = imgs.clone().to(self._device, dtype=torch.float32)
         imgs_copy = imgs_copy.permute(0,3,1,2)
         self.batch_size = imgs_copy.shape[0]
-        print(self.batch_size)
         self.change_randomization_params_all()
         outputs = self.forward(imgs_copy)
         outputs = outputs.permute(0,2,3,1)
@@ -589,18 +588,18 @@ def Identity(x):
     return x
 
 aug_to_func = {    
-        # 'crop': Crop, #works
-        # 'random-conv': RandomConv, #works
-        # 'cutout-color': CutoutColor, #works
+        'crop': Crop, #works
+        'random-conv': RandomConv, #works
+        'cutout-color': CutoutColor, #works
         'color-jitter': ColorJitter, #works
-        # 'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
-        # 'flip': Flip, #works
-        # 'cutout': Cutout, #works
-        # 'grayscale': Grayscale, #works
+        'rotate': Rotate, #works but maybe not doing the intended rotation? shouldn't make a diff tho
+        'flip': Flip, #works
+        'cutout': Cutout, #works
+        'grayscale': Grayscale, #works
 
 }
 
-aug_list = [aug_to_func[t](batch_size=16384) 
+aug_list = [aug_to_func[t](batch_size=256) 
             for t in list(aug_to_func.keys())]
 
 num_aug_types = len(aug_list)
@@ -797,10 +796,10 @@ def update_ucb_values(rollout_reward_mean):
     for i in range(num_aug_types):
         expl_action[i] = ucb_exploration_coef * np.sqrt(np.log(total_num) / num_action[i])
         ucb_action[i] = qval_action[i] + expl_action[i]
-    # print(ucb_action)
+    print(ucb_action)
     ucb_aug_id = np.argmax(ucb_action)
 
-    # print("select the aug", ucb_aug_id)
+    print("select the aug", ucb_aug_id)
 
 
 def kl_and_loss_stats(policy, train_batch):
