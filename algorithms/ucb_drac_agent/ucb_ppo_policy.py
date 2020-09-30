@@ -608,7 +608,7 @@ ucb_action = [0.] * num_aug_types
 total_num = 1
 num_action = [1.] * num_aug_types
 qval_action = [0.] * num_aug_types
-ucb_exploration_coef = 2.0
+ucb_exploration_coef = 0.5
 ucb_window_length = 10
 return_action = []
 for i in range(num_aug_types):
@@ -791,17 +791,17 @@ def update_ucb_values(rollout_reward_mean):
     num_action[ucb_aug_id] += 1
     return_action[ucb_aug_id].append(rollout_reward_mean)
 
-    print(return_action)
+    # print(return_action)
     qval_action[ucb_aug_id] = np.mean(return_action[ucb_aug_id])
 
     # select aug
     for i in range(num_aug_types):
         expl_action[i] = ucb_exploration_coef * np.sqrt(np.log(total_num) / num_action[i])
         ucb_action[i] = qval_action[i] + expl_action[i]
-    print(ucb_action)
+    # print(ucb_action)
     ucb_aug_id = np.argmax(ucb_action)
 
-    print("select the aug", ucb_aug_id)
+    # print("select the aug", ucb_aug_id)
 
 
 def kl_and_loss_stats(policy, train_batch):
