@@ -271,7 +271,7 @@ class Crop(object):
         self.batch_size = batch_size 
 
     def do_augmentation(self, x):
-        # x = x.clone()
+        x = x.clone()
         x = x.permute(0,3,1,2).to(device=x.device, dtype=torch.float32)
         aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
                             kornia.augmentation.RandomCrop((64, 64)))
