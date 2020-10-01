@@ -118,31 +118,30 @@ def warn_about_bad_reward_scales(config, result):
 
 
 def validate_config(config):
-    pass
-    # if config["entropy_coeff"] < 0:
-    #     raise DeprecationWarning("entropy_coeff must be >= 0")
-    # if isinstance(config["entropy_coeff"], int):
-    #     config["entropy_coeff"] = float(config["entropy_coeff"])
-    # if config["sgd_minibatch_size"] > config["train_batch_size"]:
-    #     raise ValueError(
-    #         "Minibatch size {} must be <= train batch size {}.".format(
-    #             config["sgd_minibatch_size"], config["train_batch_size"]))
-    # if config["batch_mode"] == "truncate_episodes" and not config["use_gae"]:
-    #     raise ValueError(
-    #         "Episode truncation is not supported without a value "
-    #         "function. Consider setting batch_mode=complete_episodes.")
-    # if config["multiagent"]["policies"] and not config["simple_optimizer"]:
-    #     logger.info(
-    #         "In multi-agent mode, policies will be optimized sequentially "
-    #         "by the multi-GPU optimizer. Consider setting "
-    #         "simple_optimizer=True if this doesn't work for you.")
-    # if config["simple_optimizer"]:
-    #     logger.warning(
-    #         "Using the simple minibatch optimizer. This will significantly "
-    #         "reduce performance, consider simple_optimizer=False.")
-    # # Multi-gpu not supported for PyTorch and tf-eager.
-    # elif config["framework"] in ["tfe", "torch"]:
-    #     config["simple_optimizer"] = True
+    if config["entropy_coeff"] < 0:
+        raise DeprecationWarning("entropy_coeff must be >= 0")
+    if isinstance(config["entropy_coeff"], int):
+        config["entropy_coeff"] = float(config["entropy_coeff"])
+    if config["sgd_minibatch_size"] > config["train_batch_size"]:
+        raise ValueError(
+            "Minibatch size {} must be <= train batch size {}.".format(
+                config["sgd_minibatch_size"], config["train_batch_size"]))
+    if config["batch_mode"] == "truncate_episodes" and not config["use_gae"]:
+        raise ValueError(
+            "Episode truncation is not supported without a value "
+            "function. Consider setting batch_mode=complete_episodes.")
+    if config["multiagent"]["policies"] and not config["simple_optimizer"]:
+        logger.info(
+            "In multi-agent mode, policies will be optimized sequentially "
+            "by the multi-GPU optimizer. Consider setting "
+            "simple_optimizer=True if this doesn't work for you.")
+    if config["simple_optimizer"]:
+        logger.warning(
+            "Using the simple minibatch optimizer. This will significantly "
+            "reduce performance, consider simple_optimizer=False.")
+    # Multi-gpu not supported for PyTorch and tf-eager.
+    elif config["framework"] in ["tfe", "torch"]:
+        config["simple_optimizer"] = True
 
 def get_policy_class(config):
     return PPOTorchPolicy

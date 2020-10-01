@@ -26,6 +26,8 @@ import random
 import time
 import kornia 
 
+import trainer
+
 from collections import deque
 
 
@@ -889,7 +891,7 @@ def setup_mixins(policy, obs_space, action_space, config):
 
 PPOTorchPolicy = build_torch_policy(
     name="PPOTorchPolicy",
-    get_default_config=lambda: ray.rllib.agents.ppo.ppo.DEFAULT_CONFIG,
+    get_default_config=lambda: trainer.DEFAULT_CONFIG,
     loss_fn=ppo_surrogate_loss,
     update_ucb_values_fn=update_ucb_values,
     stats_fn=kl_and_loss_stats,
