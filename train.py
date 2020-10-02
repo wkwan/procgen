@@ -144,6 +144,7 @@ def create_parser(parser_creator=None):
         type=str,
         help="If specified, use config options from this file. Note that this "
         "overrides any trial-specific options set via flags above.")
+    print("parser is", parser)
     return parser
 
 
