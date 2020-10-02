@@ -26,7 +26,7 @@ import random
 import time
 import kornia 
 
-from .trainer import *
+from ray.rllib.agents import with_common_config
 
 from collections import deque
 
@@ -889,9 +889,73 @@ def setup_mixins(policy, obs_space, action_space, config):
     LearningRateSchedule.__init__(policy, config["lr"], config["lr_schedule"])
 
 
+# yapf: disable
+# __sphinx_doc_begin__
+DEFAULT_CONFIG = with_common_config({
+    # Should use a critic as a baseline (otherwise don't use value baseline;
+    # required for using GAE).
+    "use_critic": True,
+    # If true, use the Generalized Advantage Estimator (GAE)
+    # with a value function, see https://arxiv.org/pdf/1506.02438.pdf.
+    "use_gae": True,
+    # The GAE(lambda) parameter.
+    "gamma": 0.999,
+    "lambda": 0.95,
+    # Initial coefficient for KL divergence.
+    "kl_coeff": 0.0,
+    # Size of batches collected from each worker.
+    "rollout_fragment_length": 256,
+    # Number of timesteps collected for each SGD round. This defines the size
+    # of each SGD epoch.
+    "train_batch_size": 16384,
+    # Total SGD batch size across all devices for SGD. This defines the
+    # minibatch size within each epoch.
+    "sgd_minibatch_size": 2048,
+    # Whether to shuffle sequences in the batch when training (recommended).
+    "shuffle_sequences": True,
+    # Number of SGD iterations in each outer loop (i.e., number of epochs to
+    # execute per train batch).
+    "num_sgd_iter": 2,
+    # Stepsize of SGD.
+    "lr": 5e-4,
+    # Learning rate schedule.
+    "lr_schedule": None,
+    # Share layers for value function. If you set this to True, it's important
+    # to tune vf_loss_coeff.
+    "vf_share_layers": True,
+    # Coefficient of the value function loss. IMPORTANT: you must tune this if
+    # you set vf_share_layers: True.
+    "vf_loss_coeff": 0.5,
+    # Coefficient of the entropy regularizer.
+    "entropy_coeff": 0.01,
+    # Decay schedule for the entropy regularizer.
+    "entropy_coeff_schedule": None,
+    # PPO clip parameter.
+    "clip_param": 0.2,
+    # Clip param for the value function. Note that this is sensitive to the
+    # scale of the rewards. If your expected V is large, increase this.
+    "vf_clip_param": 0.2,
+    # If specified, clip the global norm of gradients by this amount.
+    "grad_clip": 0.5,
+    # Target value for KL divergence.
+    "kl_target": 0.01,
+    # Whether to rollout "complete_episodes" or "truncate_episodes".
+    "batch_mode": "truncate_episodes",
+    # Which observation filter to apply to the observation.
+    "observation_filter": "NoFilter",
+    # Uses the sync samples optimizer instead of the multi-gpu one. This is
+    # usually slower, but you might want to try it if you run into issues with
+    # the default optimizer.
+    "simple_optimizer": False,
+    # Whether to fake GPUs (using CPUs).
+    # Set this to True for debugging on non-GPU machines (set `num_gpus` > 0).
+    "_fake_gpus": False,
+    "framework": "torch"
+})
+
 PPOTorchPolicy = build_torch_policy(
     name="PPOTorchPolicy",
-    get_default_config=lambda: trainer.DEFAULT_CONFIG,
+    get_default_config=lambda: DEFAULT_CONFIG,
     loss_fn=ppo_surrogate_loss,
     update_ucb_values_fn=update_ucb_values,
     stats_fn=kl_and_loss_stats,
