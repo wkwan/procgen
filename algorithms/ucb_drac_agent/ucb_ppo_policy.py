@@ -26,7 +26,7 @@ import random
 import time
 import kornia 
 
-import trainer
+import .trainer
 
 from collections import deque
 
