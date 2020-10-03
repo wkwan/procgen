@@ -623,7 +623,7 @@ ucb_action = [0.] * num_aug_types
 total_num = 1
 num_action = [1.] * num_aug_types
 qval_action = [0.] * num_aug_types
-ucb_exploration_coef = 5.0
+ucb_exploration_coef = 0.5
 ucb_window_length = 10
 return_action = []
 for i in range(num_aug_types):
@@ -907,10 +907,10 @@ DEFAULT_CONFIG = with_common_config({
     "rollout_fragment_length": 256,
     # Number of timesteps collected for each SGD round. This defines the size
     # of each SGD epoch.
-    "train_batch_size": 16384,
+    "train_batch_size": 2048,
     # Total SGD batch size across all devices for SGD. This defines the
     # minibatch size within each epoch.
-    "sgd_minibatch_size": 1024,
+    "sgd_minibatch_size": 256,
     # Whether to shuffle sequences in the batch when training (recommended).
     "shuffle_sequences": True,
     # Number of SGD iterations in each outer loop (i.e., number of epochs to
