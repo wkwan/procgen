@@ -15,14 +15,14 @@ if [[ -z $AICROWD_IS_GRADING ]]; then
   # variable is set, due to which this block will be skipped.              #
   ##########################################################################
 
-  export OUTPUTS_DIR=./outputs
-  export RAY_MEMORY_LIMIT=1500000000
-  export RAY_CPUS=2
-  export RAY_STORE_MEMORY=1000000000
+  # export OUTPUTS_DIR=./outputs
+  # export RAY_MEMORY_LIMIT=1500000000
+  # export RAY_CPUS=2
+  # export RAY_STORE_MEMORY=1000000000
 
   # Cleaning output directory between multiple runs
-  rm -rf ${OUTPUTS_DIR}
-  mkdir ${OUTPUTS_DIR}
+  # rm -rf ${OUTPUTS_DIR}
+  # mkdir ${OUTPUTS_DIR}
 fi
 
 
