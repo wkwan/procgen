@@ -38,8 +38,8 @@ class Crop(ObservationWrapper):
 
             #RAND CROP
             print("original dtype", self.prev_obs.dtype)
-            self.prev_obs = self.prev_obs.astype(np.float32)
-            print("after dtype", self.prev_obs.dtype)
+            original_dtype = self.prev_obs.dtype
+            # print("after dtype", self.prev_obs.dtype)
 
             self.prev_obs = torch.from_numpy(self.prev_obs)
 
@@ -51,6 +51,7 @@ class Crop(ObservationWrapper):
             self.prev_obs = self.prev_obs[0].permute(1,2,0)
 
             self.prev_obs = self.prev_obs.detach().numpy
+            self.prev_obs = self.prev_obs.astype(original_dtype)
 
             obs = self.prev_obs
             reward = self.prev_reward
