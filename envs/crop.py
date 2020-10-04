@@ -40,10 +40,8 @@ class Crop(ObservationWrapper):
             print("original dtype", self.prev_obs.dtype)
             original_dtype = self.prev_obs.dtype
             # print("after dtype", self.prev_obs.dtype)
-            self.prev_obs = self.prev_obs.to(dtype=torch.float32)
-            self.prev_obs = torch.from_numpy(self.prev_obs)
+            self.prev_obs = torch.from_numpy(self.prev_obs).float()
 
-            # self.prev_obs = self.prev_obs.to(dtype=torch.float32)
             self.prev_obs = self.prev_obs.permute(2,0,1)
             aug_trans = nn.Sequential(nn.ReplicationPad2d((12,12)),
                                 kornia.augmentation.RandomCrop((64, 64)))
