@@ -41,6 +41,7 @@ class Crop(ObservationWrapper):
 
 
             #RAND CROP
+            global written
             if not written:
                 imageio.imwrite('/home/ubuntu/procgen-competition/bcropstepbefore.png', self.prev_obs)
 
