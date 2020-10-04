@@ -49,10 +49,10 @@ class Crop(ObservationWrapper):
             self.prev_obs = aug_trans(self.prev_obs)
             self.prev_obs = self.prev_obs[0].permute(1,2,0)
 
-            self.prev_obs = self.prev_obs.detach().numpy()
+            self.prev_obs = self.prev_obs.detach().numpy().astype(np.uint8)
+
             imageio.imwrite('/home/ubuntu/procgen-competition/bcropstep.png', self.prev_obs)
 
-            self.prev_obs = self.prev_obs.astype(np.uint8)
 
             obs = self.prev_obs
             reward = self.prev_reward
