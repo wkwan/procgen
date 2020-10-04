@@ -37,6 +37,7 @@ class Crop(ObservationWrapper):
 
 
             #RAND CROP
+            print("original dtype", self.prev_obs.dtype)
             self.prev_obs = self.prev_obs.astype(np.float32)
             print("type", type(self.prev_obs))
             self.prev_obs = torch.from_numpy(self.prev_obs)
