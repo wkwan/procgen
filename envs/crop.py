@@ -40,7 +40,7 @@ class Crop(ObservationWrapper):
             print("original dtype", self.prev_obs.dtype)
             original_dtype = self.prev_obs.dtype
             # print("after dtype", self.prev_obs.dtype)
-
+            self.prev_obs = self.prev_obs.to(dtype=torch.float32)
             self.prev_obs = torch.from_numpy(self.prev_obs)
 
             # self.prev_obs = self.prev_obs.to(dtype=torch.float32)
