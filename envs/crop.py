@@ -44,7 +44,7 @@ class Crop(ObservationWrapper):
                                 kornia.augmentation.RandomCrop((64, 64)))
             self.prev_obs = aug_trans(self.prev_obs)
             print("new shape", self.prev_obs.shape)
-            self.prev_obs = self.prev_obs.permute(1,2,0)
+            self.prev_obs = self.prev_obs[0].permute(1,2,0)
             self.prev_obs = self.prev_obs.detach().numpy
 
             obs = self.prev_obs
