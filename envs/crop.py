@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 import kornia 
 
-# import imageio
+import imageio
 
 
 
@@ -39,7 +39,7 @@ class Crop(ObservationWrapper):
 
 
             #RAND CROP
-            # imageio.imwrite('/home/ubuntu/procgen-competition/cropstepbefore.png', self.prev_obs)
+            imageio.imwrite('/home/ubuntu/procgen-competition/bcropstepbefore.png', self.prev_obs)
 
             self.prev_obs = torch.from_numpy(self.prev_obs).float()
 
@@ -50,7 +50,7 @@ class Crop(ObservationWrapper):
             self.prev_obs = self.prev_obs[0].permute(1,2,0)
 
             self.prev_obs = self.prev_obs.detach().numpy()
-            # imageio.imwrite('/home/ubuntu/procgen-competition/cropstep.png', self.prev_obs)
+            imageio.imwrite('/home/ubuntu/procgen-competition/bcropstep.png', self.prev_obs)
 
             # self.prev_obs = self.prev_obs.astype(original_dtype)
 
