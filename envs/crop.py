@@ -41,10 +41,10 @@ class Crop(ObservationWrapper):
             #RAND CROP
             imageio.imwrite('/home/ubuntu/procgen-competition/bcropstepbefore.png', self.prev_obs)
 
-            self.prev_obs = torch.from_numpy(self.prev_obs).float()
+            self.prev_obs = torch.from_numpy(self.prev_obs).int()
 
             self.prev_obs = self.prev_obs.permute(2,0,1)
-            aug_trans = nn.Sequential(nn.ReplicationPad2d((12,12)),
+            aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
                                 kornia.augmentation.RandomCrop((64, 64)))
             self.prev_obs = aug_trans(self.prev_obs)
             self.prev_obs = self.prev_obs[0].permute(1,2,0)
