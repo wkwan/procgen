@@ -49,7 +49,7 @@ class Crop(ObservationWrapper):
             self.prev_obs = self.prev_obs[0].permute(1,2,0)
 
             self.prev_obs = self.prev_obs.detach().numpy
-            self.prev_obs = self.prev_obs.astype(original_dtype)
+            # self.prev_obs = self.prev_obs.astype(original_dtype)
 
             obs = self.prev_obs
             reward = self.prev_reward
