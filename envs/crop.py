@@ -38,11 +38,11 @@ class Crop(ObservationWrapper):
 
             #RAND CROP
 
-            self.prev_obs = self.prev_obs.permute(0,3,1,2).to(device=self.prev_obs.device, dtype=torch.float32)
+            self.prev_obs = np.transpose(self.prev_obs, (0,3,1,2))
             aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
                                 kornia.augmentation.RandomCrop((64, 64)))
             self.prev_obs = aug_trans(self.prev_obs)
-            self.prev_obs = self.prev_obs.permute(0,2,3,1)
+            self.prev_obs = np.transpose(self.prev_obs, (0,3,1,2))
 
             obs = self.prev_obs
             reward = self.prev_reward
@@ -81,7 +81,7 @@ class Crop(ObservationWrapper):
         return obs
 
 def create_my_custom_env(config):
-    print("IS ROLLOUT", config["rollout"] if ("rollout" in config) else False)
+    # print("IS ROLLOUT", config["rollout"] if ("rollout" in config) else False)
     return Crop(ProcgenEnvWrapper(config), config["rollout"] if ("rollout" in config) else False)
 
 # Register Env in Ray
