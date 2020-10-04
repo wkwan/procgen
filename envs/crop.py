@@ -22,7 +22,7 @@ class Crop(ObservationWrapper):
         self.prev_info = None
         self.is_rollout = is_rollout
 
-    written = False
+        self.written = False
 
     def step(self, action):
         if not self.is_rollout and self.prev_obs is not None:
@@ -41,8 +41,7 @@ class Crop(ObservationWrapper):
 
 
             #RAND CROP
-            global written
-            if not written:
+            if not self.written:
                 imageio.imwrite('/home/ubuntu/procgen-competition/bcropstepbefore.png', self.prev_obs)
 
             self.prev_obs = torch.from_numpy(self.prev_obs).float()
@@ -55,10 +54,9 @@ class Crop(ObservationWrapper):
 
             self.prev_obs = self.prev_obs.detach().numpy().astype(np.uint8)
 
-            if not written:
+            if not self.written:
                 imageio.imwrite('/home/ubuntu/procgen-competition/bcropstep.png', self.prev_obs)
-
-            written = True
+                self.written = True
 
 
             obs = self.prev_obs
