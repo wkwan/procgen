@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 import kornia 
 
-import imageio
+# import imageio
 
 
 
@@ -22,7 +22,7 @@ class Crop(ObservationWrapper):
         self.prev_info = None
         self.is_rollout = is_rollout
 
-        self.written = False
+        # self.written = False
 
     def step(self, action):
         if not self.is_rollout and self.prev_obs is not None:
@@ -41,8 +41,8 @@ class Crop(ObservationWrapper):
 
 
             #RAND CROP
-            if not self.written:
-                imageio.imwrite('/home/ubuntu/procgen-competition/bcropstepbefore.png', self.prev_obs)
+            # if not self.written:
+            #     imageio.imwrite('/home/ubuntu/procgen-competition/bcropstepbefore.png', self.prev_obs)
 
             self.prev_obs = torch.from_numpy(self.prev_obs).float()
 
@@ -54,9 +54,9 @@ class Crop(ObservationWrapper):
 
             self.prev_obs = self.prev_obs.detach().numpy().astype(np.uint8)
 
-            if not self.written:
-                imageio.imwrite('/home/ubuntu/procgen-competition/bcropstep.png', self.prev_obs)
-                self.written = True
+            # if not self.written:
+            #     imageio.imwrite('/home/ubuntu/procgen-competition/bcropstep.png', self.prev_obs)
+            #     self.written = True
 
 
             obs = self.prev_obs
