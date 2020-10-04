@@ -37,7 +37,7 @@ class Crop(ObservationWrapper):
 
 
             #RAND CROP
-            self.prev_obs = torch.from_numpy(self.prev_obs).float()
+            self.prev_obs = torch.from_numpy(self.prev_obs.copy()).float()
             self.prev_obs = self.prev_obs.permute(0,3,1,2)
             aug_trans = nn.Sequential(nn.ReplicationPad2d(12),
                                 kornia.augmentation.RandomCrop((64, 64)))
