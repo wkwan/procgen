@@ -79,7 +79,7 @@ procgen-ppo:
         # you set vf_share_layers: True.
         vf_loss_coeff: 0.5
         # Coefficient of the entropy regularizer.
-        entropy_coeff: 0.05
+        entropy_coeff: 0.01
         # PPO clip parameter.
         clip_param: 0.2
         # Clip param for the value function. Note that this is sensitive to the
