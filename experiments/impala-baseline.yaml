@@ -272,6 +272,7 @@ procgen-ppo:
             # of your class (e.g. "ray.rllib.utils.exploration.epsilon_greedy.
             # EpsilonGreedy)
             type: "StochasticSampling"
+            random_timesteps: 30
             # Can add constructor kwargs here (if any)
 
         ################################################
