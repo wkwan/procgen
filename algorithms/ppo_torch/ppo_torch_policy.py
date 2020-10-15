@@ -98,7 +98,10 @@ class PPOLoss:
                                                 -vf_clip_param, vf_clip_param)
             vf_loss2 = torch.pow(vf_clipped - value_targets, 2.0)
             vf_loss = torch.max(vf_loss1, vf_loss2)
-            self.mean_vf_loss = 0.5 * reduce_mean_valid(vf_loss)
+
+            self.mean_vf_loss = reduce_mean_valid(vf_loss)
+
+            # self.mean_vf_loss = 0.5 * reduce_mean_valid(vf_loss)
             print("use gae", self.mean_vf_loss)
 
             loss = reduce_mean_valid(
