@@ -145,7 +145,6 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
 
 def kl_and_loss_stats(policy, train_batch):
-    print("kl loss and stats")
     return {
         "cur_kl_coeff": policy.kl_coeff,
         "cur_lr": policy.cur_lr,
@@ -216,7 +215,6 @@ def setup_mixins(policy, obs_space, action_space, config):
 
 
 def choose_optimizer(policy, config):
-    print("use the adam optimizer", config["lr"])
     return torch.optim.Adam(policy.model.parameters(), lr=config["lr"], eps=1e-5)
 
 PPOTorchPolicy = build_torch_policy(
