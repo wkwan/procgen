@@ -214,6 +214,10 @@ def setup_mixins(policy, obs_space, action_space, config):
     LearningRateSchedule.__init__(policy, config["lr"], config["lr_schedule"])
 
 
+def choose_optimizer(policy, config):
+    print("use the adam optimizer")
+    return torch.optim.Adam(lr=policy.cur_lr, eps=1e-5)
+
 PPOTorchPolicy = build_torch_policy(
     name="PPOTorchPolicy",
     get_default_config=lambda: ray.rllib.agents.ppo.ppo.DEFAULT_CONFIG,
@@ -221,6 +225,7 @@ PPOTorchPolicy = build_torch_policy(
     stats_fn=kl_and_loss_stats,
     extra_action_out_fn=vf_preds_fetches,
     postprocess_fn=postprocess_ppo_gae,
+    optimizer_fn=choose_optimizer,
     extra_grad_process_fn=apply_grad_clipping,
     before_init=setup_config,
     after_init=setup_mixins,
