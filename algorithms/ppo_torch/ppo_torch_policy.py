@@ -81,7 +81,7 @@ class PPOLoss:
         logp_ratio = torch.exp(
             curr_action_dist.logp(actions) - prev_actions_logp)
         action_kl = prev_dist.kl(curr_action_dist)
-        self.mean_kl = reduce_mean_valid(action_kl)
+        self.mean_kl = 0.5*reduce_mean_valid(action_kl)
 
         curr_entropy = curr_action_dist.entropy()
         self.mean_entropy = reduce_mean_valid(curr_entropy)
