@@ -217,7 +217,7 @@ def setup_mixins(policy, obs_space, action_space, config):
 
 def choose_optimizer(policy, config):
     print("use the adam optimizer", config["lr"])
-    return torch.optim.Adam(lr=config["lr"], eps=1e-5)
+    return torch.optim.Adam(params=policy.parameters, lr=config["lr"], eps=1e-5)
 
 PPOTorchPolicy = build_torch_policy(
     name="PPOTorchPolicy",
