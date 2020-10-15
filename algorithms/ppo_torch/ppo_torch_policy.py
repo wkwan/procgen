@@ -85,9 +85,9 @@ class PPOLoss:
 
         curr_entropy = curr_action_dist.entropy()
         self.mean_entropy = reduce_mean_valid(curr_entropy)
-
+        print("advantages", advantages)
         advantages = (advantages - reduce_mean_valid(advantages)) / (torch.std(advantages) + 1e-8)
-
+        print("advantages after", advantages)
         surrogate_loss = torch.min(
             advantages * logp_ratio,
             advantages * torch.clamp(logp_ratio, 1 - clip_param,
