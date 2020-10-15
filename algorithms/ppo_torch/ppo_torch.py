@@ -175,14 +175,12 @@ def execution_plan(workers, config):
     rollouts = rollouts.for_each(StandardizeFields(["advantages"]))
 
     if config["simple_optimizer"]:
-        print("USE SIMPLE OPT")
         train_op = rollouts.for_each(
             TrainOneStep(
                 workers,
                 num_sgd_iter=config["num_sgd_iter"],
                 sgd_minibatch_size=config["sgd_minibatch_size"]))
     else:
-        print("USE MULTI IOP")
         train_op = rollouts.for_each(
             TrainTFMultiGPU(
                 workers,
