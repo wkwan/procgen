@@ -1,7 +1,6 @@
 import logging
 
 from ray.rllib.agents import with_common_config
-from ray.rllib.agents.ppo.ppo_tf_policy import PPOTFPolicy
 from .ppo_torch_policy import PPOTorchPolicy
 
 from ray.rllib.agents.trainer_template import build_trainer
@@ -144,11 +143,7 @@ def validate_config(config):
 
 
 def get_policy_class(config):
-    if config["framework"] == "torch":
-        return PPOTorchPolicy
-    else:
-        return PPOTFPolicy
-
+    return PPOTorchPolicy
 
 class UpdateKL:
     """Callback to update the KL based on optimization info."""
@@ -208,7 +203,7 @@ def execution_plan(workers, config):
 PPOTrainer = build_trainer(
     name="PPOOpen",
     default_config=DEFAULT_CONFIG,
-    default_policy=PPOTFPolicy,
+    default_policy=PPOTorchPolicy,
     get_policy_class=get_policy_class,
     execution_plan=execution_plan,
     validate_config=validate_config)
