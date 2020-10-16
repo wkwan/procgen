@@ -75,7 +75,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
     @override(TorchModelV2)
     def forward(self, input_dict, state, seq_lens):
         x = input_dict["obs"].float()
-        print("x shape", x.shape)
+        # print("x shape", x.shape)
         x = x / 255.0  # scale to 0-1
         x = x.permute(0, 3, 1, 2)  # NHWC => NCHW
         for conv_seq in self.conv_seqs:
