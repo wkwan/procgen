@@ -5,7 +5,7 @@ from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.rllib.utils import add_mixins
 from ray.rllib.utils.annotations import override, DeveloperAPI
 from ray.rllib.utils.framework import try_import_torch
-from .custom_torch_ops import convert_to_non_torch_type
+from ray.rllib.utils.torch_ops import convert_to_non_torch_type
 
 torch, _ = try_import_torch()
 
