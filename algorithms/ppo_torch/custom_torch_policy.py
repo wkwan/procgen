@@ -106,7 +106,6 @@ class TorchPolicy(Policy):
                         explore=None,
                         timestep=None,
                         **kwargs):
-        print("COMPUTE ACTIONS")
 
         explore = explore if explore is not None else self.config["explore"]
         timestep = timestep if timestep is not None else self.global_timestep
@@ -246,7 +245,7 @@ class TorchPolicy(Policy):
             opt.zero_grad()
             # Recompute gradients of loss over all variables.
             print("LOSS OUT learn on batch", i, loss_out[i])
-            loss_out[i][0].backward(retain_graph=(i < len(self._optimizers) - 1))
+            loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
             if self.distributed_world_size:
@@ -293,7 +292,7 @@ class TorchPolicy(Policy):
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
             print("LOSS IS", loss_out[i])
-            loss_out[i][0].backward()
+            loss_out[i].backward()
             grad_process_info = self.extra_grad_process(opt, loss_out[i])
 
             # Note that return values are just references;
