@@ -73,6 +73,16 @@ def intprod(xs):
     for x in xs:
         out *= x
     return out
+
+def transpose(x, before, after):
+    """
+    Usage: x_bca = transpose(x_abc, 'abc', 'bca')
+    """
+    assert sorted(before) == sorted(after), f"cannot transpose {before} to {after}"
+    assert x.ndim == len(
+        before
+    ), f"before spec '{before}' has length {len(before)} but x has {x.ndim} dimensions: {tuple(x.shape)}"
+    return x.permute(tuple(before.index(i) for i in after))
     
 def NormedLinear(*args, scale=1.0, dtype=th.float32, **kwargs):
     """
