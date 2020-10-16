@@ -73,6 +73,7 @@ class TorchPolicy(Policy):
                 that returns the divisibility requirement for sample batches.
         """
         self.framework = "torch"
+        print("INIT TORCH POLICY")
         super().__init__(observation_space, action_space, config)
         self.device = (torch.device("cuda")
                        if torch.cuda.is_available() else torch.device("cpu"))
@@ -105,6 +106,7 @@ class TorchPolicy(Policy):
                         explore=None,
                         timestep=None,
                         **kwargs):
+        print("COMPUTE ACTIONS")
 
         explore = explore if explore is not None else self.config["explore"]
         timestep = timestep if timestep is not None else self.global_timestep
@@ -181,6 +183,7 @@ class TorchPolicy(Policy):
                                 state_batches=None,
                                 prev_action_batch=None,
                                 prev_reward_batch=None):
+        print("COMPUTE LOG LIKELIHOODS")
 
         if self.action_sampler_fn and self.action_distribution_fn is None:
             raise ValueError("Cannot compute log-prob/likelihood w/o an "
@@ -221,6 +224,8 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def learn_on_batch(self, postprocessed_batch):
+        print("LEARN ON BATCH")
+
         # Get batch ready for RNNs, if applicable.
         pad_batch_to_sequences_of_same_size(
             postprocessed_batch,
@@ -276,6 +281,7 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def compute_gradients(self, postprocessed_batch):
+        print("COMPUTE GRADIENTS")
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
@@ -299,11 +305,11 @@ class TorchPolicy(Policy):
 
         grad_info = self.extra_grad_info(train_batch)
         grad_info.update(grad_process_info)
-        return None
-        # return grads, {LEARNER_STATS_KEY: grad_info}
+        return grads, {LEARNER_STATS_KEY: grad_info}
 
     @override(Policy)
     def apply_gradients(self, gradients):
+        print("APPLY GRADIENTS")
         # TODO(sven): Not supported for multiple optimizers yet.
         assert len(self._optimizers) == 1
         for g, p in zip(gradients, self.model.parameters()):
@@ -314,6 +320,7 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def get_weights(self):
+        print("GET WEIGHTS")
         return {
             k: v.cpu().detach().numpy()
             for k, v in self.model.state_dict().items()
@@ -321,11 +328,13 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def set_weights(self, weights):
+        print("SET WEIGHTS")
         weights = convert_to_torch_tensor(weights, device=self.device)
         self.model.load_state_dict(weights)
 
     @override(Policy)
     def get_state(self):
+        print("GET STATE")
         state = super().get_state()
         state["_optimizer_variables"] = []
         for i, o in enumerate(self._optimizers):
@@ -334,6 +343,7 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def set_state(self, state):
+        print("SET STATE")
         state = state.copy()  # shallow copy
         # Set optimizer vars first.
         optimizer_vars = state.pop("_optimizer_variables", None)
