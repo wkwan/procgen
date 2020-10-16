@@ -276,7 +276,6 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def compute_gradients(self, postprocessed_batch):
-        print("compute gradients")
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
@@ -286,7 +285,6 @@ class TorchPolicy(Policy):
         grads = []
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
-            print("loss is", loss_out[i])
             loss_out[i].backward()
             grad_process_info = self.extra_grad_process(opt, loss_out[i])
 
@@ -301,7 +299,8 @@ class TorchPolicy(Policy):
 
         grad_info = self.extra_grad_info(train_batch)
         grad_info.update(grad_process_info)
-        return grads, {LEARNER_STATS_KEY: grad_info}
+        return None
+        # return grads, {LEARNER_STATS_KEY: grad_info}
 
     @override(Policy)
     def apply_gradients(self, gradients):
