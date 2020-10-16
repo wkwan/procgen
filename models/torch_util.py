@@ -13,7 +13,6 @@ import torch.distributed as dist
 import torch.distributions as dis
 import torch.nn.functional as F
 from torch import nn
-from . import tree_util
 import socket
 import time
 import random
@@ -227,25 +226,6 @@ def explained_variance(ypred: th.Tensor, y: th.Tensor, comm: MPI.Comm = None) ->
     else:
         return 1.0 - var_err / var_y
 
-@functools.lru_cache()  # Just run once
-def register_distributions_for_tree_util():
-    tree_util.register_pytree_node(
-        dis.Categorical,
-        lambda d: ((d.logits,), None),
-        lambda _keys, xs: dis.Categorical(logits=xs[0]),
-    )
-    tree_util.register_pytree_node(
-        dis.Bernoulli,
-        lambda d: ((d.logits,), None),
-        lambda _keys, xs: dis.Bernoulli(logits=xs[0]),
-    )
-
-@functools.lru_cache()
-def warn_no_gradient(model, task):
-    for n, p in model.named_parameters():
-        if p.grad is None:
-            print(f"parameter '{n}' {p.shape} has no gradient for '{task}'")
-
 def parse_dtype(x):
     if isinstance(x, th.dtype):
         return x
@@ -272,33 +252,6 @@ def parse_dtype(x):
             raise ValueError(f"cannot parse {x} as a dtype")
     else:
         raise TypeError(f"cannot parse {type(x)} as dtype")
-
-@no_grad
-def minibatched_call(fn, mbsize, *args, **kwargs):
-    """
-    Same result as fn(**kwargs) but breaking up the inputs
-    into minibatches of size mbsize to avoid OOM errors
-    """
-    tensor_list, _ = tree_util.tree_flatten((args, kwargs))
-    batchsize = tensor_list[0].shape[0]
-    mbs = [
-        fn(*tree_slice(args, inds), **tree_slice(kwargs, inds))
-        for inds in th.arange(batchsize).split(mbsize)
-    ]
-    return tree_cat(mbs, dim=0)
-
-
-def tree_stack(trees):
-    return tree_util.tree_multimap(lambda *xs: th.stack(xs, dim=0), *trees)
-
-
-def tree_cat(trees, dim=0):
-    return tree_util.tree_multimap(lambda *xs: th.cat(xs, dim=dim), *trees)
-
-
-def tree_slice(tree, sli):
-    return tree_util.tree_map(lambda x: x[sli], tree)
-
 
 def sum_nonbatch(x, nbatchdim=2):
     return x.sum(dim=tuple(range(nbatchdim, x.dim()))) if x.dim() > nbatchdim else x
