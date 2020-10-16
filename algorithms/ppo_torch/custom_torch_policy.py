@@ -245,8 +245,8 @@ class TorchPolicy(Policy):
             # Erase gradients in all vars of this optimizer.
             opt.zero_grad()
             # Recompute gradients of loss over all variables.
-            print("LOSS OUT ", i, loss_out[i])
-            loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
+            print("LOSS OUT learn on batch", i, loss_out[i])
+            loss_out[i][0].backward(retain_graph=(i < len(self._optimizers) - 1))
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
             if self.distributed_world_size:
@@ -292,7 +292,8 @@ class TorchPolicy(Policy):
         grads = []
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
-            loss_out[i].backward()
+            print("LOSS IS", loss_out[i])
+            loss_out[i][0].backward()
             grad_process_info = self.extra_grad_process(opt, loss_out[i])
 
             # Note that return values are just references;
