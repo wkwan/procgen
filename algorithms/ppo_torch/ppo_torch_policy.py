@@ -8,7 +8,7 @@ from ray.rllib.evaluation.postprocessing import Postprocessing
 from ray.rllib.policy.sample_batch import SampleBatch
 from ray.rllib.policy.torch_policy import EntropyCoeffSchedule, \
     LearningRateSchedule
-from ray.rllib.policy.torch_policy_template import build_torch_policy
+.custom_torch_policy_template import build_torch_policy
 from ray.rllib.utils.explained_variance import explained_variance
 from ray.rllib.utils.torch_ops import sequence_mask
 from ray.rllib.utils import try_import_torch
