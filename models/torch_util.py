@@ -153,23 +153,6 @@ def dist_get_world_size(group=dist.group.WORLD):
         return 1
     return dist.get_world_size(group=group)
 
-
-def sync_params(params, src_rank=0, group=dist.group.WORLD, comm=None, use_mpi=False):
-    """
-    Send parameters from src_rank to all others in the group
-    """
-    datas = [p.data for p in params]
-    flatvec = flatten_tensors(datas)
-    if use_mpi:
-        if comm is None:
-            comm = DEFAULT_COMM
-        flatvec = th2np(flatvec)
-        comm.Bcast(flatvec, root=0)
-        flatvec = np2th(flatvec)
-    else:
-        dist_broadcast(flatvec, src=src_rank, group=group)
-    unflatten_to(flatvec, datas)
-
 def sync_grads(
     params, group=dist.group.WORLD, grad_weight=1.0, dtype=None, sync_buffer=None
 ):
@@ -193,38 +176,6 @@ def _numpy_allmean(comm, x):
     comm.Allreduce(x, out)
     out /= comm.size
     return out
-
-
-def mpi_moments(comm: MPI.Comm, x: th.Tensor) -> (float, float):
-    mean_x_x2 = np.array([x.mean().item(), (x ** 2).mean().item()])
-    mean_x_x2 = _numpy_allmean(comm, mean_x_x2)
-    mean_x, mean_x2 = mean_x_x2
-    var_x = mean_x2 - mean_x ** 2
-    return float(mean_x), max(float(var_x), 0)
-
-
-def explained_variance(ypred: th.Tensor, y: th.Tensor, comm: MPI.Comm = None) -> float:
-    """
-    Computes fraction of variance that ypred explains about y.
-    Returns 1 - Var[y-ypred] / Var[y]
- 
-    interpretation:
-        ev=0  =>  might as well have predicted zero
-        ev=1  =>  perfect prediction
-        ev<0  =>  worse than just predicting zero    
-    """
-    assert ypred.shape == y.shape
-    err = y - ypred
-    if comm is None:
-        var_y = float(y.var())
-        var_err = float(err.var())
-    else:
-        _, var_y = mpi_moments(comm, y)
-        _, var_err = mpi_moments(comm, err)
-    if var_y == 0:
-        return float("nan")
-    else:
-        return 1.0 - var_err / var_y
 
 def parse_dtype(x):
     if isinstance(x, th.dtype):
