@@ -27,6 +27,7 @@ class ConvSequence(nn.Module):
         self._input_shape = input_shape
         self._out_channels = out_channels
         self.conv = nn.Conv2d(in_channels=self._input_shape[0], out_channels=self._out_channels, kernel_size=3, padding=1)
+        self.conv.bias.data *= 0
         self.res_block0 = ResidualBlock(self._out_channels)
         self.res_block1 = ResidualBlock(self._out_channels)
 
@@ -54,7 +55,6 @@ class ImpalaCNN(TorchModelV2, nn.Module):
     def __init__(self, obs_space, action_space, num_outputs, model_config,
                  name):
 
-        print("init impala torch", obs_space.shape, action_space.shape, num_outputs)
         TorchModelV2.__init__(self, obs_space, action_space, num_outputs,
                               model_config, name)
         nn.Module.__init__(self)
@@ -69,8 +69,11 @@ class ImpalaCNN(TorchModelV2, nn.Module):
             conv_seqs.append(conv_seq)
         self.conv_seqs = nn.ModuleList(conv_seqs)
         self.hidden_fc = nn.Linear(in_features=shape[0] * shape[1] * shape[2], out_features=256)
+        self.hidden_fc.bias.data *= 0
         self.logits_fc = nn.Linear(in_features=256, out_features=num_outputs)
+        self.logits_fc.bias.data * 0
         self.value_fc = nn.Linear(in_features=256, out_features=1)
+        self.value_fc.bias.data *= 0
         
     @override(TorchModelV2)
     def forward(self, input_dict, state, seq_lens):
