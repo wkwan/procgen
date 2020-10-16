@@ -108,9 +108,9 @@ def flatten_image(x):
     return x.reshape((*batch_shape, h * w * c))
 
 
-def sequential(layers, x, *args, diag_name=None):
+def sequential(layers, input_dict, state, seq_lens, diag_name=None):
     for (i, layer) in enumerate(layers):
-        x = layer(x, *args)
+        x = layer(input_dict, state, seq_lens)
     return x
 
 def all_mean_(x, group=dist.group.WORLD):
@@ -386,7 +386,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         # x = x.reshape(b, x.shape[-3:])
         # x = transpose(x, "bhwc", "bchw")
         x = x.permute(0, 3, 1, 2)
-        x = sequential(self.stacks, x, state, seq_lens, diag_name=self.name)
+        x = sequential(self.stacks, input_dict, state, seq_lens, diag_name=self.name)
         # x = x.reshape(b, x.shape[1:])
         x = flatten_image(x)
         x = th.relu(x)
