@@ -1,3 +1,5 @@
+from ray.rllib.models import ModelCatalog
+
 import math
 
 import torch as th
@@ -395,3 +397,5 @@ class ImpalaEncoder(Encoder):
 
     def initial_state(self, batchsize):
         return tu.zeros(batchsize, 0)
+
+ModelCatalog.register_custom_model("impala_ppg", ImpalaCNN)
