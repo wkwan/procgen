@@ -10,7 +10,7 @@ from .custom_torch_policy import EntropyCoeffSchedule, \
     LearningRateSchedule
 from .custom_torch_policy_template import build_torch_policy
 from ray.rllib.utils.explained_variance import explained_variance
-from .custom_torch_ops import sequence_mask
+from ray.rllib.utils.torch_ops import sequence_mask
 from ray.rllib.utils import try_import_torch
 
 torch, nn = try_import_torch()
