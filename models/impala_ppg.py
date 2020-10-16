@@ -358,7 +358,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         self.stacks = nn.ModuleList()
         for outchan in chans:
             stack = CnnDownStack(
-                curshape[0], nblock=nblock, outchan=outchan, scale=s, **kwargs
+                curshape[0], nblock=nblock, outchan=outchan, scale=s
             )
             self.stacks.append(stack)
             curshape = stack.output_shape(curshape)
