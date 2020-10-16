@@ -65,6 +65,15 @@ def th2np(tharr):
     return tharr.cpu().numpy()
 
 
+def intprod(xs):
+    """
+    Product of a sequence of integers
+    """
+    out = 1
+    for x in xs:
+        out *= x
+    return out
+    
 def NormedLinear(*args, scale=1.0, dtype=th.float32, **kwargs):
     """
     nn.Linear but with normalized fan-in init
