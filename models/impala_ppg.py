@@ -324,7 +324,8 @@ class CnnDownStack(nn.Module):
             [CnnBasicBlock(outchan, scale=s, **kwargs) for _ in range(nblock)]
         )
 
-    def forward(self, x):
+    def forward(self, input_dict, state, seq_lens):
+        x = input_dict["obs"].float()
         x = self.firstconv(x)
         if getattr(self, "pool", True):
             x = F.max_pool2d(x, kernel_size=3, stride=2, padding=1)
