@@ -338,6 +338,7 @@ class ImpalaCNN(nn.Module):
         self, inshape, chans, outsize, scale_ob, nblock, final_relu=True, **kwargs
     ):
         super().__init__()
+        print("INIT THE IMPALA CNN")
         self.scale_ob = scale_ob
         h, w, c = inshape
         curshape = (c, h, w)
