@@ -6,7 +6,7 @@ from ray.rllib.agents.ppo.ppo_tf_policy import postprocess_ppo_gae, \
     setup_config
 from ray.rllib.evaluation.postprocessing import Postprocessing
 from ray.rllib.policy.sample_batch import SampleBatch
-from ray.rllib.policy.torch_policy import EntropyCoeffSchedule, \
+from .custom_torch_policy import EntropyCoeffSchedule, \
     LearningRateSchedule
 from .custom_torch_policy_template import build_torch_policy
 from ray.rllib.utils.explained_variance import explained_variance
