@@ -275,8 +275,8 @@ class CnnBasicBlock(nn.Module):
         self.inchan = inchan
         self.batch_norm = batch_norm
         s = math.sqrt(scale)
-        self.conv0 = tu.NormedConv2d(self.inchan, self.inchan, 3, padding=1, scale=s)
-        self.conv1 = tu.NormedConv2d(self.inchan, self.inchan, 3, padding=1, scale=s)
+        self.conv0 = NormedConv2d(self.inchan, self.inchan, 3, padding=1, scale=s)
+        self.conv1 = NormedConv2d(self.inchan, self.inchan, 3, padding=1, scale=s)
         if self.batch_norm:
             self.bn0 = nn.BatchNorm2d(self.inchan)
             self.bn1 = nn.BatchNorm2d(self.inchan)
@@ -309,7 +309,7 @@ class CnnDownStack(nn.Module):
         self.inchan = inchan
         self.outchan = outchan
         self.pool = pool
-        self.firstconv = tu.NormedConv2d(inchan, outchan, 3, padding=1)
+        self.firstconv = NormedConv2d(inchan, outchan, 3, padding=1)
         s = scale / math.sqrt(nblock)
         self.blocks = nn.ModuleList(
             [CnnBasicBlock(outchan, scale=s, **kwargs) for _ in range(nblock)]
@@ -362,7 +362,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
             )
             self.stacks.append(stack)
             curshape = stack.output_shape(curshape)
-        self.dense = tu.NormedLinear(tu.intprod(curshape), num_outputs, scale=1.4)
+        self.dense = NormedLinear(intprod(curshape), num_outputs, scale=1.4)
         self.outsize = num_outputs
         self.final_relu = True
 
@@ -371,10 +371,10 @@ class ImpalaCNN(TorchModelV2, nn.Module):
 
         b, t = x.shape[:-3]
         x = x.reshape(b * t, *x.shape[-3:])
-        x = tu.transpose(x, "bhwc", "bchw")
-        x = tu.sequential(self.stacks, x, diag_name=self.name)
+        x = transpose(x, "bhwc", "bchw")
+        x = sequential(self.stacks, x, diag_name=self.name)
         x = x.reshape(b, t, *x.shape[1:])
-        x = tu.flatten_image(x)
+        x = flatten_image(x)
         x = th.relu(x)
         x = self.dense(x)
         if self.final_relu:
@@ -409,6 +409,6 @@ class ImpalaEncoder(Encoder):
         return x, state_in
 
     def initial_state(self, batchsize):
-        return tu.zeros(batchsize, 0)
+        return zeros(batchsize, 0)
 
 ModelCatalog.register_custom_model("impala_ppg", ImpalaCNN)
