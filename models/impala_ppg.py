@@ -340,6 +340,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
     # ):
     def __init__(self, obs_space, action_space, num_outputs, model_config,
                  name):
+        num_outputs = 15
         TorchModelV2.__init__(self, obs_space, action_space, num_outputs,
                               model_config, name)
 
@@ -348,6 +349,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         print("INIT THE IMPALA CNN")
         chans = [16, 32, 32]
         scale_ob = 255.0
+        nblock = 2
 
         self.scale_ob = scale_ob
         h, w, c = obs_space.shape
@@ -360,9 +362,9 @@ class ImpalaCNN(TorchModelV2, nn.Module):
             )
             self.stacks.append(stack)
             curshape = stack.output_shape(curshape)
-        self.dense = tu.NormedLinear(tu.intprod(curshape), outsize, scale=1.4)
-        self.outsize = outsize
-        self.final_relu = final_relu
+        self.dense = tu.NormedLinear(tu.intprod(curshape), num_outputs, scale=1.4)
+        self.outsize = num_outputs
+        self.final_relu = True
 
     def forward(self, x):
         x = x.to(dtype=th.float32) / self.scale_ob
