@@ -12,7 +12,6 @@ import torch as th
 import torch.distributed as dist
 import torch.distributions as dis
 import torch.nn.functional as F
-from . import logger
 from mpi4py import MPI
 from torch import nn
 from . import tree_util
@@ -184,7 +183,7 @@ def torch_init_process_group(
                 dist.init_process_group(backend=backend, init_method=f"env://")
 
             except RuntimeError as e:
-                _log(f"failed with error '{e}', trying again")
+                # _log(f"failed with error '{e}', trying again")
 
             # We check if we are initialized here because it helps to avoid errors of:
             # "trying to initialize the default process group twice!"
