@@ -335,13 +335,22 @@ class CnnDownStack(nn.Module):
 class ImpalaCNN(TorchModelV2, nn.Module):
     name = "ImpalaCNN"  # put it here to preserve pickle compat
 
-    def __init__(
-        self, inshape, chans, outsize, scale_ob, nblock, final_relu=True, **kwargs
-    ):
-        super().__init__()
+    # def __init__(
+    #     self, inshape, chans, outsize, scale_ob, nblock, final_relu=True, **kwargs
+    # ):
+    def __init__(self, obs_space, action_space, num_outputs, model_config,
+                 name):
+        TorchModelV2.__init__(self, obs_space, action_space, num_outputs,
+                              model_config, name)
+
+        nn.Module.__init__(self)
+
         print("INIT THE IMPALA CNN")
+        chans = [16, 32, 32]
+        scale_ob = 255.0
+
         self.scale_ob = scale_ob
-        h, w, c = inshape
+        h, w, c = obs_space.shape
         curshape = (c, h, w)
         s = 1 / math.sqrt(len(chans))  # per stack scale
         self.stacks = nn.ModuleList()

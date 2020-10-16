@@ -53,6 +53,8 @@ class ImpalaCNN(TorchModelV2, nn.Module):
 
     def __init__(self, obs_space, action_space, num_outputs, model_config,
                  name):
+
+        print("init impala torch", obs_space.shape, action_space.shape, num_outputs)
         TorchModelV2.__init__(self, obs_space, action_space, num_outputs,
                               model_config, name)
         nn.Module.__init__(self)
