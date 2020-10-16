@@ -378,6 +378,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
 
     def forward(self, input_dict, state, seq_lens):
         x = input_dict["obs"].float()
+        print("x shape is", x.shape)
 
         x = x.to(dtype=th.float32) / self.scale_ob
 
