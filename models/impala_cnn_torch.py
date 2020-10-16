@@ -27,6 +27,7 @@ class ConvSequence(nn.Module):
         self._input_shape = input_shape
         self._out_channels = out_channels
         self.conv = nn.Conv2d(in_channels=self._input_shape[0], out_channels=self._out_channels, kernel_size=3, padding=1)
+        self.conv.weight.data *= 255.0 / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
         self.conv.bias.data *= 0
         self.res_block0 = ResidualBlock(self._out_channels)
         self.res_block1 = ResidualBlock(self._out_channels)
@@ -69,10 +70,15 @@ class ImpalaCNN(TorchModelV2, nn.Module):
             conv_seqs.append(conv_seq)
         self.conv_seqs = nn.ModuleList(conv_seqs)
         self.hidden_fc = nn.Linear(in_features=shape[0] * shape[1] * shape[2], out_features=256)
+        self.hidden_fc.weight.data *= 1.4 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.hidden_fc.bias.data *= 0
+
         self.logits_fc = nn.Linear(in_features=256, out_features=num_outputs)
+        self.hidden_fc.weight.data *= 1.4 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.logits_fc.bias.data * 0
+
         self.value_fc = nn.Linear(in_features=256, out_features=1)
+        self.hidden_fc.weight.data *= 1.4 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.value_fc.bias.data *= 0
         
     @override(TorchModelV2)
