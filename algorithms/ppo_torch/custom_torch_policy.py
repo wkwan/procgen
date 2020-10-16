@@ -285,6 +285,7 @@ class TorchPolicy(Policy):
         grads = []
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
+            print("loss is", loss_out[i])
             loss_out[i].backward()
             grad_process_info = self.extra_grad_process(opt, loss_out[i])
 
