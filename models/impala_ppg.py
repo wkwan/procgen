@@ -383,10 +383,10 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         x = x.to(dtype=th.float32) / self.scale_ob
 
         b = x.shape[:-3]
-        x = x.reshape(b, *x.shape[-3:])
+        x = x.reshape(b, x.shape[-3:])
         x = transpose(x, "bhwc", "bchw")
         x = sequential(self.stacks, x, diag_name=self.name)
-        x = x.reshape(b, *x.shape[1:])
+        x = x.reshape(b, x.shape[1:])
         x = flatten_image(x)
         x = th.relu(x)
         x = self.dense(x)
