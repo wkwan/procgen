@@ -276,6 +276,7 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def compute_gradients(self, postprocessed_batch):
+        print("compute gradients")
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
