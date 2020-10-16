@@ -245,6 +245,7 @@ class TorchPolicy(Policy):
             # Erase gradients in all vars of this optimizer.
             opt.zero_grad()
             # Recompute gradients of loss over all variables.
+            print("LOSS OUT ", i, loss_out[i])
             loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
