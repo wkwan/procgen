@@ -108,8 +108,9 @@ class PPOLoss:
             loss = reduce_mean_valid(-surrogate_loss +
                                      cur_kl_coeff * action_kl -
                                      entropy_coeff * curr_entropy)
-        print("mean policy loss", self.loss, "loss", loss)
         self.loss = self.mean_policy_loss
+        print("mean policy loss", self.loss, "loss", loss)
+
         # self.loss = loss
 
 
