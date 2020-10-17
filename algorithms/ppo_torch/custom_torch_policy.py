@@ -245,34 +245,35 @@ class TorchPolicy(Policy):
             opt.zero_grad()
             # Recompute gradients of loss over all variables.
 
-            print("LOSS OUT learn on batch", loss_out[i].shape, loss_out[i].type)
+            # print("LOSS OUT learn on batch", loss_out[i].shape, loss_out[i].type)
 
-            loss_out[i][0].backward(retain_graph=(i < len(self._optimizers) - 1))
-            grad_info.update(self.extra_grad_process(opt, loss_out[i]))
+            for loss_i in range(0,2):
+                loss_out[i][loss_i].backward(retain_graph=(i < len(self._optimizers) - 1))
+                grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
-            if self.distributed_world_size:
-                grads = []
-                for param_group in opt.param_groups:
-                    for p in param_group["params"]:
-                        if p.grad is not None:
-                            grads.append(p.grad)
+                if self.distributed_world_size:
+                    grads = []
+                    for param_group in opt.param_groups:
+                        for p in param_group["params"]:
+                            if p.grad is not None:
+                                grads.append(p.grad)
 
-                start = time.time()
-                if torch.cuda.is_available():
-                    # Sadly, allreduce_coalesced does not work with CUDA yet.
-                    for g in grads:
-                        torch.distributed.all_reduce(
-                            g, op=torch.distributed.ReduceOp.SUM)
-                else:
-                    torch.distributed.all_reduce_coalesced(
-                        grads, op=torch.distributed.ReduceOp.SUM)
+                    start = time.time()
+                    if torch.cuda.is_available():
+                        # Sadly, allreduce_coalesced does not work with CUDA yet.
+                        for g in grads:
+                            torch.distributed.all_reduce(
+                                g, op=torch.distributed.ReduceOp.SUM)
+                    else:
+                        torch.distributed.all_reduce_coalesced(
+                            grads, op=torch.distributed.ReduceOp.SUM)
 
-                for param_group in opt.param_groups:
-                    for p in param_group["params"]:
-                        if p.grad is not None:
-                            p.grad /= self.distributed_world_size
+                    for param_group in opt.param_groups:
+                        for p in param_group["params"]:
+                            if p.grad is not None:
+                                p.grad /= self.distributed_world_size
 
-                grad_info["allreduce_latency"] += time.time() - start
+                    grad_info["allreduce_latency"] += time.time() - start
 
             # Step the optimizer.
             opt.step()
