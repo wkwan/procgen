@@ -182,7 +182,7 @@ class TorchPolicy(Policy):
                                 state_batches=None,
                                 prev_action_batch=None,
                                 prev_reward_batch=None):
-        print("COMPUTE LOG LIKELIHOODS")
+        # print("COMPUTE LOG LIKELIHOODS")
 
         if self.action_sampler_fn and self.action_distribution_fn is None:
             raise ValueError("Cannot compute log-prob/likelihood w/o an "
@@ -223,7 +223,7 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def learn_on_batch(self, postprocessed_batch):
-        print("LEARN ON BATCH")
+        # print("LEARN ON BATCH")
 
         # Get batch ready for RNNs, if applicable.
         pad_batch_to_sequences_of_same_size(
@@ -244,7 +244,7 @@ class TorchPolicy(Policy):
             # Erase gradients in all vars of this optimizer.
             opt.zero_grad()
             # Recompute gradients of loss over all variables.
-            print("LOSS OUT learn on batch", i, loss_out[i])
+            # print("LOSS OUT learn on batch", i, loss_out[i])
             loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
@@ -281,7 +281,7 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def compute_gradients(self, postprocessed_batch):
-        print("COMPUTE GRADIENTS")
+        # print("COMPUTE GRADIENTS")
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
@@ -291,7 +291,7 @@ class TorchPolicy(Policy):
         grads = []
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
-            print("LOSS IS", loss_out[i])
+            # print("LOSS IS", loss_out[i])
             loss_out[i].backward()
             grad_process_info = self.extra_grad_process(opt, loss_out[i])
 
@@ -310,7 +310,7 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def apply_gradients(self, gradients):
-        print("APPLY GRADIENTS")
+        # print("APPLY GRADIENTS")
         # TODO(sven): Not supported for multiple optimizers yet.
         assert len(self._optimizers) == 1
         for g, p in zip(gradients, self.model.parameters()):
@@ -321,7 +321,7 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def get_weights(self):
-        print("GET WEIGHTS")
+        # print("GET WEIGHTS")
         return {
             k: v.cpu().detach().numpy()
             for k, v in self.model.state_dict().items()
@@ -329,13 +329,13 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def set_weights(self, weights):
-        print("SET WEIGHTS")
+        # print("SET WEIGHTS")
         weights = convert_to_torch_tensor(weights, device=self.device)
         self.model.load_state_dict(weights)
 
     @override(Policy)
     def get_state(self):
-        print("GET STATE")
+        # print("GET STATE")
         state = super().get_state()
         state["_optimizer_variables"] = []
         for i, o in enumerate(self._optimizers):
