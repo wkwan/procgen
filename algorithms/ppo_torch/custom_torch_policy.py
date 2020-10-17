@@ -247,7 +247,7 @@ class TorchPolicy(Policy):
 
             print("LOSS OUT learn on batch", loss_out[i].shape)
 
-            loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
+            loss_out[i][0].backward(retain_graph=(i < len(self._optimizers) - 1))
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
             if self.distributed_world_size:
