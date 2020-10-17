@@ -235,7 +235,7 @@ class TorchPolicy(Policy):
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
-        assert len(loss_out) == len(self._optimizers)
+        # assert len(loss_out) == len(self._optimizers)
         # assert not any(torch.isnan(l) for l in loss_out)
 
         # Loop through all optimizers.
@@ -285,7 +285,7 @@ class TorchPolicy(Policy):
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
-        assert len(loss_out) == len(self._optimizers)
+        # assert len(loss_out) == len(self._optimizers)
 
         grad_process_info = {}
         grads = []
