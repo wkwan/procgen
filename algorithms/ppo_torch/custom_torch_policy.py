@@ -249,7 +249,10 @@ class TorchPolicy(Policy):
 
             for loss_i in range(0,2):
                 print("loss", loss_i, loss_out[i][loss_i])
-                loss_out[i][loss_i].backward(retain_graph=(i < len(self._optimizers) - 1))
+                if i == 0:
+                    loss_out[i][loss_i].backward(retain_graph=(True))
+                else:
+                    loss_out[i][loss_i].backward(retain_graph=(i < len(self._optimizers) - 1))
                 grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
                 if self.distributed_world_size:
