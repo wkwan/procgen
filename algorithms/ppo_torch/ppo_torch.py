@@ -100,11 +100,11 @@ def warn_about_bad_reward_scales(config, result):
     # Warn about bad clipping configs
     if config["vf_clip_param"] <= 0:
         rew_scale = float("inf")
-        print("do inf reward scale")
+        # print("do inf reward scale")
     else:
         rew_scale = round(
             abs(result["episode_reward_mean"]) / config["vf_clip_param"], 0)
-        print("after simple reward scale", rew_scale)
+        # print("after simple reward scale", rew_scale)
     if rew_scale > 200:
         logger.warning(
             "The magnitude of your environment rewards are more than "

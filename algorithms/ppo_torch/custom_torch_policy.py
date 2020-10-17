@@ -235,7 +235,7 @@ class TorchPolicy(Policy):
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
-        # assert len(loss_out) == len(self._optimizers)
+        assert len(loss_out) == len(self._optimizers)
         # assert not any(torch.isnan(l) for l in loss_out)
 
         # Loop through all optimizers.
@@ -244,7 +244,7 @@ class TorchPolicy(Policy):
             # Erase gradients in all vars of this optimizer.
             opt.zero_grad()
             # Recompute gradients of loss over all variables.
-            # print("LOSS OUT learn on batch", i, loss_out[i])
+            print("LOSS OUT learn on batch", i, loss_out[i])
             loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
             grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
@@ -285,7 +285,7 @@ class TorchPolicy(Policy):
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
-        # assert len(loss_out) == len(self._optimizers)
+        assert len(loss_out) == len(self._optimizers)
 
         grad_process_info = {}
         grads = []
