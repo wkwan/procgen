@@ -248,6 +248,7 @@ class TorchPolicy(Policy):
             # print("LOSS OUT learn on batch", loss_out[i].shape, loss_out[i].type)
 
             for loss_i in range(0,2):
+                print("loss", loss_i, loss_out[i][loss_i])
                 loss_out[i][loss_i].backward(retain_graph=(i < len(self._optimizers) - 1))
                 grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
