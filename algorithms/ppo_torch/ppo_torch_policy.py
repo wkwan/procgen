@@ -109,7 +109,7 @@ class PPOLoss:
                                      cur_kl_coeff * action_kl -
                                      entropy_coeff * curr_entropy)
         self.loss = torch.stack((self.mean_policy_loss, self.mean_vf_loss))
-        print("mean policy loss and vf loss", self.loss)
+        # print("mean policy loss and vf loss", self.loss)
 
         # self.loss = loss
 

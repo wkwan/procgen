@@ -248,7 +248,7 @@ class TorchPolicy(Policy):
             # print("LOSS OUT learn on batch", loss_out[i].shape, loss_out[i].type)
 
             for loss_i in range(0,2):
-                print("loss", loss_i, loss_out[i][loss_i])
+                # print("loss", loss_i, loss_out[i][loss_i])
                 if i == 0:
                     loss_out[i][loss_i].backward(retain_graph=(True))
                 else:
