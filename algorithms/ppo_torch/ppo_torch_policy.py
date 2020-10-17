@@ -108,7 +108,7 @@ class PPOLoss:
             loss = reduce_mean_valid(-surrogate_loss +
                                      cur_kl_coeff * action_kl -
                                      entropy_coeff * curr_entropy)
-        self.loss = (self.mean_vf_loss, self.mean_policy_loss)
+        self.loss = loss
 
 
 def ppo_surrogate_loss(policy, model, dist_class, train_batch):
@@ -145,7 +145,6 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
 
 def kl_and_loss_stats(policy, train_batch):
-    print("total loss is", policy.loss_obj.loss)
     return {
         "cur_kl_coeff": policy.kl_coeff,
         "cur_lr": policy.cur_lr,

@@ -73,7 +73,7 @@ class TorchPolicy(Policy):
                 that returns the divisibility requirement for sample batches.
         """
         self.framework = "torch"
-        print("INIT TORCH POLICY")
+        # print("INIT TORCH POLICY")
         super().__init__(observation_space, action_space, config)
         self.device = (torch.device("cuda")
                        if torch.cuda.is_available() else torch.device("cpu"))
