@@ -246,7 +246,7 @@ class TorchPolicy(Policy):
             # Recompute gradients of loss over all variables.
 
             # print("LOSS OUT learn on batch", loss_out[i].shape, loss_out[i].type)
-
+            print("before doing the custom double loss backprop")
             for loss_i in range(0,2):
                 # print("loss", loss_i, loss_out[i][loss_i])
                 if i == 0:

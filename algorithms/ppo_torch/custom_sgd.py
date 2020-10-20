@@ -96,6 +96,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     Returns:
         averaged info fetches over the last SGD epoch taken.
     """
+    # Get batch
+
     if isinstance(samples, SampleBatch):
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
 
@@ -110,7 +112,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
         for i in range(num_sgd_iter):
             iter_extra_fetches = defaultdict(list)
+            #get minibatch
             for minibatch in minibatches(batch, sgd_minibatch_size):
+                #compute losses and do backprop
+                seg_buf = []
+                print("before learn on batch")
                 batch_fetches = (local_worker.learn_on_batch(
                     MultiAgentBatch({
                         policy_id: minibatch
