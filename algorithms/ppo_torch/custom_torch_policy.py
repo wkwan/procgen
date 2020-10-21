@@ -234,6 +234,7 @@ class TorchPolicy(Policy):
 
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         print("before calling loss function")
+        
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
         # assert len(loss_out) == len(self._optimizers)
@@ -285,7 +286,7 @@ class TorchPolicy(Policy):
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
-        return {LEARNER_STATS_KEY: grad_info}
+        return {LEARNER_STATS_KEY: grad_info, 'value_targets': train_batch[Postprocessing.ADVANTAGES]}
 
     @override(Policy)
     def compute_gradients(self, postprocessed_batch):
