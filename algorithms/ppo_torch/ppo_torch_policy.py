@@ -120,6 +120,8 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
 
+    print("state", state.shape, state)
+
     mask = None
     if state:
         max_seq_len = torch.max(train_batch["seq_lens"])
@@ -201,7 +203,7 @@ class ValueNetworkMixin:
                     "is_training": False,
                 }, [self._convert_to_tensor(s) for s in state],
                                           self._convert_to_tensor([1]))
-                print("value mixin", self.model.value_function()[0])
+                # print("value mixin", self.model.value_function()[0])
                 return self.model.value_function()[0]
 
         else:
