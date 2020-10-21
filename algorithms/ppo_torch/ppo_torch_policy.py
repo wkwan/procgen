@@ -76,7 +76,7 @@ class PPOLoss:
             def reduce_mean_valid(t):
                 return torch.mean(t)
 
-        print("value targets", value')
+        print("value targets", value_targets)
 
         prev_dist = dist_class(prev_logits, model)
         # Make loss functions.
