@@ -233,6 +233,7 @@ class TorchPolicy(Policy):
             batch_divisibility_req=self.batch_divisibility_req)
 
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
+        print("before calling loss function")
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
         # assert len(loss_out) == len(self._optimizers)
