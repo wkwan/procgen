@@ -131,7 +131,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             needed_keys = {"ob", "first", "state_in", "oldpd", "vtarg"}
 
-            seg_buf = [{k: seg_buf[k] for k in needed_keys} for seg in seg_buf]
+            seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             print("done sgd iter", i, len(seg_buf))
 
             seg_buf.clear()
