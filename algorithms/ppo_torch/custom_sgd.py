@@ -120,7 +120,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for minibatch in minibatches(batch, sgd_minibatch_size):
                 #compute losses and do backprop
                 # print("minibatch", minibatch)
-                seg_buf.append(tree_map(lambda x: x, minibatch))
+                seg_buf.append(tree_map(lambda x: x, minibatch.data))
                 batch_fetches = (local_worker.learn_on_batch(
                     MultiAgentBatch({
                         policy_id: minibatch
@@ -128,7 +128,12 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
-            print("done sgd iter", i, len(seg_buf))
+
+            needed_keys = {"ob", "first", "state_in", "oldpd", "vtarg"}
+
+            segs = [{k: seg[k] for k in needed_keys} for seg in segs]
+            print("done sgd iter", i, len(segs))
+
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
     return fetches
