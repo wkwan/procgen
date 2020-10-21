@@ -125,16 +125,17 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                         policy_id: minibatch
                     }, minibatch.count)))[policy_id]
                 print("value targets size", len(batch_fetches["value_targets"]))
-
+                minibatch.data["vtarg"] = batch_fetches["value_targets"]
                 seg_buf.append(tree_map(lambda x: x, minibatch.data))
 
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
 
-            needed_keys = {"obs", "infos", "action_prob", "vf_preds"}
+            needed_keys = {"obs", "infos", "action_prob", "vf_preds", "vtarg"}
 
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
+
             print("done sgd iter", i, len(seg_buf))
 
             seg_buf.clear()
