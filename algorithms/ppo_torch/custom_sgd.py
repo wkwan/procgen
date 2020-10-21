@@ -131,8 +131,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             needed_keys = {"ob", "first", "state_in", "oldpd", "vtarg"}
 
-            segs = [{k: seg[k] for k in needed_keys} for seg in segs]
-            print("done sgd iter", i, len(segs))
+            seg_buf = [{k: seg_buf[k] for k in needed_keys} for seg in seg_buf]
+            print("done sgd iter", i, len(seg_buf))
 
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
