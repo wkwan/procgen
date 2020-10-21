@@ -120,7 +120,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for minibatch in minibatches(batch, sgd_minibatch_size):
                 #compute losses and do backprop
                 print("minibatch", minibatch)
-                seg_buf.append(tree_map(lambda x: x.cpu(), minibatch))
+                seg_buf.append(tree_map(lambda x: x.cpu(), minibatch.data))
                 batch_fetches = (local_worker.learn_on_batch(
                     MultiAgentBatch({
                         policy_id: minibatch
