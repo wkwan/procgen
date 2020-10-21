@@ -124,7 +124,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     MultiAgentBatch({
                         policy_id: minibatch
                     }, minibatch.count)))[policy_id]
-                print("value targets size", len(batch_fetches["value_targets"]))
                 minibatch.data["vtarg"] = batch_fetches["value_targets"]
                 seg_buf.append(tree_map(lambda x: x, minibatch.data))
 

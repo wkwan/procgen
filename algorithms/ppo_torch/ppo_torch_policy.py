@@ -120,7 +120,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
 
-    print("state", state.shape, state)
+    print("state", len(state), state)
 
     mask = None
     if state:
