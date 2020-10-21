@@ -10,6 +10,9 @@ from ray.rllib.evaluation.metrics import LEARNER_STATS_KEY
 from ray.rllib.policy.sample_batch import SampleBatch, DEFAULT_POLICY_ID, \
     MultiAgentBatch
 
+from .tree_util import tree_map
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -101,7 +104,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     if isinstance(samples, SampleBatch):
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
 
-    print("samples", samples.keys())
+    seg_buf = []
     fetches = {}
     for policy_id, policy in policies.items():
         if policy_id not in samples.policy_batches:
@@ -116,8 +119,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #get minibatch
             for minibatch in minibatches(batch, sgd_minibatch_size):
                 #compute losses and do backprop
-                seg_buf = []
-                print("before learn on batch")
+                print("minibatch", minibatch)
+                seg_buf.append(tree_map(lambda x: x.cpu(), minibatch))
                 batch_fetches = (local_worker.learn_on_batch(
                     MultiAgentBatch({
                         policy_id: minibatch
