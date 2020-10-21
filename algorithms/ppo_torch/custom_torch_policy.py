@@ -12,7 +12,7 @@ from ray.rllib.utils.torch_ops import convert_to_non_torch_type, \
     convert_to_torch_tensor
 from ray.rllib.utils.tracking_dict import UsageTrackingDict
 
-from ray.rllib.policy.sample_batch import SampleBatch
+from ray.rllib.evaluation.postprocessing import Postprocessing
 
 
 torch, _ = try_import_torch()
