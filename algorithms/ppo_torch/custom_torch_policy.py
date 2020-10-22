@@ -294,7 +294,7 @@ class TorchPolicy(Policy):
 
             self.backprop(grad_info, i, opt, pi_loss, True)
             for j in range(6):
-                self.backprop(grad_info, i, opt, vf_loss, j == 5 and i == len(self._optimizers)-1)
+                self.backprop(grad_info, i, opt, vf_loss, not(j == 5 and i == len(self._optimizers)-1))
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
