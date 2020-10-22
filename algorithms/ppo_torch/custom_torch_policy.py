@@ -231,7 +231,8 @@ class TorchPolicy(Policy):
             log_likelihoods = action_dist.logp(input_dict[SampleBatch.ACTIONS])
             return log_likelihoods
 
-    def backprop(self, grad_info, i, opt, loss, retain_graph):
+    def backprop(self, grad_info, opt, loss, retain_graph):
+        print("retain graph", retain_graph)
         loss.backward(retain_graph=retain_graph)
         grad_info.update(self.extra_grad_process(opt, loss))
 
@@ -292,9 +293,11 @@ class TorchPolicy(Policy):
             pi_loss = loss_out[i][0]
             vf_loss = loss_out[i][1]
 
-            self.backprop(grad_info, i, opt, pi_loss, True)
+            print("before pi loss backprop")
+            self.backprop(grad_info, opt, pi_loss, True)
             for j in range(6):
-                self.backprop(grad_info, i, opt, vf_loss, not(j == 5 and i == len(self._optimizers)-1))
+                print("before vf loss backprop", j)
+                self.backprop(grad_info, opt, vf_loss, not(j == 5 and i == len(self._optimizers)-1))
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
