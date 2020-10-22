@@ -231,6 +231,37 @@ class TorchPolicy(Policy):
             log_likelihoods = action_dist.logp(input_dict[SampleBatch.ACTIONS])
             return log_likelihoods
 
+    def backprop(self, grad_info, i, opt, loss, retain_graph):
+        loss.backward(retain_graph=retain_graph)
+        grad_info.update(self.extra_grad_process(opt, loss))
+
+        if self.distributed_world_size:
+            grads = []
+            for param_group in opt.param_groups:
+                for p in param_group["params"]:
+                    if p.grad is not None:
+                        grads.append(p.grad)
+
+            start = time.time()
+            if torch.cuda.is_available():
+                # Sadly, allreduce_coalesced does not work with CUDA yet.
+                for g in grads:
+                    torch.distributed.all_reduce(
+                        g, op=torch.distributed.ReduceOp.SUM)
+            else:
+                torch.distributed.all_reduce_coalesced(
+                    grads, op=torch.distributed.ReduceOp.SUM)
+
+            for param_group in opt.param_groups:
+                for p in param_group["params"]:
+                    if p.grad is not None:
+                        p.grad /= self.distributed_world_size
+
+            grad_info["allreduce_latency"] += time.time() - start
+
+        # Step the optimizer.
+        opt.step()
+
     @override(Policy)
     def learn_on_batch(self, postprocessed_batch):
         # print("LEARN ON BATCH")
@@ -243,7 +274,6 @@ class TorchPolicy(Policy):
             batch_divisibility_req=self.batch_divisibility_req)
 
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
-        print("before calling loss function")
         
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch))
@@ -258,40 +288,13 @@ class TorchPolicy(Policy):
             # Recompute gradients of loss over all variables.
 
             # print("LOSS OUT learn on batch", loss_out[i].shape, loss_out[i].type)
-            for loss_i in range(0,2):
-                # print("loss", loss_i, loss_out[i][loss_i])
-                if i == 0:
-                    loss_out[i][loss_i].backward(retain_graph=(True))
-                else:
-                    loss_out[i][loss_i].backward(retain_graph=(i < len(self._optimizers) - 1))
-                grad_info.update(self.extra_grad_process(opt, loss_out[i]))
 
-                if self.distributed_world_size:
-                    grads = []
-                    for param_group in opt.param_groups:
-                        for p in param_group["params"]:
-                            if p.grad is not None:
-                                grads.append(p.grad)
+            pi_loss = loss_out[i][0]
+            vf_loss = loss_out[i][1]
 
-                    start = time.time()
-                    if torch.cuda.is_available():
-                        # Sadly, allreduce_coalesced does not work with CUDA yet.
-                        for g in grads:
-                            torch.distributed.all_reduce(
-                                g, op=torch.distributed.ReduceOp.SUM)
-                    else:
-                        torch.distributed.all_reduce_coalesced(
-                            grads, op=torch.distributed.ReduceOp.SUM)
-
-                    for param_group in opt.param_groups:
-                        for p in param_group["params"]:
-                            if p.grad is not None:
-                                p.grad /= self.distributed_world_size
-
-                    grad_info["allreduce_latency"] += time.time() - start
-
-            # Step the optimizer.
-            opt.step()
+            self.backprop(grad_info, i, opt, pi_loss, True)
+            for j in range(6):
+                self.backprop(grad_info, i, opt, vf_loss, j == 5 and i == len(self._optimizers)-1)
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
