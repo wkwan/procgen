@@ -121,8 +121,9 @@ class PPOLoss:
 def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
-    print("action dist in surrogate loss fn", action_dist, logits)
+    print("action dist in surrogate loss fn", action_dist)
     print("state", len(state), state)
+    print("action dist from train batch", train_batch[SampleBatch.ACTION_DIST_INPUTS])
 
     mask = None
     if state:
