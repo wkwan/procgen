@@ -258,7 +258,6 @@ class TorchPolicy(Policy):
             # Recompute gradients of loss over all variables.
 
             # print("LOSS OUT learn on batch", loss_out[i].shape, loss_out[i].type)
-            print("before doing the custom double loss backprop")
             for loss_i in range(0,2):
                 # print("loss", loss_i, loss_out[i][loss_i])
                 if i == 0:
@@ -296,7 +295,7 @@ class TorchPolicy(Policy):
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
-        return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.ADVANTAGES], 'oldpd': self.action_dist_cache}
+        return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.ADVANTAGES], 'oldpd': self.action_dist_cache, 'dones': train_batch["done"]}
 
     @override(Policy)
     def compute_gradients(self, postprocessed_batch):
