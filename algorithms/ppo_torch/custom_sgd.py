@@ -124,7 +124,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     MultiAgentBatch({
                         policy_id: minibatch
                     }, minibatch.count)))[policy_id]
-                minibatch.data["vtarg"] = batch_fetches["value_targets"]
+                minibatch.data["vtarg"] = batch_fetches["vtarg"]
+                minibatch.data["oldpd"] = batch_fetches["oldpd"]
                 print("ok the seg buf minibatch", minibatch.data)
                 seg_buf.append(tree_map(lambda x: x, minibatch.data))
 
@@ -132,7 +133,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     iter_extra_fetches[k].append(v)
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
 
-            needed_keys = {"obs", "infos", "action_prob", "vf_preds", "vtarg"}
+            needed_keys = {"obs", "infos", "oldpd", "vf_preds", "vtarg"}
 
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
 
