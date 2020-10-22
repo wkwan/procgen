@@ -54,6 +54,7 @@ class CustomCallbacks(DefaultCallbacks):
                 metrics for the episode.
             kwargs: Forward compatibility placeholder.
         """
+        print("on spisode step", episode)
         pass
 
     def on_episode_end(self, worker: RolloutWorker, base_env: BaseEnv,

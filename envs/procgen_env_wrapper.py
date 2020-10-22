@@ -42,6 +42,7 @@ class ProcgenEnvWrapper(gym.Env):
 
     def step(self, action):
         obs, rew, done, info = self.env.step(action)
+        print("env wrapper step", done, info)
         self._done = done
         return obs, rew, done, info
 
