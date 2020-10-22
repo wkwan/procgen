@@ -410,8 +410,7 @@ class TorchPolicy(Policy):
             action_dist (TorchActionDistribution): Torch action dist object
                 to get log-probs (e.g. for already sampled actions).
         """
-        print("call custom extra action out")
-        return {'oldpd': action_dist, 'state_in': state_batches}
+        return {}
 
     def extra_grad_info(self, train_batch):
         """Return dict of extra grad info."""
