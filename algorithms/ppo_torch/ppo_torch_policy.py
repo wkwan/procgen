@@ -111,7 +111,7 @@ class PPOLoss:
             # loss = reduce_mean_valid(-surrogate_loss +
             #                          cur_kl_coeff * action_kl -
             #                          entropy_coeff * curr_entropy)
-        self.loss = torch.stack((reduce_mean_valid(-surrogate_loss + cur_kl_coeff * action_kl - entropy_coeff * curr_entropy), reduce_mean_valid(vf_loss_coeff * vf_loss))
+        self.loss = torch.stack((reduce_mean_valid(-surrogate_loss + cur_kl_coeff * action_kl - entropy_coeff * curr_entropy), reduce_mean_valid(vf_loss_coeff * vf_loss)))
         # print("mean policy loss and vf loss", self.loss)
 
         # self.loss = loss
