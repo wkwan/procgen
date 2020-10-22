@@ -175,6 +175,7 @@ class TorchPolicy(Policy):
             # Action-dist inputs.
             if dist_inputs is not None:
                 extra_fetches[SampleBatch.ACTION_DIST_INPUTS] = dist_inputs
+                extra_fetches['oldpd'] = action_dist
             return convert_to_non_torch_type((actions, state_out,
                                               extra_fetches))
 
