@@ -154,6 +154,8 @@ class TorchPolicy(Policy):
                     dist_inputs, state_out = self.model(
                         input_dict, state_batches, seq_lens)
                 action_dist = dist_class(dist_inputs, self.model)
+                print("set action dist cache")
+                self.action_dist_cache = action_dist
 
                 # Get the exploration action from the forward results.
                 actions, logp = \
@@ -292,7 +294,7 @@ class TorchPolicy(Policy):
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
-        return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.ADVANTAGES], 'oldpd': train_batch['oldpd']}
+        return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.ADVANTAGES], 'oldpd': self.action_dist_cache}
 
     @override(Policy)
     def compute_gradients(self, postprocessed_batch):
