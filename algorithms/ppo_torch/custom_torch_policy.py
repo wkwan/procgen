@@ -98,7 +98,7 @@ class TorchPolicy(Policy):
             get_batch_divisibility_req(self) if get_batch_divisibility_req \
             else 1
 
-        self.action_cache_dist = None
+        self.action_dist_cache = None
 
     @override(Policy)
     def compute_actions(self,
