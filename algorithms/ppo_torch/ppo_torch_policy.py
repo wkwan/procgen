@@ -124,7 +124,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
     # print("action dist in surrogate loss fn", action_dist)
     train_batch['oldpd'] = action_dist
     print("state", len(state), state)
-    print("action dist from train batch", train_batch[SampleBatch.ACTIONS])
+    print("the old pd we just put in", train_batch['oldpd'])
 
     mask = None
     if state:

@@ -133,7 +133,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     iter_extra_fetches[k].append(v)
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
 
-            needed_keys = {"obs", "infos", "oldpd", "vf_preds", "vtarg"}
+            needed_keys = {"obs", "infos", "oldpd", "vtarg"}
 
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
 
