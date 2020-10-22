@@ -176,8 +176,7 @@ def vf_preds_fetches(policy, input_dict, state_batches, model, action_dist):
     """Adds value function outputs to experience train_batches."""
     return {
         SampleBatch.VF_PREDS: policy.model.value_function(),
-        'oldpd': {'action_dist': action_dist}
-    }
+    }, action_dist
 
 
 class KLCoeffMixin:
