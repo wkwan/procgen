@@ -167,6 +167,8 @@ class TorchPolicy(Policy):
             # Add default and custom fetches.
             extra_fetches = self.extra_action_out(input_dict, state_batches,
                                                   self.model, action_dist)
+
+            print("extra fetches", extra_fetches)
             # Action-logp and action-prob.
             if logp is not None:
                 logp = convert_to_non_torch_type(logp)
@@ -175,7 +177,7 @@ class TorchPolicy(Policy):
             # Action-dist inputs.
             if dist_inputs is not None:
                 extra_fetches[SampleBatch.ACTION_DIST_INPUTS] = dist_inputs
-                extra_fetches['oldpd'] = action_dist
+                # extra_fetches['oldpd'] = action_dist
             return convert_to_non_torch_type((actions, state_out,
                                               extra_fetches))
 
@@ -408,7 +410,7 @@ class TorchPolicy(Policy):
             action_dist (TorchActionDistribution): Torch action dist object
                 to get log-probs (e.g. for already sampled actions).
         """
-        return {}
+        return {'oldpd': actiondist}
 
     def extra_grad_info(self, train_batch):
         """Return dict of extra grad info."""
