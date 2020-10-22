@@ -122,7 +122,6 @@ def build_torch_policy(name,
             # Make sure, we passed in a correct Model factory.
             assert isinstance(self.model, TorchModelV2), \
                 "ERROR: Generated Model must be a TorchModelV2 object!"
-            print("action dist class", dist_class)
             TorchPolicy.__init__(
                 self,
                 observation_space=obs_space,
