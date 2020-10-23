@@ -105,6 +105,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     if isinstance(samples, SampleBatch):
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
 
+    global nepochs
     seg_buf = []
     fetches = {}
     for policy_id, policy in policies.items():
@@ -119,7 +120,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             iter_extra_fetches = defaultdict(list)
             #get minibatch
             print("get minibatch call", nepochs)
-            global nepochs += 1
+            nepochs += 1
             for minibatch in minibatches(batch, sgd_minibatch_size):
                 #compute losses and do backprop
                 # print("minibatch", minibatch)
