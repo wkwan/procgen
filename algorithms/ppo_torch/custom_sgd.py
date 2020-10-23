@@ -100,6 +100,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         averaged info fetches over the last SGD epoch taken.
     """
     # Get batch
+    print("do minibatch sgd")
 
     if isinstance(samples, SampleBatch):
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
@@ -136,7 +137,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             needed_keys = {"obs", "dones", "oldpd", "vtarg"}
 
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
-
+            for i in range(16):
+                pass
 
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
