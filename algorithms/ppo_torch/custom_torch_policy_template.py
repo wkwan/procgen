@@ -179,11 +179,11 @@ def build_torch_policy(name,
         @override(TorchPolicy)
         def extra_action_out(self, input_dict, state_batches, model,
                              action_dist):
-            print("call this extra action out")
+            # print("call this extra action out")
             with torch.no_grad():
                 if extra_action_out_fn:
 
-                    print("inside extra action out")
+                    # print("inside extra action out")
 
                     stats_dict = extra_action_out_fn(
                         self, input_dict, state_batches, model, action_dist)
