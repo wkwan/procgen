@@ -121,7 +121,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #get minibatch
 
             for minibatch in minibatches(batch, sgd_minibatch_size):
-                print("get minibatch call", nepochs)
+                # print("get minibatch call", nepochs)
                 nepochs += 1
                 #compute losses and do backprop
                 # print("minibatch", minibatch)
@@ -137,7 +137,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
-            print("done one pass of minibatches")
+            # print("done one pass of minibatches")
             needed_keys = {"obs", "dones", "oldpd", "vtarg"}
 
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]

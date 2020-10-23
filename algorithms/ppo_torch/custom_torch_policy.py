@@ -292,7 +292,7 @@ class TorchPolicy(Policy):
 
             # print("before pi loss backprop")
             self.backprop(grad_info, opt, pi_loss, True)
-            for j in range(3):
+            for j in range(9):
                 # print("before vf loss backprop", j)
                 self.backprop(grad_info, opt, vf_loss, not(j == 2 and i == len(self._optimizers)-1))
 

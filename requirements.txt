@@ -6,4 +6,3 @@ boto3==1.13.10
 requests
 torch==1.6.0+cu101
 torchvision==0.7.0+cu101
-mpi4py
