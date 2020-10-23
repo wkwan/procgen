@@ -119,9 +119,10 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         for i in range(num_sgd_iter):
             iter_extra_fetches = defaultdict(list)
             #get minibatch
-            print("get minibatch call", nepochs)
-            nepochs += 1
+
             for minibatch in minibatches(batch, sgd_minibatch_size):
+                print("get minibatch call", nepochs)
+                nepochs += 1
                 #compute losses and do backprop
                 # print("minibatch", minibatch)
                 batch_fetches = (local_worker.learn_on_batch(
