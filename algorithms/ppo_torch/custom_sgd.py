@@ -132,6 +132,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 minibatch.data["vtarg"] = batch_fetches["vtarg"]
                 minibatch.data["oldpd"] = batch_fetches["oldpd"]
                 minibatch.data["dones"] = batch_fetches["dones"]
+
+                model = batch_fetches["model"]
+                print("model id", id(model))
                 seg_buf.append(tree_map(lambda x: x, minibatch.data))
 
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
