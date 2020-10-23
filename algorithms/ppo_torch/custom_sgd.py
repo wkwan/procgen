@@ -109,8 +109,10 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     seg_buf = []
     fetches = {}
 
-    model = local_worker.model
     for policy_id, policy in policies.items():
+
+        model = policy.model
+
         if policy_id not in samples.policy_batches:
             continue
 
