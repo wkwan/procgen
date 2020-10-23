@@ -108,6 +108,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     global nepochs
     seg_buf = []
     fetches = {}
+
+    model = local_worker.model
     for policy_id, policy in policies.items():
         if policy_id not in samples.policy_batches:
             continue
@@ -133,8 +135,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 minibatch.data["oldpd"] = batch_fetches["oldpd"]
                 minibatch.data["dones"] = batch_fetches["dones"]
 
-                model = batch_fetches["model"]
-                print("model id", id(model))
                 seg_buf.append(tree_map(lambda x: x, minibatch.data))
 
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
@@ -145,8 +145,12 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
+            #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
-                seg['oldpd'] = None
+                logits, state = model.forward(seg, None, None)
+                print("logits", logits)
+
+            #train on replay buffer
             for i in range(9):
                 pass
 
