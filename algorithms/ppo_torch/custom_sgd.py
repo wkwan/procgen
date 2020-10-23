@@ -151,7 +151,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
-                seg["obs"] = th.from_numpy(seg["obs"])
+                seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
                 logits, state = model.forward(seg, None, None)
                 print("logits", logits)
 
