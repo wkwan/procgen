@@ -172,7 +172,7 @@ class TorchPolicy(Policy):
             extra_fetches = self.extra_action_out(input_dict, state_batches,
                                                   self.model, action_dist)
 
-            print("extra fetches", extra_fetches)
+            # print("extra fetches", extra_fetches)
             # Action-logp and action-prob.
             if logp is not None:
                 logp = convert_to_non_torch_type(logp)
@@ -260,8 +260,7 @@ class TorchPolicy(Policy):
 
             grad_info["allreduce_latency"] += time.time() - start
 
-        # Step the optimizer.
-        opt.step()
+
 
     @override(Policy)
     def learn_on_batch(self, postprocessed_batch):
@@ -298,6 +297,9 @@ class TorchPolicy(Policy):
             for j in range(6):
                 print("before vf loss backprop", j)
                 self.backprop(grad_info, opt, vf_loss, not(j == 5 and i == len(self._optimizers)-1))
+
+            # Step the optimizer.
+            opt.step()
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
