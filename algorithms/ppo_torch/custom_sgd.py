@@ -16,6 +16,9 @@ import torch as th
 
 from . import torch_util as tu
 
+import itertools
+
+
 
 def make_minibatches(segs, mbsize):
     """
