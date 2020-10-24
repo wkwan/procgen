@@ -181,11 +181,18 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 logits, state = model.forward(seg, None, None)
                 return logits, state
 
+            def compute_aux_loss(aux, seg):
+                vtarg = seg["vtarg"]
+                return {
+                    "vf_aux": 0.5 * ((aux["vpredaux"] - vtarg) ** 2).mean(),
+                    "vf_true": 0.5 * ((aux["vpredtrue"] - vtarg) ** 2).mean(),
+                }
+
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                # logits, state = tu.minibatched_call(forward, 4, seg=seg)
-                # seg["oldpd"] = dist_class(logits, model)
+                logits, state = tu.minibatched_call(forward, 4, seg=seg)
+                seg["oldpd"] = dist_class(logits, model)
                 # print("calculated old pd", seg["oldpd"])
 
             #train on replay buffer
@@ -196,11 +203,10 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     logits, state = model.forward(mb, None, None)
                     pd = dist_class(logits, model)
                     print("newpd", pd)
-
-
-                    # name2loss = {}
-                    # name2loss["pol_distance"] = td.kl_divergence(mb["oldpd"], pd).mean()
-
+                    name2loss = {}
+                    name2loss["pol_distance"] = td.kl_divergence(mb["oldpd"], pd).mean()
+                    print("pol dist", name2loss["pol_distance"])
+                    # name2loss.update(compute_aux_loss(aux, mb))
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
     return fetches
