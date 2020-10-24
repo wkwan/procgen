@@ -178,7 +178,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
                 logits, state = model.forward(seg, None, None)
-                # seg["oldpd"] = dist_class(logits)
+                seg["oldpd"] = dist_class(logits, model)
                 print("calculated old pd", seg["oldpd"])
 
             #train on replay buffer
