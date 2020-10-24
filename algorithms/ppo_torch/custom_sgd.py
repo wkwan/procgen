@@ -16,6 +16,8 @@ import torch as th
 
 from . import torch_util as tu
 
+from torch import distributions as td
+
 import itertools
 
 
@@ -193,7 +195,10 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     # print("a mb")
                     print("oldpd", mb['oldpd'])
                     logits, state = model.forward(mb, None, None)
-                    print("newpd", dist_class(logits, model))
+                    pd = dist_class(logits, model)
+
+                    name2loss = {}
+                    name2loss["pol_distance"] = td.kl_divergence(mb["oldpd"], pd).mean()
 
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
