@@ -176,7 +176,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             #train on replay buffer
             for i in range(9):
-                aux_mbsize = 1
+                aux_mbsize = 2048
                 # tu.minibatched_call(forward, aux_mbsize, ob=)
                 for mb in make_minibatches(seg_buf, aux_mbsize):
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
