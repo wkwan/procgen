@@ -125,82 +125,6 @@ no_grad = contextmanager_to_decorator(th.no_grad)
 DEFAULT_DEVICE = th.device(type=default_device_type())
 DEFAULT_COMM = None
 
-
-def torch_init_process_group(
-    backend, comm=None, start_port=29500, attempts=10, jitter_seconds_per_rank=0.005
-):
-    """
-    Setup torch distributed
-    """
-    from mpi4py import MPI
-    from torch import distributed as dist
-
-    if dist.is_initialized():
-        # already initialized
-        return
-
-    if comm is None:
-        comm = MPI.COMM_WORLD
-
-    os.environ["NCCL_NSOCKS_PERTHREAD"] = "2"
-    os.environ["NCCL_SOCKET_NTHREADS"] = "8"
-    # (clemens) this ordering is faster
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,3,2,7,6,4,5"
-    if platform.system() == "Darwin":
-        # By default, Gloo will try to resolve the hostname, eventually
-        # time out, and then fall back to the local machine.
-        # This makes it use the local machine right away
-        os.environ["GLOO_SOCKET_IFNAME"] = "en0"
-        # using localhost saves around 5 seconds per group creation
-        hostname = "localhost"
-    elif "RAPID_ID" in os.environ:  # Although this function is in rcall, I (joschu)
-        # would like to use it from code launched by rapid. As of last time I tried,
-        # gethostname() didn't work.
-        hostname = socket.gethostbyname(socket.getfqdn())
-    else:
-        hostname = socket.gethostname()
-    os.environ["MASTER_ADDR"] = comm.bcast(hostname, root=0)
-    os.environ["RANK"] = str(comm.rank)
-    os.environ["WORLD_SIZE"] = str(comm.size)
-
-    # sometimes torch.dist doesn't clean up old processes.
-    # this ensures processes are started
-    # this outer loop tries different ports in case some are in use, this may be unnecessary since we should be able to usually
-    # choose an unused port before calling this function
-    for i in range(attempts):
-        # we have to offset the port by the global rank of the broadcasting comm so that different groups don't clobber each other
-        port = start_port + MPI.COMM_WORLD.Get_rank() * attempts + i
-        port = comm.bcast(port, root=0)
-        comm.Barrier()
-        success = False
-        # this inner loop retries in case we got "Connection reset by peer"
-        for _ in range(3):
-            # add some jitter to avoid overloading incoming connections on the master
-            time.sleep(random.random() * jitter_seconds_per_rank * comm.size)
-            try:
-                os.environ["MASTER_PORT"] = str(port)
-                # this takes 5 minutes to timeout, the timeout option doesn't seem to do anything
-                dist.init_process_group(backend=backend, init_method=f"env://")
-
-            except RuntimeError as e:
-                _log(f"failed with error '{e}', trying again")
-
-            # We check if we are initialized here because it helps to avoid errors of:
-            # "trying to initialize the default process group twice!"
-            if dist.is_initialized():
-                success = True
-                break
-
-        successes = comm.allgather(success)
-        if all(successes):
-            # all ranks succeeded, we're done here
-            break
-        if success:
-            # some machines didn't succeed, attempt to retry by destroying the process group
-            dist.destroy_process_group()
-    else:
-        raise RuntimeError("Failed to init on any port")
-
 def _get_local_rank_size(comm):
     """
     Returns the rank of each process on its machine
@@ -219,76 +143,6 @@ def _get_local_rank_size(comm):
         node2rankssofar[node] += 1
     assert local_rank is not None
     return local_rank, node2rankssofar[this_node]
-
-def torch_setup(device_type=None, gpu_offset=0):
-    """
-    Setup torch to use the correct device and number of threads.  This should be called before `torch_init_process_group`
-
-    Returns the torch device to use
-    """
-    from mpi4py import MPI
-    import torch
-
-    if device_type is None:
-        device_type = "cuda" if torch.cuda.is_available() else "cpu"
-
-    local_rank, local_size = _get_local_rank_size(MPI.COMM_WORLD)
-    if device_type == "cuda":
-        device_index = (local_rank + gpu_offset) % torch.cuda.device_count()
-        torch.cuda.set_device(device_index)
-    else:
-        device_index = 0
-    if "RCALL_NUM_CPU_PER_PROC" in os.environ:
-        num_threads = int(os.environ["RCALL_NUM_CPU_PER_PROC"])
-    else:
-        num_threads = max(round(mp.cpu_count() // 2 / local_size), 1)
-    torch.set_num_threads(num_threads)
-    return torch.device(type=device_type, index=device_index)
-
-
-def setup_dist(
-    device_type=None,
-    comm=None,
-    backend=None,
-    should_init_process_group=True,
-    start_port=29500,
-    gpu_offset=0,
-):
-    """
-    Use MPI communicator to set up torch distributed.
-
-    Sets two global variables:
-    - DEFAULT_DEVICE is default device used by this process,
-    - DEFAULT_COMM is the MPI communicator used to set up torch distributed
-    """
-    global DEFAULT_DEVICE, DEFAULT_COMM
-    if device_type is None:
-        device_type = default_device_type()
-    if comm is None:
-        comm = MPI.COMM_WORLD
-    if (
-        os.environ.get("PYTEST_RUNNING", "0") == "1"
-        and os.environ.get("MPI_CALL_RUNNING", "0") != "1"
-    ):
-        # ideally we would have pytest-xdist never reuse a test worker
-        # this is almost doable in pytest-xdist, but it's not obvious how to make it work
-        # https://github.com/pytest-dev/pytest-xdist/issues/363
-        # this is almost doable in pytest-forked, except that the test item cannot
-        # be pickled or cloudpickled
-        # instead, just don't really do setup_dist() when using pytest
-        # detect pytest by using a conftest.py in the orc root
-        assert comm.size == 1
-        return
-
-    DEFAULT_DEVICE = torch_setup(device_type=device_type, gpu_offset=gpu_offset)
-    if should_init_process_group:
-        backend = backend or ("nccl" if device_type == "cuda" else "gloo")
-        if device_type == "cpu":
-            assert (
-                backend != "nccl"
-            ), "nccl backend will not work with device_type='cpu'"
-        DEFAULT_COMM = comm
-        torch_init_process_group(backend=backend, start_port=start_port, comm=comm)
 
 def dev():
     return DEFAULT_DEVICE
@@ -421,23 +275,6 @@ def dist_get_world_size(group=dist.group.WORLD):
         return 1
     return dist.get_world_size(group=group)
 
-
-def sync_params(params, src_rank=0, group=dist.group.WORLD, comm=None, use_mpi=False):
-    """
-    Send parameters from src_rank to all others in the group
-    """
-    datas = [p.data for p in params]
-    flatvec = flatten_tensors(datas)
-    if use_mpi:
-        if comm is None:
-            comm = DEFAULT_COMM
-        flatvec = th2np(flatvec)
-        comm.Bcast(flatvec, root=0)
-        flatvec = np2th(flatvec)
-    else:
-        dist_broadcast(flatvec, src=src_rank, group=group)
-    unflatten_to(flatvec, datas)
-
 def sync_grads(
     params, group=dist.group.WORLD, grad_weight=1.0, dtype=None, sync_buffer=None
 ):
@@ -461,38 +298,6 @@ def _numpy_allmean(comm, x):
     comm.Allreduce(x, out)
     out /= comm.size
     return out
-
-
-def mpi_moments(comm: MPI.Comm, x: th.Tensor) -> (float, float):
-    mean_x_x2 = np.array([x.mean().item(), (x ** 2).mean().item()])
-    mean_x_x2 = _numpy_allmean(comm, mean_x_x2)
-    mean_x, mean_x2 = mean_x_x2
-    var_x = mean_x2 - mean_x ** 2
-    return float(mean_x), max(float(var_x), 0)
-
-
-def explained_variance(ypred: th.Tensor, y: th.Tensor, comm: MPI.Comm = None) -> float:
-    """
-    Computes fraction of variance that ypred explains about y.
-    Returns 1 - Var[y-ypred] / Var[y]
- 
-    interpretation:
-        ev=0  =>  might as well have predicted zero
-        ev=1  =>  perfect prediction
-        ev<0  =>  worse than just predicting zero    
-    """
-    assert ypred.shape == y.shape
-    err = y - ypred
-    if comm is None:
-        var_y = float(y.var())
-        var_err = float(err.var())
-    else:
-        _, var_y = mpi_moments(comm, y)
-        _, var_err = mpi_moments(comm, err)
-    if var_y == 0:
-        return float("nan")
-    else:
-        return 1.0 - var_err / var_y
 
 @functools.lru_cache()  # Just run once
 def register_distributions_for_tree_util():
