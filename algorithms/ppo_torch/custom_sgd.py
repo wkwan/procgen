@@ -174,22 +174,29 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
+
+            def forward(obs):
+                logits, state = model.forward(obs.to(tu.dev()), None, None)
+                return logits, state
+
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                logits, state = model.forward(seg, None, None)
+                # logits, state = model.forward(seg, None, None)
+                logits, state = tu.minibatched_call(forward, 4, obs=seg["obs"])
+
                 seg["oldpd"] = dist_class(logits, model)
                 print("calculated old pd", seg["oldpd"])
 
             #train on replay buffer
-            for i in range(9):
-                aux_mbsize = 512
-                # tu.minibatched_call(forward, aux_mbsize, ob=)
-                for mb in make_minibatches(seg_buf, aux_mbsize):
-                    mb = tree_map(lambda x: x.to(tu.dev()), mb)
-                    # print("a mb")
-                    # print("mb", mb['oldpd'])
-                    # logits, state = model.forward(mb['obs'], None, None)
+            # for i in range(9):
+            #     # aux_mbsize = 512
+            #     # tu.minibatched_call(forward, aux_mbsize, ob=)
+            #     for mb in make_minibatches(seg_buf, 4):
+            #         mb = tree_map(lambda x: x.to(tu.dev()), mb)
+            #         # print("a mb")
+            #         # print("mb", mb['oldpd'])
+            #         # logits, state = model.forward(mb['obs'], None, None)
 
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
