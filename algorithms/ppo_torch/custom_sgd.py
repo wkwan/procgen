@@ -184,7 +184,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 for mb in make_minibatches(seg_buf, aux_mbsize):
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     # print("a mb")
-                    print("mb", mb)
+                    print("mb", mb['oldpd'])
+                    logits, state = model.forward(seg, None, None)
 
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
