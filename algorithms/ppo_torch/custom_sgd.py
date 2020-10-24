@@ -28,6 +28,7 @@ def make_minibatches(segs, mbsize):
     nenv = tu.batch_len(segs[0])
     nseg = len(segs)
     print("nenv", nenv, "nseg", nseg)
+    nenv = 1024
     envs_segs = th.tensor(list(itertools.product(range(nenv), range(nseg))))
     for perminds in th.randperm(len(envs_segs)).split(mbsize):
         esinds = envs_segs[perminds]
