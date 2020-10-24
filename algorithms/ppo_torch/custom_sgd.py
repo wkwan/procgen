@@ -170,8 +170,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
             #compute presleep outputs for replay buffer (what does this mean?)
-            # for seg in seg_buf:
-            #     seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
+            for seg in seg_buf:
+                seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
                 # logits, state = model.forward(seg, None, None)
 
             #train on replay buffer
