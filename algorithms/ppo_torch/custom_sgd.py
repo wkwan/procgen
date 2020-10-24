@@ -194,11 +194,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     # print("a mb")
                     print("oldpd", mb['oldpd'])
-                    logits, state = model.forward(mb, None, None)
-                    pd = dist_class(logits, model)
+                    # logits, state = model.forward(mb, None, None)
+                    # pd = dist_class(logits, model)
 
-                    name2loss = {}
-                    name2loss["pol_distance"] = td.kl_divergence(mb["oldpd"], pd).mean()
+                    # name2loss = {}
+                    # name2loss["pol_distance"] = td.kl_divergence(mb["oldpd"], pd).mean()
 
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
