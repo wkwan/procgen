@@ -27,12 +27,12 @@ def make_minibatches(segs, mbsize):
     """
     nenv = tu.batch_len(segs[0])
     nseg = len(segs)
-    print("nenv", nenv, "nseg", nseg)
-    nenv = 1024
+    # print("nenv", nenv, "nseg", nseg)
+    nenv = 1024 #should be 2048, but then it doesn't work for any smaller minibatches
     envs_segs = th.tensor(list(itertools.product(range(nenv), range(nseg))))
     for perminds in th.randperm(len(envs_segs)).split(mbsize):
         esinds = envs_segs[perminds]
-        print("for perminds", perminds, esinds)
+        # print("for perminds", perminds, esinds)
         yield tu.tree_stack(
             [tu.tree_slice(segs[segind], envind) for (envind, segind) in esinds]
         )
@@ -183,7 +183,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 # tu.minibatched_call(forward, aux_mbsize, ob=)
                 for mb in make_minibatches(seg_buf, aux_mbsize):
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
-                    print("a mb")
+                    # print("a mb")
 
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
