@@ -10,7 +10,6 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from contextlib import contextmanager
 from functools import partial, wraps
-from mpi4py import MPI
 
 
 def mpi_weighted_mean(comm, local_name2valcount):
