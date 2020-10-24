@@ -30,7 +30,7 @@ def make_minibatches(segs, mbsize):
     envs_segs = th.tensor(list(itertools.product(range(nenv), range(nseg))))
     for perminds in th.randperm(len(envs_segs)).split(mbsize):
         esinds = envs_segs[perminds]
-        print("for perminds", perminds, segind, esinds, envind)
+        print("for perminds", perminds, esinds)
         yield tu.tree_stack(
             [tu.tree_slice(segs[segind], envind) for (envind, segind) in esinds]
         )
