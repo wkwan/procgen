@@ -184,18 +184,19 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                logits, state = tu.minibatched_call(forward, 4, seg=seg)
-                seg["oldpd"] = dist_class(logits, model)
+                # logits, state = tu.minibatched_call(forward, 4, seg=seg)
+                # seg["oldpd"] = dist_class(logits, model)
                 # print("calculated old pd", seg["oldpd"])
 
             #train on replay buffer
             for i in range(9):
                 for mb in make_minibatches(seg_buf, 4):
-                    # mb = tree_map(lambda x: x.to(tu.dev()), mb)
-                    print("a mb")
+                    mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     # print("oldpd", mb['oldpd'])
-                    # logits, state = model.forward(mb, None, None)
-                    # pd = dist_class(logits, model)
+                    logits, state = model.forward(mb, None, None)
+                    pd = dist_class(logits, model)
+                    print("newpd", pd)
+
 
                     # name2loss = {}
                     # name2loss["pol_distance"] = td.kl_divergence(mb["oldpd"], pd).mean()
