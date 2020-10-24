@@ -157,6 +157,7 @@ class TorchPolicy(Policy):
                         input_dict, state_batches, seq_lens)
                 action_dist = dist_class(dist_inputs, self.model)
                 self.action_dist_cache = action_dist
+                print("action dist cache after compute actions", self.action_dist_cache)
 
                 # Get the exploration action from the forward results.
                 actions, logp = \
