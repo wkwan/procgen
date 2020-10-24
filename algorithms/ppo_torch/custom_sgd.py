@@ -138,6 +138,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
         model = policy.model
         dist_class = policy.dist_class
+        print("dist class is", dist_class)
 
         if policy_id not in samples.policy_batches:
             continue
@@ -162,7 +163,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 minibatch.data["vtarg"] = batch_fetches["vtarg"]
                 minibatch.data["oldpd"] = batch_fetches["oldpd"]
                 minibatch.data["dones"] = batch_fetches["dones"]
-                print("batch fetches oldpd", batch_fetches["oldpd"])
 
                 seg_buf.append(tree_map(lambda x: x, minibatch.data))
 
@@ -177,7 +177,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                print("segs oldpd", seg['oldpd'])
                 # logits, state = model.forward(seg, None, None)
 
             #train on replay buffer
