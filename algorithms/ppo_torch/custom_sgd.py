@@ -175,15 +175,16 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
 
-            def forward(obs):
-                logits, state = model.forward(obs.to(tu.dev()), None, None)
+            def forward(seg):
+                logits, state = model.forward(seg, None, None)
                 return logits, state
 
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
                 # logits, state = model.forward(seg, None, None)
-                logits, state = tu.minibatched_call(forward, 4, obs=seg["obs"])
+
+                logits, state = tu.minibatched_call(forward, 4, seg=seg)
 
                 seg["oldpd"] = dist_class(logits, model)
                 print("calculated old pd", seg["oldpd"])
