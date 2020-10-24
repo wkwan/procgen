@@ -14,6 +14,23 @@ from .tree_util import tree_map
 
 import torch as th
 
+import torch_util as tu
+
+
+def make_minibatches(segs, mbsize):
+    """
+    Yield one epoch of minibatch over the dataset described by segs
+    Each minibatch mixes data between different segs
+    """
+    nenv = tu.batch_len(segs[0])
+    nseg = len(segs)
+    envs_segs = th.tensor(list(itertools.product(range(nenv), range(nseg))))
+    for perminds in th.randperm(len(envs_segs)).split(mbsize):
+        esinds = envs_segs[perminds]
+        yield tu.tree_stack(
+            [tu.tree_slice(segs[segind], envind) for (envind, segind) in esinds]
+        )
+
 
 logger = logging.getLogger(__name__)
 
@@ -150,13 +167,17 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
             #compute presleep outputs for replay buffer (what does this mean?)
-            for seg in seg_buf:
-                seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                logits, state = model.forward(seg, None, None)
+            # for seg in seg_buf:
+            #     seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
+                # logits, state = model.forward(seg, None, None)
 
             #train on replay buffer
             for i in range(9):
-                pass
+                aux_mbsize = 4
+                # tu.minibatched_call(forward, aux_mbsize, ob=)
+                for mb in make_minibatches(seg_buf, aux_mbsize):
+                    mb = tree_map(lambda x: x.to(tu.dev()), mb)
+                    print("a mb")
 
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
