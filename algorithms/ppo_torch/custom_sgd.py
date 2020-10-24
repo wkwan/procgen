@@ -192,8 +192,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for i in range(9):
                 for mb in make_minibatches(seg_buf, 4):
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
-                    # print("a mb")
-                    print("oldpd", mb['oldpd'])
+                    print("a mb")
+                    # print("oldpd", mb['oldpd'])
                     # logits, state = model.forward(mb, None, None)
                     # pd = dist_class(logits, model)
 
