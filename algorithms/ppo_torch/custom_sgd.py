@@ -14,7 +14,7 @@ from .tree_util import tree_map
 
 import torch as th
 
-import torch_util as tu
+import .torch_util as tu
 
 
 def make_minibatches(segs, mbsize):
