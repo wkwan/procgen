@@ -201,9 +201,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     # print("oldpd", mb['oldpd'])
                     logits, state = model.forward(mb, None, None)
-                    pd = dist_class(logits, model)
-                    print("newpd", pd)
-                    name2loss = {}
+                    # pd = dist_class(logits, model)
+                    # print("newpd", pd)
+                    # name2loss = {}
                     # name2loss["pol_distance"] = td.kl_divergence(mb["oldpd"], pd).mean()
                     # print("pol dist", name2loss["pol_distance"])
                     # name2loss.update(compute_aux_loss(aux, mb))
