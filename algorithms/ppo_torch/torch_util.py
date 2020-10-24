@@ -353,7 +353,6 @@ def minibatched_call(fn, mbsize, *args, **kwargs):
     """
     tensor_list, _ = tree_util.tree_flatten((args, kwargs))
     batchsize = tensor_list[0].shape[0]
-    print("before minibatched call")
     mbs = [
         fn(*tree_slice(args, inds), **tree_slice(kwargs, inds))
         for inds in th.arange(batchsize).split(mbsize)
