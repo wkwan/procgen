@@ -203,9 +203,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     print("mb ind", z)
                     z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
-                    print("oldpd", mb['oldpd'])
+                    print("oldpd", mb['oldpd'].shape, mb['oldpd'])
                     logits, state = model.forward(mb, None, None)
-                    print("new pd", logits)
+                    print("new pd", logits.shape, logits)
                     # pd = dist_class(logits, model)
                     # print("newpd", pd)
                     # name2loss = {}
