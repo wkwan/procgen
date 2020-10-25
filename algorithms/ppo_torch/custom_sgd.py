@@ -193,6 +193,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
                 logits, state = tu.minibatched_call(forward, 4, seg=seg)
                 seg["oldpd"] = dist_class(logits, model)
+                print("presleep oldpd", seg["oldpd"])
                 # print("calculated old pd", seg["oldpd"])
 
             #train on replay buffer
