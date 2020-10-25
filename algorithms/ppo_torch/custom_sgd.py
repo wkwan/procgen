@@ -198,9 +198,10 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             #train on replay buffer
             for i in range(9):
-                mbs = make_minibatches(seg_buf, 4)
-                print("num minibatches", len(mbs))
-                for mb in mbs:
+                z = 0
+                for mb in make_minibatches(seg_buf, 4):
+                    print("mb ind", z)
+                    z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     print("oldpd", mb['oldpd'])
                     logits, state = model.forward(mb, None, None)
