@@ -98,7 +98,6 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         self._value = value.squeeze(1)
         return logits, state
 
-    @override(TorchModelV2)
     def forward_x(self, input_dict):
         x = input_dict["obs"].float()
         # print("x shape", x.shape)
