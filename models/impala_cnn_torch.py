@@ -126,7 +126,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         self.hidden_fc.weight.data *= 1.4 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.value_fc.bias.data *= 0
 
-        self.aux_vf_head = tu.NormedLinear(256, 1, scale=0.1)
+        self.aux_vf_head = NormedLinear(256, 1, scale=0.1)
         
     @override(TorchModelV2)
     def forward(self, input_dict, state, seq_lens):
