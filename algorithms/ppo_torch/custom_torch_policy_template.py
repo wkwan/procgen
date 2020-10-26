@@ -9,6 +9,8 @@ from ray.rllib.utils.torch_ops import convert_to_non_torch_type
 
 torch, _ = try_import_torch()
 
+from . import torch_util as tu
+
 
 @DeveloperAPI
 def build_torch_policy(name,
@@ -138,6 +140,10 @@ def build_torch_policy(name,
 
             if after_init:
                 after_init(self, obs_space, action_space, config)
+
+            self.pi_head = tu.NormedLinear(256, 15, scale=0.1)
+            self.v_head = tu.NormedLinear(256, 1, scale=0.1)
+            self.aux_vf_head = tu.NormedLinear(256, 1, scale=0.1)
 
         @override(Policy)
         def postprocess_trajectory(self,

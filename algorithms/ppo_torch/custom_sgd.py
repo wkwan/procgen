@@ -20,6 +20,7 @@ from torch import distributions as td
 
 import itertools
 
+from torch import nn
 
 
 def make_minibatches(segs, mbsize):
@@ -109,6 +110,7 @@ def minibatches(samples, sgd_minibatch_size):
     for i, j in slices:
         yield samples.slice(i, j)
 
+
 nepochs = 0
 
 def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
@@ -139,8 +141,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     for policy_id, policy in policies.items():
 
         model = policy.model
+        pi_head = policy.pi_head
+        v_head = policy.v_head
+        aux_vf_head = policy.aux_vf_head
+
         dist_class = policy.dist_class
-        print("dist class is", dist_class)
 
         if policy_id not in samples.policy_batches:
             continue
@@ -200,21 +205,23 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for i in range(9):
                 z = 0
                 for mb in make_minibatches(seg_buf, 4):
-                    print("mb ind", z)
+                    # print("mb ind", z)
                     z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
-                    print("old logits", mb['oldpd'].shape, mb['oldpd'])
-                    logits, state = model.forward(mb, None, None)
-                    print("new logits", logits.shape, logits)
+                    # print("old logits", mb['oldpd'].shape, mb['oldpd'])
+                    logits, state, x = model.forward(mb, None, None)
+                    # print("new logits", logits.shape, logits)
 
                     oldpd = dist_class(mb['oldpd'])
                     pd = dist_class(logits, model)
                     # print("newpd", pd)
                     name2loss = {}
                     name2loss["pol_distance"] = oldpd.kl(pd).mean()
-
-                    # name2loss["pol_distance"] = oldpd.dist(pd)
                     print("pol dist", name2loss["pol_distance"])
+
+                    vpredaux = aux_vf_head(x)[..., 0]
+                    print("v pred aux")
+                    
 
                     # name2loss.update(compute_aux_loss(aux, mb))
             seg_buf.clear()

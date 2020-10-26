@@ -96,11 +96,14 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         logits = self.logits_fc(x)
         value = self.value_fc(x)
         self._value = value.squeeze(1)
-        return logits, state
+        return logits, state, x
 
     @override(TorchModelV2)
     def value_function(self):
         assert self._value is not None, "must call forward() first"
         return self._value
+
+
+
 
 ModelCatalog.register_custom_model("impala_cnn_torch", ImpalaCNN)
