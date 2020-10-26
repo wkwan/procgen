@@ -219,14 +219,12 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     name2loss["pol_distance"] = oldpd.kl(pd).mean()
                     print("pol dist", name2loss["pol_distance"])
 
-                    print("x from forward x", vpredaux)
+                    print("vpredaux", vpredaux)
+                    print("vtrue", model.value_function())
+                    print("distribution", pd)
 
                     # vpredaux = aux_vf_head(x)
                     # print("v pred aux", vpredaux)
-
-
-                    
-
                     # name2loss.update(compute_aux_loss(aux, mb))
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
