@@ -221,8 +221,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
                     print("x from forward x", x)
 
-                    vpredaux = aux_vf_head(x)
-                    print("v pred aux", vpredaux)
+                    # vpredaux = aux_vf_head(x)
+                    # print("v pred aux", vpredaux)
 
 
                     
