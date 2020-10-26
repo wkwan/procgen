@@ -298,6 +298,8 @@ class TorchPolicy(Policy):
 
             # Step the optimizer.
             opt.step()
+            pi_loss.detach()
+            vf_loss.detach()
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
