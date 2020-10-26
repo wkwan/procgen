@@ -125,6 +125,8 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         self.value_fc = nn.Linear(in_features=256, out_features=1)
         self.hidden_fc.weight.data *= 1.4 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.value_fc.bias.data *= 0
+
+        self.aux_vf_head = tu.NormedLinear(256, 1, scale=0.1)
         
     @override(TorchModelV2)
     def forward(self, input_dict, state, seq_lens):
@@ -157,7 +159,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         logits = self.logits_fc(x)
         # value = self.value_fc(x)
         # self._value = value.squeeze(1)
-        return logits, x
+        return logits, self.aux_vf_head(x)
 
     @override(TorchModelV2)
     def value_function(self):
