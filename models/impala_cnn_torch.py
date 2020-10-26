@@ -77,9 +77,9 @@ def NormedLinear(*args, scale=1.0, dtype=th.float32, **kwargs):
     nn.Linear but with normalized fan-in init
     """
     dtype = parse_dtype(dtype)
-    if dtype == th.float32:
+    if dtype == torch.float32:
         out = nn.Linear(*args, **kwargs)
-    elif dtype == th.float16:
+    elif dtype == torch.float16:
         out = LinearF16(*args, **kwargs)
     else:
         raise ValueError(dtype)
