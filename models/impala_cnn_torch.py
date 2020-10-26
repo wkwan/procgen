@@ -45,6 +45,49 @@ class ConvSequence(nn.Module):
         return (self._out_channels, (h + 1) // 2, (w + 1) // 2)
 
 
+def parse_dtype(x):
+    if isinstance(x, torch.dtype):
+        return x
+    elif isinstance(x, str):
+        if x == "float32" or x == "float":
+            return torch.float32
+        elif x == "float64" or x == "double":
+            return torch.float64
+        elif x == "float16" or x == "half":
+            return torch.float16
+        elif x == "uint8":
+            return torch.uint8
+        elif x == "int8":
+            return torch.int8
+        elif x == "int16" or x == "short":
+            return torch.int16
+        elif x == "int32" or x == "int":
+            return torch.int32
+        elif x == "int64" or x == "long":
+            return torch.int64
+        elif x == "bool":
+            return torch.bool
+        else:
+            raise ValueError(f"cannot parse {x} as a dtype")
+    else:
+        raise TypeError(f"cannot parse {type(x)} as dtype")
+
+def NormedLinear(*args, scale=1.0, dtype=th.float32, **kwargs):
+    """
+    nn.Linear but with normalized fan-in init
+    """
+    dtype = parse_dtype(dtype)
+    if dtype == th.float32:
+        out = nn.Linear(*args, **kwargs)
+    elif dtype == th.float16:
+        out = LinearF16(*args, **kwargs)
+    else:
+        raise ValueError(dtype)
+    out.weight.data *= scale / out.weight.norm(dim=1, p=2, keepdim=True)
+    if kwargs.get("bias", True):
+        out.bias.data *= 0
+    return out
+
 class ImpalaCNN(TorchModelV2, nn.Module):
     """
     Network from IMPALA paper implemented in ModelV2 API.
@@ -52,6 +95,8 @@ class ImpalaCNN(TorchModelV2, nn.Module):
     Based on https://github.com/ray-project/ray/blob/master/rllib/models/tf/visionnet_v2.py
     and https://github.com/openai/baselines/blob/9ee399f5b20cd70ac0a871927a6cf043b478193f/baselines/common/models.py#L28
     """
+
+
 
     def __init__(self, obs_space, action_space, num_outputs, model_config,
                  name):
