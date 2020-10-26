@@ -209,7 +209,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     # print("old logits", mb['oldpd'].shape, mb['oldpd'])
-                    logits, x = model.forward_x(mb)
+                    logits, vpredaux = model.forward_x(mb)
                     # print("new logits", logits.shape, logits)
 
                     oldpd = dist_class(mb['oldpd'])
@@ -219,7 +219,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     name2loss["pol_distance"] = oldpd.kl(pd).mean()
                     print("pol dist", name2loss["pol_distance"])
 
-                    print("x from forward x", x)
+                    print("x from forward x", vpredaux)
 
                     # vpredaux = aux_vf_head(x)
                     # print("v pred aux", vpredaux)
