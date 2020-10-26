@@ -192,7 +192,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
                 logits, state = tu.minibatched_call(forward, 8, seg=seg)
-                seg["oldpd"] = dist_class(logits)
+                print("presleep logits", logits)
+                print("logits splice", logits[2:])
+                # seg["oldpd"] = dist_class(logits)
                 # print("seg presleep oldpd", logits.shape, logits)
                 # print("presleep oldpd", seg["oldpd"])
                 # print("calculated old pd", seg["oldpd"])
