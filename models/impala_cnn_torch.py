@@ -72,7 +72,7 @@ def parse_dtype(x):
     else:
         raise TypeError(f"cannot parse {type(x)} as dtype")
 
-def NormedLinear(*args, scale=1.0, dtype=th.float32, **kwargs):
+def NormedLinear(*args, scale=1.0, dtype=torch.float32, **kwargs):
     """
     nn.Linear but with normalized fan-in init
     """
