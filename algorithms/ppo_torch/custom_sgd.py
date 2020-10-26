@@ -211,8 +211,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     pd = dist_class(logits, model)
                     # print("newpd", pd)
                     name2loss = {}
-                    name2loss["pol_distance"] = td.kl.kl_divergence(oldpd, pd).mean()
+                    name2loss["pol_distance"] = oldpd.kl(pd).mean()
+
+                    # name2loss["pol_distance"] = oldpd.dist(pd)
                     print("pol dist", name2loss["pol_distance"])
+
                     # name2loss.update(compute_aux_loss(aux, mb))
             seg_buf.clear()
         fetches[policy_id] = averaged(iter_extra_fetches)
