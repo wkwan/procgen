@@ -220,8 +220,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     print("pol dist", name2loss["pol_distance"])
 
                     print("x from forward x", x)
-                    # vpredaux = aux_vf_head(x)[..., 0]
-                    # print("v pred aux", vpredaux)
+
+                    vpredaux = aux_vf_head(x)[..., 0]
+                    print("v pred aux", vpredaux)
+
+                    
                     
 
                     # name2loss.update(compute_aux_loss(aux, mb))
