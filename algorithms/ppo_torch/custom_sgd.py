@@ -191,7 +191,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                logits, state = tu.minibatched_call(forward, 2048, seg=seg)
+                logits, state = tu.minibatched_call(forward, 4, seg=seg)
                 print("presleep logits", logits)
                 # print("logits splice", logits[2:])
                 # seg["oldpd"] = dist_class(logits)
@@ -202,7 +202,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #train on replay buffer
             for i in range(9):
                 z = 0
-                for mb in make_minibatches(seg_buf, 512):
+                for mb in make_minibatches(seg_buf, 4):
                     print("mb ind", z)
                     z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
