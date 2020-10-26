@@ -194,7 +194,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 logits, state = tu.minibatched_call(forward, 4, seg=seg)
                 print("presleep logits", logits.shape, logits)
                 # print("logits splice", logits[2:])
-                seg["oldpd"] = dist_class(logits)
+                seg["oldpd"] = logits
                 # print("seg presleep oldpd", logits.shape, logits)
                 # print("presleep oldpd", seg["oldpd"])
                 # print("calculated old pd", seg["oldpd"])
