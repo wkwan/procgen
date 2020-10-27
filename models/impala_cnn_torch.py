@@ -141,7 +141,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         x = self.hidden_fc(x)
         x = nn.functional.relu(x)
         logits = self.logits_fc(x)
-        self.value_fc.detach() #detach during policy phase only
+        x.detach() #detach during policy phase only
         value = self.value_fc(x)
         self._value = value.squeeze(1)
         return logits, state
