@@ -262,7 +262,7 @@ class TorchPolicy(Policy):
     def aux_learn(self, loss):
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
-            loss.backard()
+            loss.backward()
             #do we need to sync grads here?
             opt.step()
             print("just stepped")
