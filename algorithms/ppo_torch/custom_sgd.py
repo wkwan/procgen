@@ -178,7 +178,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
             # print("done the first phase")
-            MB_SIZE = 2048
+            MB_SIZE = 1024
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
                 return logits, state               
