@@ -76,30 +76,31 @@ class PPOLoss:
             def reduce_mean_valid(t):
                 return torch.mean(t)
 
-        prev_dist = dist_class(prev_logits, model)
+        # prev_dist = dist_class(prev_logits, model)
         # Make loss functions.
         logp_ratio = torch.exp(
             curr_action_dist.logp(actions) - prev_actions_logp)
-        action_kl = prev_dist.kl(curr_action_dist)
-        self.mean_kl = 0.5*reduce_mean_valid(action_kl)
+        # action_kl = prev_dist.kl(curr_action_dist)
+        # self.mean_kl = 0.5*reduce_mean_valid(action_kl)
 
         curr_entropy = curr_action_dist.entropy()
-        self.mean_entropy = reduce_mean_valid(curr_entropy)
+        # self.mean_entropy = reduce_mean_valid(curr_entropy)
 
         # advantages = (advantages - reduce_mean_valid(advantages)) / (torch.std(advantages) + 1e-8)
-        surrogate_loss = torch.min(
-            advantages * logp_ratio,
-            advantages * torch.clamp(logp_ratio, 1 - clip_param,
+        surrogate_loss = torch.max(
+            -advantages * logp_ratio,
+            -advantages * torch.clamp(logp_ratio, 1 - clip_param,
                                      1 + clip_param))
-        self.mean_policy_loss = reduce_mean_valid(-surrogate_loss)
+        # self.mean_policy_loss = reduce_mean_valid(surrogate_loss)
 
         if use_gae:
-            vf_loss1 = torch.pow(value_fn - value_targets, 2.0)
-            vf_clipped = vf_preds + torch.clamp(value_fn - vf_preds,
-                                                -vf_clip_param, vf_clip_param)
-            vf_loss2 = torch.pow(vf_clipped - value_targets, 2.0)
-            vf_loss = torch.max(vf_loss1, vf_loss2)
-            self.mean_vf_loss = 0.5 * reduce_mean_valid(vf_loss)
+            # vf_loss1 = torch.pow(value_fn - value_targets, 2.0)
+            # vf_clipped = vf_preds + torch.clamp(value_fn - vf_preds,
+            #                                     -vf_clip_param, vf_clip_param)
+            # vf_loss2 = torch.pow(vf_clipped - value_targets, 2.0)
+            # vf_loss = torch.max(vf_loss1, vf_loss2)
+            # self.mean_vf_loss = reduce_mean_valid(vf_loss)
+            self.mean_vf_loss = vf_loss_coeff * reduce_mean_valid(torch.pow(vf_preds - value_targets, 2.0))
 
             # loss = reduce_mean_valid(
             #     -surrogate_loss + cur_kl_coeff * action_kl +
@@ -111,7 +112,7 @@ class PPOLoss:
             #                          entropy_coeff * curr_entropy)
 
         # self.loss = torch.stack((self.mean_policy_loss, self.mean_vf_loss))
-        self.loss = torch.stack((reduce_mean_valid(-surrogate_loss + cur_kl_coeff * action_kl - entropy_coeff * curr_entropy), reduce_mean_valid(vf_loss_coeff * vf_loss)))
+        self.loss = torch.stack((-entropy_coeff * curr_entropy + surrogate_loss, self.mean_vf_loss))
         # print("mean policy loss and vf loss", self.loss)
 
         # self.loss = loss
@@ -156,18 +157,18 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch):
 
 def kl_and_loss_stats(policy, train_batch):
     return {
-        "cur_kl_coeff": policy.kl_coeff,
-        "cur_lr": policy.cur_lr,
-        "total_loss": policy.loss_obj.loss,
-        "policy_loss": policy.loss_obj.mean_policy_loss,
+        # "cur_kl_coeff": policy.kl_coeff,
+        # "cur_lr": policy.cur_lr,
+        # "total_loss": policy.loss_obj.loss,
+        # "policy_loss": policy.loss_obj.mean_policy_loss,
         "vf_loss": policy.loss_obj.mean_vf_loss,
-        "vf_explained_var": explained_variance(
-            train_batch[Postprocessing.VALUE_TARGETS],
-            policy.model.value_function(),
-            framework="torch"),
-        "kl": policy.loss_obj.mean_kl,
-        "entropy": policy.loss_obj.mean_entropy,
-        "entropy_coeff": policy.entropy_coeff,
+        # "vf_explained_var": explained_variance(
+        #     train_batch[Postprocessing.VALUE_TARGETS],
+        #     policy.model.value_function(),
+        #     framework="torch"),
+        # "kl": policy.loss_obj.mean_kl,
+        # "entropy": policy.loss_obj.mean_entropy,
+        # "entropy_coeff": policy.entropy_coeff,
     }
 
 
