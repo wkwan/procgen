@@ -154,16 +154,17 @@ class UpdateKL:
         self.workers = workers
 
     def __call__(self, fetches):
-        def update(pi, pi_id):
-            assert "kl" not in fetches, (
-                "kl should be nested under policy id key", fetches)
-            if pi_id in fetches:
-                assert "kl" in fetches[pi_id], (fetches, pi_id)
-                pi.update_kl(fetches[pi_id]["kl"])
-            else:
-                logger.warning("No data for {}, not updating kl".format(pi_id))
+        pass
+        # def update(pi, pi_id):
+        #     assert "kl" not in fetches, (
+        #         "kl should be nested under policy id key", fetches)
+        #     if pi_id in fetches:
+        #         assert "kl" in fetches[pi_id], (fetches, pi_id)
+        #         pi.update_kl(fetches[pi_id]["kl"])
+        #     else:
+        #         logger.warning("No data for {}, not updating kl".format(pi_id))
 
-        self.workers.local_worker().foreach_trainable_policy(update)
+        # self.workers.local_worker().foreach_trainable_policy(update)
 
 
 def execution_plan(workers, config):
