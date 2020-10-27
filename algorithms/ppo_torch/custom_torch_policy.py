@@ -235,6 +235,7 @@ class TorchPolicy(Policy):
         grad_info.update(self.extra_grad_process(opt, loss))
 
         if self.distributed_world_size:
+            print("do the distributed world size")
             grads = []
             for param_group in opt.param_groups:
                 for p in param_group["params"]:

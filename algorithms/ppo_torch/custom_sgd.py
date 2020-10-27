@@ -195,7 +195,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 # print("calculated old pd", seg["oldpd"])
 
             #train on replay buffer
-            for i in range(9):
+            for i in range(3):
                 z = 0
                 for mb in make_minibatches(seg_buf, 4):
                     # print("mb ind", z)
@@ -209,16 +209,16 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     pd = dist_class(logits, model)
                     # print("newpd", pd)
                     pol_distance = oldpd.kl(pd).mean()
-                    print("pol dist", pol_distance)
+                    # print("pol dist", pol_distance)
 
-                    print("vpredaux", vpredaux)
+                    # print("vpredaux", vpredaux)
                     vpredtrue = model.value_function()
-                    print("vpredtrue", vpredtrue)
-                    print("distribution", pd)
+                    # print("vpredtrue", vpredtrue)
+                    # print("distribution", pd)
                 
                     vf_aux = 0.5 * ((vpredaux - mb["vtarg"]) ** 2).mean() 
                     vf_true = 0.5 * ((vpredtrue - mb["vtarg"]) ** 2).mean()
-                    print("vf aux", vf_aux, "vf_true", vf_true)
+                    # print("vf aux", vf_aux, "vf_true", vf_true)
 
                     loss = pol_distance + vf_aux + vf_true
 
