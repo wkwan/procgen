@@ -34,7 +34,7 @@ def make_minibatches(segs, mbsize):
     envs_segs = th.tensor(list(itertools.product(range(nenv), range(nseg))))
     for perminds in th.randperm(len(envs_segs)).split(mbsize):
         esinds = envs_segs[perminds]
-        print("for perminds", perminds, esinds)
+        print("for perminds", perminds.shape, esinds.shape)
         yield tu.tree_stack(
             [tu.tree_slice(segs[segind], envind) for (envind, segind) in esinds]
         )
@@ -178,7 +178,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
             # print("done the first phase")
-            MB_SIZE = 2048
+            MB_SIZE = 4
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
                 return logits, state               
