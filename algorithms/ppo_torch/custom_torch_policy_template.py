@@ -141,10 +141,6 @@ def build_torch_policy(name,
             if after_init:
                 after_init(self, obs_space, action_space, config)
 
-            self.pi_head = tu.NormedLinear(256, 15, scale=0.1)
-            self.v_head = tu.NormedLinear(256, 1, scale=0.1)
-            self.aux_vf_head = tu.NormedLinear(256, 1, scale=0.1)
-
         @override(Policy)
         def postprocess_trajectory(self,
                                    sample_batch,
