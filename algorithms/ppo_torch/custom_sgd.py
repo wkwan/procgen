@@ -178,7 +178,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
-
+            print("done the first phase")
             MB_SIZE = 512 
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
@@ -194,7 +194,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 # print("seg presleep oldpd", logits.shape, logits)
                 # print("presleep oldpd", seg["oldpd"])
                 # print("calculated old pd", seg["oldpd"])
-
+            print("done computing presleep")
             #train on replay buffer
             for i in range(9):
                 z = 0
@@ -228,5 +228,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     # print("v pred aux", vpredaux)
                     # name2loss.update(compute_aux_loss(aux, mb))
             seg_buf.clear()
+            print("done aux train")
         fetches[policy_id] = averaged(iter_extra_fetches)
     return fetches
