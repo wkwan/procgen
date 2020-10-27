@@ -28,10 +28,9 @@ def make_minibatches(segs, mbsize):
     Yield one epoch of minibatch over the dataset described by segs
     Each minibatch mixes data between different segs
     """
-    nenv = tu.batch_len(segs[0])
+    # nenv = tu.batch_len(segs[0])
+    nenv = tu.batch_len(segs[-1])
     nseg = len(segs)
-    print("nenv", nenv, "nseg", nseg, "last seg len", tu.batch_len(segs[-1]))
-    # nenv = 1024 #should be 2048, but then it doesn't work for any smaller minibatches
     envs_segs = th.tensor(list(itertools.product(range(nenv), range(nseg))))
     for perminds in th.randperm(len(envs_segs)).split(mbsize):
         esinds = envs_segs[perminds]
