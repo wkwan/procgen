@@ -84,14 +84,14 @@ class PPOLoss:
         # self.mean_kl = 0.5*reduce_mean_valid(action_kl)
 
         curr_entropy = curr_action_dist.entropy()
-        # self.mean_entropy = reduce_mean_valid(curr_entropy)
+        self.mean_entropy = reduce_mean_valid(curr_entropy)
 
         # advantages = (advantages - reduce_mean_valid(advantages)) / (torch.std(advantages) + 1e-8)
         surrogate_loss = torch.max(
             -advantages * logp_ratio,
             -advantages * torch.clamp(logp_ratio, 1 - clip_param,
                                      1 + clip_param))
-        # self.mean_policy_loss = reduce_mean_valid(surrogate_loss)
+        self.mean_policy_loss = reduce_mean_valid(surrogate_loss)
 
         if use_gae:
             # vf_loss1 = torch.pow(value_fn - value_targets, 2.0)
@@ -112,7 +112,7 @@ class PPOLoss:
             #                          entropy_coeff * curr_entropy)
 
         # self.loss = torch.stack((self.mean_policy_loss, self.mean_vf_loss))
-        self.loss = torch.stack((-entropy_coeff * curr_entropy + surrogate_loss, self.mean_vf_loss))
+        self.loss = torch.stack((-entropy_coeff * self.mean_entropy + self.mean_policy_loss, self.mean_vf_loss))
         # print("mean policy loss and vf loss", self.loss)
 
         # self.loss = loss
@@ -160,14 +160,14 @@ def kl_and_loss_stats(policy, train_batch):
         # "cur_kl_coeff": policy.kl_coeff,
         # "cur_lr": policy.cur_lr,
         # "total_loss": policy.loss_obj.loss,
-        # "policy_loss": policy.loss_obj.mean_policy_loss,
+        "policy_loss": policy.loss_obj.mean_policy_loss,
         "vf_loss": policy.loss_obj.mean_vf_loss,
         # "vf_explained_var": explained_variance(
         #     train_batch[Postprocessing.VALUE_TARGETS],
         #     policy.model.value_function(),
         #     framework="torch"),
         # "kl": policy.loss_obj.mean_kl,
-        # "entropy": policy.loss_obj.mean_entropy,
+        "entropy": policy.loss_obj.mean_entropy,
         # "entropy_coeff": policy.entropy_coeff,
     }
 
