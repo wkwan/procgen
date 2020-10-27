@@ -222,7 +222,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
                     loss = pol_distance + vf_aux + vf_true
 
-                    local_worker.aux_learn(loss)
+                    policy.aux_learn(loss)
                     # vpredaux = aux_vf_head(x)
                     # print("v pred aux", vpredaux)
                     # name2loss.update(compute_aux_loss(aux, mb))
