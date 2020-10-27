@@ -203,7 +203,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     # print("old logits", mb['oldpd'].shape, mb['oldpd'])
-                    logits, vpredaux = model.forward_x(mb)
+                    logits, vpredaux = model.forward_aux(mb)
                     # print("new logits", logits.shape, logits)
 
                     oldpd = dist_class(mb['oldpd'])

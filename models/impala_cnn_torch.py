@@ -141,11 +141,12 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         x = self.hidden_fc(x)
         x = nn.functional.relu(x)
         logits = self.logits_fc(x)
+        self.value_fc.detach() #detach during policy phase only
         value = self.value_fc(x)
         self._value = value.squeeze(1)
         return logits, state
 
-    def forward_x(self, input_dict):
+    def forward_aux(self, input_dict):
         x = input_dict["obs"].float()
         # print("x shape", x.shape)
         x = x / 255.0  # scale to 0-1
@@ -157,8 +158,8 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         x = self.hidden_fc(x)
         x = nn.functional.relu(x)
         logits = self.logits_fc(x)
-        # value = self.value_fc(x)
-        # self._value = value.squeeze(1)
+        value = self.value_fc(x)
+        self._value = value.squeeze(1)
         return logits, self.aux_vf_head(x)
 
     @override(TorchModelV2)
