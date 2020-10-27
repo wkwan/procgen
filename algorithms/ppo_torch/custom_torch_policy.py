@@ -266,7 +266,6 @@ class TorchPolicy(Policy):
             loss.backward()
             #do we need to sync grads here?
             opt.step()
-            print("just stepped")
 
     @override(Policy)
     def learn_on_batch(self, postprocessed_batch):
