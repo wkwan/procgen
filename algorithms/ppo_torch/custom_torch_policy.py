@@ -259,6 +259,13 @@ class TorchPolicy(Policy):
             grad_info["allreduce_latency"] += time.time() - start
 
 
+    def aux_learn(self, loss):
+        for i, opt in enumerate(self._optimizers):
+            opt.zero_grad()
+            loss.backard()
+            #do we need to sync grads here?
+            opt.step()
+            print("just stepped")
 
     @override(Policy)
     def learn_on_batch(self, postprocessed_batch):

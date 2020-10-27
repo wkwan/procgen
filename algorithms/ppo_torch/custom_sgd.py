@@ -181,14 +181,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
-                return logits, state
-
-            def compute_aux_loss(aux, seg):
-                vtarg = seg["vtarg"]
-                return {
-                    "vf_aux": 0.5 * ((aux["vpredaux"] - vtarg) ** 2).mean(),
-                    "vf_true": 0.5 * ((aux["vpredtrue"] - vtarg) ** 2).mean(),
-                }
+                return logits, state               
 
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
@@ -215,14 +208,21 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     oldpd = dist_class(mb['oldpd'])
                     pd = dist_class(logits, model)
                     # print("newpd", pd)
-                    name2loss = {}
-                    name2loss["pol_distance"] = oldpd.kl(pd).mean()
-                    print("pol dist", name2loss["pol_distance"])
+                    pol_distance = oldpd.kl(pd).mean()
+                    print("pol dist", pol_distance)
 
                     print("vpredaux", vpredaux)
-                    print("vtrue", model.value_function())
+                    vpredtrue = model.value_function()
+                    print("vpredtrue", vpredtrue)
                     print("distribution", pd)
+                
+                    vf_aux = 0.5 * ((vpredaux - mb["vtarg"]) ** 2).mean() 
+                    vf_true = 0.5 * ((vpredtrue - mb["vtarg"]) ** 2).mean()
+                    print("vf aux", vf_aux, "vf_true", vf_true)
 
+                    loss = pol_distance + vf_aux + vf_true
+
+                    local_worker.aux_learn(loss)
                     # vpredaux = aux_vf_head(x)
                     # print("v pred aux", vpredaux)
                     # name2loss.update(compute_aux_loss(aux, mb))
