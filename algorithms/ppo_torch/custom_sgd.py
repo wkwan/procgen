@@ -34,7 +34,7 @@ def make_minibatches(segs, mbsize):
     envs_segs = th.tensor(list(itertools.product(range(nenv), range(nseg))))
     for perminds in th.randperm(len(envs_segs)).split(mbsize):
         esinds = envs_segs[perminds]
-        print("for perminds", perminds.shape, esinds.shape)
+        # print("for perminds", perminds.shape, esinds.shape)
         yield tu.tree_stack(
             [tu.tree_slice(segs[segind], envind) for (envind, segind) in esinds]
         )
@@ -178,7 +178,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
             # print("done the first phase")
-            MB_SIZE = 4
+            MB_SIZE = 512
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
                 return logits, state               
@@ -201,7 +201,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     # print("mb ind", z)
                     z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
-                    print("mb shape", mb['obs'].shape)
+                    # print("mb shape", mb['obs'].shape)
                     # print("old logits", mb['oldpd'].shape, mb['oldpd'])
                     logits, vpredaux = model.forward_aux(mb)
                     # print("new logits", logits.shape, logits)
@@ -210,7 +210,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     pd = dist_class(logits, model)
                     # print("newpd", pd)
                     pol_distance = oldpd.kl(pd).mean()
-                    print("pol dist", pol_distance)
+                    # print("pol dist", pol_distance)
 
                     # print("vpredaux", vpredaux)
                     vpredtrue = model.value_function()
