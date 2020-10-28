@@ -292,8 +292,8 @@ class TorchPolicy(Policy):
             opt.zero_grad()
 
             pi_loss = loss_out[i][0]
-            self.backprop(grad_info, opt, pi_loss, True)
-            # opt.step()
+            self.backprop(grad_info, opt, pi_loss, False)
+            opt.step()
 
             vf_loss = loss_out[i][1]
             opt.zero_grad()
