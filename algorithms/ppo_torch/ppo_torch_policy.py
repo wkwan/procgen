@@ -4,7 +4,7 @@ import ray
 from ray.rllib.agents.a3c.a3c_torch_policy import apply_grad_clipping
 from ray.rllib.agents.ppo.ppo_tf_policy import postprocess_ppo_gae, \
     setup_config
-from ray.rllib.evaluation.postprocessing import Postprocessing
+from .custom_postprocessing import Postprocessing
 from ray.rllib.policy.sample_batch import SampleBatch
 from .custom_torch_policy import EntropyCoeffSchedule, \
     LearningRateSchedule
