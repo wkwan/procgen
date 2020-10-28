@@ -161,16 +161,16 @@ def backward_discounted_sum(
     gamma: "(float)",
 ):
     first = first.astype(float)
-    print("backward discounted", reward.shape, first.shape, first)
+    # print("backward discounted", reward.shape, first.shape, first)
     # assert first.dim() == 2
-    _nenv, nstep = reward.shape
-    ret = th.zeros_like(reward)
-    print("reward init", reward.shape, first.shape)
-    prevret = ret[:, 0] = reward[:, 0]
+    nstep = reward.shape
+    # ret = th.zeros_like(reward)
+    ret = np.zeros(nstep)
+    # print("reward init", reward.shape, first.shape)
+    prevret = ret[0] = reward[0]
     for t in range(1, nstep):
-        
-        prevret = ret[:, t] = reward[:, t] + (1 - first[:, t-1]) * gamma * prevret
-        print("reward at nstep", t, first[:, t-1])
+        prevret = ret[t] = reward[t] + (1 - first[t-1]) * gamma * prevret
+        print("reward at nstep", t, first[t-1])
     return ret
 
 
