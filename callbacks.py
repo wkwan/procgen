@@ -159,12 +159,16 @@ def backward_discounted_sum(
     first: "(th.Tensor[1, bool]) mark beginning of episodes",
     gamma: "(float)",
 ):
-    # first = first.to(dtype=th.float32)
-    # assert first.dim() == 2
-    nstep = len(reward)
-    ret = np.zeros(nstep)
+    first = first.to(dtype=th.float32)
+    print("backward discounted", first.shape, first)
+    assert first.dim() == 2
+    _nenv, nstep = reward.shape
+    ret = th.zeros_like(reward)
+    print("reward init", reward.shape, first.shape)
     for t in range(nstep):
-        prevret = ret[t] = reward[t] + gamma * prevret
+        
+        prevret = ret[:, t] = reward[:, t] + (1 - first[:, t]) * gamma * prevret
+        print("reward at nstep", t, first[:, t])
     return ret
 
 

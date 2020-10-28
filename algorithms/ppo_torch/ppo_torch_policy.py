@@ -198,7 +198,6 @@ class ValueNetworkMixin:
         if config["use_gae"]:
 
             def value(ob, prev_action, prev_reward, *state):
-                print("make model for rewards", prev_reward.shape, prev_reward)
                 model_out, _ = self.model({
                     SampleBatch.CUR_OBS: self._convert_to_tensor([ob]),
                     SampleBatch.PREV_ACTIONS: self._convert_to_tensor(
