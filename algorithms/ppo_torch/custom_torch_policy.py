@@ -191,7 +191,7 @@ class TorchPolicy(Policy):
                                 state_batches=None,
                                 prev_action_batch=None,
                                 prev_reward_batch=None):
-        # print("COMPUTE LOG LIKELIHOODS")
+        print("COMPUTE LOG LIKELIHOODS")
 
         if self.action_sampler_fn and self.action_distribution_fn is None:
             raise ValueError("Cannot compute log-prob/likelihood w/o an "
@@ -206,6 +206,7 @@ class TorchPolicy(Policy):
             if prev_action_batch is not None:
                 input_dict[SampleBatch.PREV_ACTIONS] = prev_action_batch
             if prev_reward_batch is not None:
+                print("set prev reward batch")
                 input_dict[SampleBatch.PREV_REWARDS] = prev_reward_batch
             seq_lens = torch.ones(len(obs_batch), dtype=torch.int32)
 
