@@ -355,7 +355,7 @@ class TorchPolicy(Policy):
             pi_loss = loss_out[i]
             print("train on pi loss", pi_loss)
             self.backprop(grad_info, opt, pi_loss, False)
-            tu.sync_grads(list(self.model.parameters()))
+            tu.sync_grads(self.model.parameters())
             opt.step()
 
         loss_out = force_list(
@@ -366,7 +366,7 @@ class TorchPolicy(Policy):
             vf_loss = loss_out[i]
             print("train on vf loss", vf_loss)
             self.backprop(grad_info, opt, vf_loss, False)
-            tu.sync_grads(list(self.model.parameters()))
+            tu.sync_grads(self.model.parameters())
             opt.step()
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
