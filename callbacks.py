@@ -285,6 +285,7 @@ class CustomCallbacks(DefaultCallbacks):
             kwargs: Forward compatibility placeholder.
         """
         print("on sample end", samples[SampleBatch.PREV_REWARDS].shape, samples[SampleBatch.DONES].shape)
+        samples[SampleBatch.PREV_REWARDS] = self.reward_normalizer(samples[SampleBatch.PREV_REWARDS], samples[SampleBatch.DONES])
 
     def on_train_result(self, trainer, result: dict, **kwargs):
         """Called at the end of Trainable.train().
