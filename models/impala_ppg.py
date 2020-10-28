@@ -28,6 +28,9 @@ import time
 import random
 import multiprocessing as mp
 
+def default_device_type():
+    return "cuda" if have_cuda() else "cpu"
+
 DEFAULT_DEVICE = th.device(type=default_device_type())
 def dev():
     return DEFAULT_DEVICE
@@ -37,8 +40,7 @@ def have_cuda():
         th.has_cuda and th.cuda.is_available() and not os.getenv("RCALL_NUM_GPU") == "0"
     )
 
-def default_device_type():
-    return "cuda" if have_cuda() else "cpu"
+
 
 def ftensor(*args, **kwargs):
     return th.tensor(*args, **kwargs, device=dev(), dtype=th.float32)
