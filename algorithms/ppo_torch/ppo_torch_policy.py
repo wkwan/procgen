@@ -155,7 +155,7 @@ class PPOLoss:
             self.loss = -entropy_coeff * self.mean_entropy + self.mean_policy_loss
         else:
             self.loss = self.mean_vf_loss
-            self.loss.requires_grad = True
+            # self.loss.requires_grad = True
         # self.loss = torch.stack((-entropy_coeff * self.mean_entropy + self.mean_policy_loss, self.mean_vf_loss))
         # print("mean policy loss and vf loss", self.loss)
 
@@ -207,14 +207,14 @@ def kl_and_loss_stats(policy, train_batch):
         # "cur_kl_coeff": policy.kl_coeff,
         # "cur_lr": policy.cur_lr,
         # "total_loss": policy.loss_obj.loss,
-        "policy_loss": policy.loss_obj.mean_policy_loss,
-        "vf_loss": policy.loss_obj.mean_vf_loss,
+        # "policy_loss": policy.loss_obj.mean_policy_loss,
+        # "vf_loss": policy.loss_obj.mean_vf_loss,
         # "vf_explained_var": explained_variance(
         #     train_batch[Postprocessing.VALUE_TARGETS],
         #     policy.model.value_function(),
         #     framework="torch"),
         # "kl": policy.loss_obj.mean_kl,
-        "entropy": policy.loss_obj.mean_entropy,
+        # "entropy": policy.loss_obj.mean_entropy,
         # "entropy_coeff": policy.entropy_coeff,
     }
 
