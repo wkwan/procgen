@@ -268,8 +268,8 @@ class CustomCallbacks(DefaultCallbacks):
                 trajectory data. You should not mutate this object.
             kwargs: Forward compatibility placeholder.
         """
-        print("postprocess trajectory", postprocessed_batch[SampleBatch.DONES])
-        postprocessed_batch[SampleBatch.PREV_REWARDS] = self.reward_normalizer(postprocessed_batch[SampleBatch.PREV_REWARDS], postprocessed_batch[SampleBatch.DONES])
+        # print("postprocess trajectory", postprocessed_batch[SampleBatch.DONES])
+        # postprocessed_batch[SampleBatch.PREV_REWARDS] = self.reward_normalizer(postprocessed_batch[SampleBatch.PREV_REWARDS], postprocessed_batch[SampleBatch.DONES])
 
     def on_sample_end(self, worker: RolloutWorker, samples: SampleBatch,
                       **kwargs):
@@ -280,7 +280,7 @@ class CustomCallbacks(DefaultCallbacks):
                 object to modify the samples generated.
             kwargs: Forward compatibility placeholder.
         """
-        pass
+        print("on sample end", samples[SampleBatch.PREV_REWARDS].shape, samples[SampleBatch.DONES].shape)
 
     def on_train_result(self, trainer, result: dict, **kwargs):
         """Called at the end of Trainable.train().
