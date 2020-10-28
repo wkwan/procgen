@@ -154,6 +154,7 @@ def build_torch_policy(name,
                     convert_to_non_torch_type(sample_batch),
                     convert_to_non_torch_type(other_agent_batches), episode)
                 if postprocess_fn:
+                    print("do post process with no grad")
                     return postprocess_fn(self, sample_batch,
                                           other_agent_batches, episode)
 
