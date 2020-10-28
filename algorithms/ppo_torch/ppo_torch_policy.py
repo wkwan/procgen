@@ -221,6 +221,7 @@ def kl_and_loss_stats(policy, train_batch):
 
 def vf_preds_fetches(policy, input_dict, state_batches, model, action_dist):
     """Adds value function outputs to experience train_batches."""
+    print("set vf preds", policy.model.value_function())
     return {
         SampleBatch.VF_PREDS: policy.model.value_function(),
     }
