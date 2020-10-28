@@ -240,7 +240,7 @@ class Policy(metaclass=ABCMeta):
         return sample_batch
 
     @DeveloperAPI
-    def learn_on_batch(self, samples):
+    def learn_on_batch(self, samples, extra):
         """Fused compute gradients and apply gradients call.
 
         Either this or the combination of compute/apply grads must be
@@ -253,7 +253,7 @@ class Policy(metaclass=ABCMeta):
             >>> batch = ev.sample()
             >>> ev.learn_on_batch(samples)
         """
-
+        print("custom policy extra", extra)
         grads, grad_info = self.compute_gradients(samples)
         self.apply_gradients(grads)
         return grad_info
