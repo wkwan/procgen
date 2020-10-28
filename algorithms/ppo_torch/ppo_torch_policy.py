@@ -2,9 +2,7 @@ import logging
 
 import ray
 from ray.rllib.agents.a3c.a3c_torch_policy import apply_grad_clipping
-from ray.rllib.agents.ppo.ppo_tf_policy import postprocess_ppo_gae, \
-    setup_config
-from .custom_postprocessing import Postprocessing
+from .custom_postprocessing import Postprocessing, compute_advantages
 from ray.rllib.policy.sample_batch import SampleBatch
 from .custom_torch_policy import EntropyCoeffSchedule, \
     LearningRateSchedule
@@ -16,6 +14,36 @@ from ray.rllib.utils import try_import_torch
 torch, nn = try_import_torch()
 
 logger = logging.getLogger(__name__)
+
+def setup_config(policy, obs_space, action_space, config):
+    # auto set the model option for layer sharing
+    config["model"]["vf_share_layers"] = config["vf_share_layers"]
+
+
+def postprocess_ppo_gae(policy,
+                        sample_batch,
+                        other_agent_batches=None,
+                        episode=None):
+    """Adds the policy logits, VF preds, and advantages to the trajectory."""
+
+    completed = sample_batch["dones"][-1]
+    if completed:
+        last_r = 0.0
+    else:
+        next_state = []
+        for i in range(policy.num_state_tensors()):
+            next_state.append([sample_batch["state_out_{}".format(i)][-1]])
+        last_r = policy._value(sample_batch[SampleBatch.NEXT_OBS][-1],
+                               sample_batch[SampleBatch.ACTIONS][-1],
+                               sample_batch[SampleBatch.REWARDS][-1],
+                               *next_state)
+    batch = compute_advantages(
+        sample_batch,
+        last_r,
+        policy.config["gamma"],
+        policy.config["lambda"],
+        use_gae=policy.config["use_gae"])
+    return batch
 
 
 class PPOLoss:
