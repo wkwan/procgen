@@ -140,8 +140,8 @@ class RewardNormalizer:
         rets = backward_discounted_sum(
             prevret=self.ret, reward=reward, first=first, gamma=self.gamma
         )
-        self.ret = rets[:, -1]
-        self.ret_rms.update(rets if self.per_env else rets.reshape(-1))
+        # self.ret = rets[:, -1]
+        self.ret_rms.update(rets)
         print("ret rms", self.ret_rms)
         return self.transform(reward)
 
@@ -170,7 +170,7 @@ def backward_discounted_sum(
     prevret = ret[0] = reward[0]
     for t in range(1, nstep):
         prevret = ret[t] = reward[t] + (1 - first[t-1]) * gamma * prevret
-        print("reward at nstep", t, first[t-1])
+        # print("reward at nstep", t, first[t-1])
     return ret
 
 
