@@ -143,9 +143,9 @@ class PPOLoss:
             #                          entropy_coeff * curr_entropy)
 
         # self.loss = torch.stack((self.mean_policy_loss, self.mean_vf_loss))
-        print("negent", -entropy_coeff * self.mean_entropy)
-        print("mean pl", self.mean_policy_loss)
-        print("mean vl", self.mean_vf_loss)
+        # print("negent", -entropy_coeff * self.mean_entropy)
+        # print("mean pl", self.mean_policy_loss)
+        # print("mean vl", self.mean_vf_loss)
 
         if is_policy_loss:
             self.loss = -entropy_coeff * self.mean_entropy + self.mean_policy_loss
@@ -160,7 +160,7 @@ class PPOLoss:
 
 def ppo_surrogate_loss(policy, model, dist_class, train_batch, is_policy_loss):
 
-    print("PPO SURROGATE LOSS EXTRA is policy loss", is_policy_loss)
+    # print("PPO SURROGATE LOSS EXTRA is policy loss", is_policy_loss)
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
     # print("action dist in surrogate loss fn", action_dist)
