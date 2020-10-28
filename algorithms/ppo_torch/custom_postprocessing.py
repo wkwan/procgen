@@ -159,7 +159,7 @@ def backward_discounted_sum(
     # print("reward init", reward.shape, first.shape)
     prevret = ret[0] = reward[0]
     for t in range(1, nstep):
-        prevret = ret[t] = reward[t] * gamma * prevret
+        prevret = ret[t] = reward[t] + gamma * prevret
         # print("reward at nstep", t, first[t-1])
     return ret
 
