@@ -169,7 +169,6 @@ class ImpalaCNN(TorchModelV2, nn.Module):
 
     @override(TorchModelV2)
     def value_function(self):
-        print("call value function", self._value)
         assert self._value is not None, "must call forward() first"
         return self._value
 
