@@ -289,23 +289,16 @@ class TorchPolicy(Policy):
         # Loop through all optimizers.
         grad_info = {"allreduce_latency": 0.0}
         for i, opt in enumerate(self._optimizers):
-            # Erase gradients in all vars of this optimizer.
             opt.zero_grad()
-            # Recompute gradients of loss over all variables.
-
-            # print("LOSS OUT learn on batch", loss_out[i].shape, loss_out[i].type)
 
             pi_loss = loss_out[i][0]
-            vf_loss = loss_out[i][1]
-
-            # print("before pi loss backprop")
             self.backprop(grad_info, opt, pi_loss, True)
+            opt.step()
 
-            # for j in range(9):
-                # print("before vf loss backprop", j)
+            vf_loss = loss_out[i][1]
+            opt.zero_grad()
+
             self.backprop(grad_info, opt, vf_loss, False)
-
-            # Step the optimizer.
             opt.step()
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
