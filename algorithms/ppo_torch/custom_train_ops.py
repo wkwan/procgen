@@ -6,7 +6,7 @@ from typing import List
 
 import ray
 from ray.rllib.evaluation.metrics import get_learner_stats, LEARNER_STATS_KEY
-from ray.rllib.evaluation.worker_set import WorkerSet
+from .custom_worker_set import WorkerSet
 from ray.rllib.execution.common import SampleBatchType, \
     STEPS_SAMPLED_COUNTER, STEPS_TRAINED_COUNTER, LEARNER_INFO, \
     APPLY_GRADS_TIMER, COMPUTE_GRADS_TIMER, WORKER_UPDATE_TIMER, \
