@@ -160,12 +160,12 @@ def backward_discounted_sum(
     first: "(th.Tensor[1, bool]) mark beginning of episodes",
     gamma: "(float)",
 ):
-    first = first.astype(float)
+
+    first = first.to(dtype=th.float32)
     # print("backward discounted", reward.shape, first.shape, first)
     # assert first.dim() == 2
     nstep = reward.shape[0]
-    # ret = th.zeros_like(reward)
-    ret = np.zeros(nstep)
+    ret = th.zeros_like(reward)
     # print("reward init", reward.shape, first.shape)
     prevret = ret[0] = reward[0]
     for t in range(1, nstep):
@@ -287,7 +287,7 @@ class CustomCallbacks(DefaultCallbacks):
             kwargs: Forward compatibility placeholder.
         """
         print("on sample end", samples[SampleBatch.PREV_REWARDS].shape, samples[SampleBatch.DONES].shape)
-        samples[SampleBatch.PREV_REWARDS] = self.reward_normalizer(samples[SampleBatch.PREV_REWARDS], samples[SampleBatch.DONES])
+        samples[SampleBatch.PREV_REWARDS] = self.reward_normalizer(torch.from_numpy(samples[SampleBatch.PREV_REWARDS]), torch.from_numpy(samples[SampleBatch.DONES])).numpy()
 
     def on_train_result(self, trainer, result: dict, **kwargs):
         """Called at the end of Trainable.train().
