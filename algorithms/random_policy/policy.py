@@ -47,7 +47,7 @@ class RandomPolicy(Policy):
             action_batch.append(self.action_space.sample())
         return action_batch, rnn_states, info
 
-    def learn_on_batch(self, samples):
+    def learn_on_batch(self, samples, extra):
         """Fused compute gradients and apply gradients call.
 
         Either this or the combination of compute/apply grads must be
@@ -62,6 +62,7 @@ class RandomPolicy(Policy):
         Reference: https://github.com/ray-project/ray/blob/master/rllib/policy/policy.py#L279-L316
         """
         # implement your learning code here
+        print("policy learn on batch", extra)
         return {}
 
     def get_weights(self):
