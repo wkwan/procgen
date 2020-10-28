@@ -163,7 +163,7 @@ def backward_discounted_sum(
     first = first.astype(float)
     # print("backward discounted", reward.shape, first.shape, first)
     # assert first.dim() == 2
-    nstep = reward.shape
+    nstep = reward.shape[0]
     # ret = th.zeros_like(reward)
     ret = np.zeros(nstep)
     # print("reward init", reward.shape, first.shape)
