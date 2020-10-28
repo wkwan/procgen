@@ -116,7 +116,6 @@ class TorchPolicy(Policy):
 
         explore = explore if explore is not None else self.config["explore"]
         timestep = timestep if timestep is not None else self.global_timestep
-        print("compute actions")
         # with torch.no_grad():
         seq_lens = torch.ones(len(obs_batch), dtype=torch.int32)
         input_dict = self._lazy_tensor_dict({

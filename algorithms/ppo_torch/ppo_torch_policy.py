@@ -178,6 +178,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, is_policy_loss):
         mask = sequence_mask(train_batch["seq_lens"], max_seq_len)
         mask = torch.reshape(mask, [-1])
 
+    print("before constructing ppo loss vf preds", train_batch[SampleBatch.VF_PREDS])
     policy.loss_obj = PPOLoss(
         is_policy_loss,
         dist_class,
