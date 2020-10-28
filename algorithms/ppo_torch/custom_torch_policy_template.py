@@ -181,19 +181,19 @@ def build_torch_policy(name,
         @override(TorchPolicy)
         def extra_action_out(self, input_dict, state_batches, model,
                              action_dist):
-            print("call this extra action out with no grad")
+            print("call this extra action out with grad")
             
-            with torch.no_grad():
-                if extra_action_out_fn:
+            # with torch.no_grad():
+            if extra_action_out_fn:
 
-                    # print("inside extra action out")
+                # print("inside extra action out")
 
-                    stats_dict = extra_action_out_fn(
-                        self, input_dict, state_batches, model, action_dist)
-                else:
-                    stats_dict = TorchPolicy.extra_action_out(
-                        self, input_dict, state_batches, model, action_dist)
-                return convert_to_non_torch_type(stats_dict)
+                stats_dict = extra_action_out_fn(
+                    self, input_dict, state_batches, model, action_dist)
+            else:
+                stats_dict = TorchPolicy.extra_action_out(
+                    self, input_dict, state_batches, model, action_dist)
+            return convert_to_non_torch_type(stats_dict)
 
         @override(TorchPolicy)
         def optimizer(self):
