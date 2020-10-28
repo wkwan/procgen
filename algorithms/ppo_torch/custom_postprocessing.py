@@ -50,11 +50,13 @@ def compute_advantages(rollout,
         "Can't use gae without using a value function"
 
     if use_gae:
+        print("use the gae")
         vpred_t = np.concatenate(
             [rollout[SampleBatch.VF_PREDS],
              np.array([last_r])])
         delta_t = (
             traj[SampleBatch.REWARDS] + gamma * vpred_t[1:] - vpred_t[:-1])
+        print("delta t", traj[SampleBatch.REWARDS].shape, delta_t.shape, traj[SampleBatch.REWARDS], delta_t)
         # This formula for the advantage comes from:
         # "Generalized Advantage Estimation": https://arxiv.org/abs/1506.02438
         traj[Postprocessing.ADVANTAGES] = discount(delta_t, gamma * lambda_)
@@ -67,7 +69,7 @@ def compute_advantages(rollout,
              np.array([last_r])])
         discounted_returns = discount(rewards_plus_v,
                                       gamma)[:-1].copy().astype(np.float32)
-        print("custom post processing", discounted_returns)
+        # print("custom post processing", discounted_returns)
 
         if use_critic:
             traj[Postprocessing.
