@@ -19,7 +19,7 @@ from ray.rllib.env.external_multi_agent_env import ExternalMultiAgentEnv
 from ray.rllib.env.vector_env import VectorEnv
 from ray.rllib.evaluation.sampler import AsyncSampler, SyncSampler
 from ray.rllib.policy.sample_batch import MultiAgentBatch, DEFAULT_POLICY_ID
-from ray.rllib.policy.policy import Policy
+from .custom_policy import Policy
 from ray.rllib.policy.tf_policy import TFPolicy
 from ray.rllib.policy.torch_policy import TorchPolicy
 from ray.rllib.offline import NoopOutput, IOContext, OutputWriter, InputReader
