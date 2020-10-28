@@ -353,7 +353,7 @@ class TorchPolicy(Policy):
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
             pi_loss = loss_out[i]
-            self.backprop(grad_info, opt, pi_loss, True)
+            self.backprop(grad_info, opt, pi_loss, False)
             tu.sync_grads(list(self.model.parameters()))
             opt.step()
 
