@@ -14,6 +14,8 @@ from ray.rllib.utils.tracking_dict import UsageTrackingDict
 
 from .custom_postprocessing import Postprocessing
 
+from . import torch_util as tu
+
 
 torch, _ = try_import_torch()
 
@@ -290,15 +292,15 @@ class TorchPolicy(Policy):
         grad_info = {"allreduce_latency": 0.0}
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
-
             pi_loss = loss_out[i][0]
             self.backprop(grad_info, opt, pi_loss, True)
+            tu.sync_grads(self.model.params)
             opt.step()
 
-            vf_loss = loss_out[i][1]
             opt.zero_grad()
-
+            vf_loss = loss_out[i][1]
             self.backprop(grad_info, opt, vf_loss, False)
+            tu.sync_grads(self.model.params)
             opt.step()
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
@@ -319,6 +321,7 @@ class TorchPolicy(Policy):
             opt.zero_grad()
             print("LOSS IS", loss_out[i])
             loss_out[i].backward()
+
             grad_process_info = self.extra_grad_process(opt, loss_out[i])
 
             # Note that return values are just references;
