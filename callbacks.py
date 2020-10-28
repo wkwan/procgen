@@ -185,7 +185,7 @@ class CustomCallbacks(DefaultCallbacks):
 
     def __init__(self, *args, **kwargs):
         super(CustomCallbacks, self).__init__(*args, **kwargs)
-        self.reward_normalizer = RewardNormalizer()
+        self.reward_normalizer = RewardNormalizer(1)
 
     def on_episode_start(self, worker: RolloutWorker, base_env: BaseEnv,
                          policies: Dict[str, Policy],
