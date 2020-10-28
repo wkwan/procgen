@@ -148,6 +148,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         print("value before squeeze", value)
         self._value = value.squeeze(1)
         print("value after squeeze", self._value)
+        print("logits", logits)
         return logits, state
 
     def forward_aux(self, input_dict):
