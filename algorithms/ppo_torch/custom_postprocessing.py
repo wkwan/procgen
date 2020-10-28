@@ -218,8 +218,8 @@ def compute_advantages(rollout,
     if use_gae:
 
         print("before normalizer", traj[SampleBatch.REWARDS], traj[SampleBatch.DONES])
-        traj[SampleBatch.REWARDS] = self.reward_normalizer(th.from_numpy(traj[SampleBatch.REWARDS]), th.from_numpy(traj[SampleBatch.DONES])).numpy()
-        print("after normalizer", traj[SampleBatch.REWARDS])
+        # traj[SampleBatch.REWARDS] = reward_normalizer(th.from_numpy(traj[SampleBatch.REWARDS]), th.from_numpy(traj[SampleBatch.DONES])).numpy()
+        # print("after normalizer", traj[SampleBatch.REWARDS])
 
         vpred_t = np.concatenate(
             [rollout[SampleBatch.VF_PREDS],
