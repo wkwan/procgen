@@ -38,6 +38,7 @@ def compute_advantages(rollout,
         SampleBatch (SampleBatch): Object with experience from rollout and
             processed rewards.
     """
+    print("compute advantages")
 
     traj = {}
     trajsize = len(rollout[SampleBatch.ACTIONS])
