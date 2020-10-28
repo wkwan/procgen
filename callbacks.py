@@ -138,10 +138,11 @@ class RewardNormalizer:
 
     def __call__(self, reward, first):
         rets = backward_discounted_sum(
-            prevret=self.ret, reward=reward, first=first, gamma=self.gamma
+            prevret=self.ret, reward=reward.cpu(), first=first.cpu(), gamma=self.gamma
         )
         self.ret = rets[:, -1]
         self.ret_rms.update(rets if self.per_env else rets.reshape(-1))
+        print("ret rms", self.ret_rms)
         return self.transform(reward)
 
     def transform(self, reward):
@@ -159,7 +160,7 @@ def backward_discounted_sum(
     first: "(th.Tensor[1, bool]) mark beginning of episodes",
     gamma: "(float)",
 ):
-    # first = first.to(dtype=th.float32)
+    first = first.to(dtype=th.float32)
     print("backward discounted", first.shape, first)
     assert first.dim() == 2
     _nenv, nstep = reward.shape
