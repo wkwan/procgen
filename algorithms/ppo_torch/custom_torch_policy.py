@@ -1,7 +1,7 @@
 import numpy as np
 import time
 
-from .custom_policy import Policy, LEARNER_STATS_KEY
+from ray.rllib.policy.policy import Policy, LEARNER_STATS_KEY
 from ray.rllib.policy.sample_batch import SampleBatch
 from ray.rllib.policy.rnn_sequencing import pad_batch_to_sequences_of_same_size
 from ray.rllib.utils import force_list
