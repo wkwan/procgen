@@ -142,7 +142,6 @@ class RewardNormalizer:
         )
         # self.ret = rets[:, -1]
         self.ret_rms.update(rets)
-        print("ret rms", self.ret_rms)
         return self.transform(reward)
 
     def transform(self, reward):
@@ -285,8 +284,9 @@ class CustomCallbacks(DefaultCallbacks):
                 object to modify the samples generated.
             kwargs: Forward compatibility placeholder.
         """
-        print("on sample end", samples[SampleBatch.PREV_REWARDS].shape, samples[SampleBatch.DONES].shape)
+        print("on sample end", samples[SampleBatch.PREV_REWARDS])
         samples[SampleBatch.PREV_REWARDS] = self.reward_normalizer(th.from_numpy(samples[SampleBatch.PREV_REWARDS]), th.from_numpy(samples[SampleBatch.DONES])).numpy()
+        print("on sample end normalized", samples[SampleBatch.PREV_REWARDS])
 
     def on_train_result(self, trainer, result: dict, **kwargs):
         """Called at the end of Trainable.train().
