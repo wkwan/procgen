@@ -207,7 +207,6 @@ class TorchPolicy(Policy):
             if prev_action_batch is not None:
                 input_dict[SampleBatch.PREV_ACTIONS] = prev_action_batch
             if prev_reward_batch is not None:
-                print("set prev reward batch")
                 input_dict[SampleBatch.PREV_REWARDS] = prev_reward_batch
             seq_lens = torch.ones(len(obs_batch), dtype=torch.int32)
 
@@ -237,7 +236,6 @@ class TorchPolicy(Policy):
         grad_info.update(self.extra_grad_process(opt, loss))
 
         if self.distributed_world_size:
-            print("do the distributed world size")
             grads = []
             for param_group in opt.param_groups:
                 for p in param_group["params"]:
