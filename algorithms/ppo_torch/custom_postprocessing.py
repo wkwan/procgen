@@ -130,7 +130,7 @@ class RewardNormalizer:
         self.epsilon = epsilon
         self.per_env = per_env
 
-    def __call__(self, reward, done):
+    def __call__(self, reward):
         rets = backward_discounted_sum(
             reward=reward, gamma=self.gamma
         )
