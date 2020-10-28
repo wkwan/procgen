@@ -144,8 +144,10 @@ class PPOLoss:
 
         # self.loss = torch.stack((self.mean_policy_loss, self.mean_vf_loss))
         # print("negent", -entropy_coeff * self.mean_entropy)
-        # print("mean pl", self.mean_policy_loss)
-        # print("mean vl", self.mean_vf_loss)
+        print("mean pl", self.mean_policy_loss)
+        print("mean vl", self.mean_vf_loss)
+        print("vf preds", vf_preds)
+        print("value targets", value_targets)
 
         if is_policy_loss:
             self.loss = -entropy_coeff * self.mean_entropy + self.mean_policy_loss
