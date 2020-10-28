@@ -141,14 +141,14 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         x = self.hidden_fc(x)
         x = nn.functional.relu(x)
         logits = self.logits_fc(x)
-        print("x before detach", x)
+        # print("x before detach", x)
         x.detach() #detach during policy phase only
-        print("x after de'tach", x)
+        # print("x after detach", x)
         value = self.value_fc(x)
-        print("value before squeeze", value)
+        # print("value before squeeze", value)
         self._value = value.squeeze(1)
-        print("value after squeeze", self._value)
-        print("logits", logits)
+        # print("value after squeeze", self._value)
+        # print("logits", logits)
         return logits, state
 
     def forward_aux(self, input_dict):
