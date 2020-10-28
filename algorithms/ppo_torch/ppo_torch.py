@@ -80,39 +80,39 @@ DEFAULT_CONFIG = with_common_config({
 
 
 def warn_about_bad_reward_scales(config, result):
-    if result["policy_reward_mean"]:
-        return result  # Punt on handling multiagent case.
+    # if result["policy_reward_mean"]:
+    #     return result  # Punt on handling multiagent case.
 
-    # Warn about excessively high VF loss.
-    learner_stats = result["info"]["learner"]
-    if "default_policy" in learner_stats:
-        scaled_vf_loss = (config["vf_loss_coeff"] *
-                          learner_stats["default_policy"]["vf_loss"])
-        policy_loss = learner_stats["default_policy"]["policy_loss"]
-        if config["vf_share_layers"] and scaled_vf_loss > 100:
-            logger.warning(
-                "The magnitude of your value function loss is extremely large "
-                "({}) compared to the policy loss ({}). This can prevent the "
-                "policy from learning. Consider scaling down the VF loss by "
-                "reducing vf_loss_coeff, or disabling vf_share_layers.".format(
-                    scaled_vf_loss, policy_loss))
+    # # Warn about excessively high VF loss.
+    # learner_stats = result["info"]["learner"]
+    # if "default_policy" in learner_stats:
+    #     scaled_vf_loss = (config["vf_loss_coeff"] *
+    #                       learner_stats["default_policy"]["vf_loss"])
+    #     policy_loss = learner_stats["default_policy"]["policy_loss"]
+    #     if config["vf_share_layers"] and scaled_vf_loss > 100:
+    #         logger.warning(
+    #             "The magnitude of your value function loss is extremely large "
+    #             "({}) compared to the policy loss ({}). This can prevent the "
+    #             "policy from learning. Consider scaling down the VF loss by "
+    #             "reducing vf_loss_coeff, or disabling vf_share_layers.".format(
+    #                 scaled_vf_loss, policy_loss))
 
-    # Warn about bad clipping configs
-    if config["vf_clip_param"] <= 0:
-        rew_scale = float("inf")
-        # print("do inf reward scale")
-    else:
-        rew_scale = round(
-            abs(result["episode_reward_mean"]) / config["vf_clip_param"], 0)
-        # print("after simple reward scale", rew_scale)
-    if rew_scale > 200:
-        logger.warning(
-            "The magnitude of your environment rewards are more than "
-            "{}x the scale of `vf_clip_param`. ".format(rew_scale) +
-            "This means that it will take more than "
-            "{} iterations for your value ".format(rew_scale) +
-            "function to converge. If this is not intended, consider "
-            "increasing `vf_clip_param`.")
+    # # Warn about bad clipping configs
+    # if config["vf_clip_param"] <= 0:
+    #     rew_scale = float("inf")
+    #     # print("do inf reward scale")
+    # else:
+    #     rew_scale = round(
+    #         abs(result["episode_reward_mean"]) / config["vf_clip_param"], 0)
+    #     # print("after simple reward scale", rew_scale)
+    # if rew_scale > 200:
+    #     logger.warning(
+    #         "The magnitude of your environment rewards are more than "
+    #         "{}x the scale of `vf_clip_param`. ".format(rew_scale) +
+    #         "This means that it will take more than "
+    #         "{} iterations for your value ".format(rew_scale) +
+    #         "function to converge. If this is not intended, consider "
+    #         "increasing `vf_clip_param`.")
 
     return result
 
