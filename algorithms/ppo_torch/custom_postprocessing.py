@@ -90,6 +90,8 @@ class RunningMeanStd(nn.Module):
             unflatten_to(flat, [batch_mean, batch_var, batch_count])
             batch_count *= dist.get_world_size()
         self.update_from_moments(batch_mean, batch_var, batch_count[0])
+        print("update rms", batch_mean, batch_var, batch_count, self.mean, self.var, self.count)
+
 
     def update_from_moments(self, batch_mean, batch_var, batch_count):
         # pylint: disable=attribute-defined-outside-init
