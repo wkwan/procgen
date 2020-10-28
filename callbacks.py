@@ -138,7 +138,7 @@ class RewardNormalizer:
 
     def __call__(self, reward, first):
         rets = backward_discounted_sum(
-            prevret=self.ret, reward=reward.cpu(), first=first.cpu(), gamma=self.gamma
+            prevret=self.ret, reward=reward, first=first, gamma=self.gamma
         )
         self.ret = rets[:, -1]
         self.ret_rms.update(rets if self.per_env else rets.reshape(-1))
