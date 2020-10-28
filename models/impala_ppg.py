@@ -28,6 +28,10 @@ import time
 import random
 import multiprocessing as mp
 
+DEFAULT_DEVICE = th.device(type=default_device_type())
+def dev():
+    return DEFAULT_DEVICE
+
 def have_cuda():
     return (
         th.has_cuda and th.cuda.is_available() and not os.getenv("RCALL_NUM_GPU") == "0"

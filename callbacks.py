@@ -10,6 +10,8 @@ from ray.rllib.agents.callbacks import DefaultCallbacks
 
 import numpy as np
 
+from .reward_normalizer import RewardNormalizer
+
 class CustomCallbacks(DefaultCallbacks):
     """
     Please refer to : 
@@ -22,6 +24,10 @@ class CustomCallbacks(DefaultCallbacks):
 
     These callbacks can be used for custom metrics and custom postprocessing.
     """
+
+    def __init__(self, *args, **kwargs):
+        super(CustomCallbacks, self).__init__(*args, **kwargs)
+        self.reward_normalizer = RewardNormalizer()
 
     def on_episode_start(self, worker: RolloutWorker, base_env: BaseEnv,
                          policies: Dict[str, Policy],
@@ -104,9 +110,8 @@ class CustomCallbacks(DefaultCallbacks):
                 trajectory data. You should not mutate this object.
             kwargs: Forward compatibility placeholder.
         """
-        print("postprocess trajectory", postprocessed_batch[SampleBatch.PREV_REWARDS].shape, postprocessed_batch[SampleBatch.DONES].shape)
-        
-        pass
+        print("postprocess trajectory", postprocessed_batch[SampleBatch.DONES])
+        postprocessed_batch[SampleBatch.PREV_REWARDS] = self.reward_normalizer(postprocessed_batch[SampleBatch.PREV_REWARDS], postprocessed_batch[SampleBatch.DONES])
 
     def on_sample_end(self, worker: RolloutWorker, samples: SampleBatch,
                       **kwargs):
