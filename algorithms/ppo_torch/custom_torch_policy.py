@@ -170,6 +170,7 @@ class TorchPolicy(Policy):
             input_dict[SampleBatch.ACTIONS] = actions
 
             # Add default and custom fetches.
+            print("extra action out")
             extra_fetches = self.extra_action_out(input_dict, state_batches,
                                                   self.model, action_dist)
 
