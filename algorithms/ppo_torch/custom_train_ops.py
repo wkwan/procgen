@@ -54,7 +54,6 @@ class TrainOneStep:
     def __call__(self,
                  batch: SampleBatchType) -> (SampleBatchType, List[dict]):
 
-        print("TRAIN ONE STEP")
         _check_sample_batch_type(batch)
         metrics = _get_shared_metrics()
         learn_timer = metrics.timers[LEARN_ON_BATCH_TIMER]
