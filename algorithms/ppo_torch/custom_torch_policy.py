@@ -344,7 +344,7 @@ class TorchPolicy(Policy):
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         
         loss_out = force_list(
-            self._loss(self, self.model, self.dist_class, train_batch, "HEYYYYY"))
+            self._loss(self, self.model, self.dist_class, train_batch, True))
         # assert len(loss_out) == len(self._optimizers)
         # assert not any(torch.isnan(l) for l in loss_out)
 
@@ -352,13 +352,17 @@ class TorchPolicy(Policy):
         grad_info = {"allreduce_latency": 0.0}
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
-            pi_loss = loss_out[i][0]
+            pi_loss = loss_out[i]
             self.backprop(grad_info, opt, pi_loss, True)
             tu.sync_grads(list(self.model.parameters()))
-            # opt.step()
+            opt.step()
 
+        loss_out = force_list(
+            self._loss(self, self.model, self.dist_class, train_batch, False))
+
+        for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
-            vf_loss = loss_out[i][1]
+            vf_loss = loss_out[i]
             self.backprop(grad_info, opt, vf_loss, False)
             tu.sync_grads(list(self.model.parameters()))
             opt.step()

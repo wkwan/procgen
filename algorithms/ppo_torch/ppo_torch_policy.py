@@ -50,6 +50,7 @@ def postprocess_ppo_gae(policy,
 
 class PPOLoss:
     def __init__(self,
+                 is_policy_loss,
                  dist_class,
                  model,
                  value_targets,
@@ -147,15 +148,20 @@ class PPOLoss:
         print("negent", -entropy_coeff * self.mean_entropy)
         print("mean pl", self.mean_policy_loss)
         print("mean vl", self.mean_vf_loss)
-        self.loss = torch.stack((-entropy_coeff * self.mean_entropy + self.mean_policy_loss, self.mean_vf_loss))
+
+        if is_policy_loss:
+            self.loss = -entropy_coeff * self.mean_entropy + self.mean_policy_loss
+        else:
+            self.loss = self.mean_vf_loss
+        # self.loss = torch.stack((-entropy_coeff * self.mean_entropy + self.mean_policy_loss, self.mean_vf_loss))
         # print("mean policy loss and vf loss", self.loss)
 
         # self.loss = loss
 
 
-def ppo_surrogate_loss(policy, model, dist_class, train_batch, extra):
+def ppo_surrogate_loss(policy, model, dist_class, train_batch, is_policy_loss):
 
-    print("PPO SURROGATE LOSS EXTRA", extra)
+    print("PPO SURROGATE LOSS EXTRA is policy loss", is_policy_loss)
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
     # print("action dist in surrogate loss fn", action_dist)
@@ -170,6 +176,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, extra):
         mask = torch.reshape(mask, [-1])
 
     policy.loss_obj = PPOLoss(
+        is_policy_loss,
         dist_class,
         model,
         train_batch[Postprocessing.VALUE_TARGETS],
