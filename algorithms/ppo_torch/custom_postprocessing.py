@@ -126,14 +126,13 @@ class RewardNormalizer:
         ret_rms_shape = (num_envs,) if per_env else ()
         self.ret_rms = RunningMeanStd(shape=ret_rms_shape)
         self.cliprew = cliprew
-        self.ret = th.zeros(num_envs)
         self.gamma = gamma
         self.epsilon = epsilon
         self.per_env = per_env
 
     def __call__(self, reward, done):
         rets = backward_discounted_sum(
-            prevret=self.ret, reward=reward, done=done, gamma=self.gamma
+            reward=reward, gamma=self.gamma
         )
         # self.ret = rets[:, -1]
         self.ret_rms.update(rets)
@@ -149,13 +148,10 @@ class RewardNormalizer:
 
 def backward_discounted_sum(
     *,
-    prevret: "(th.Tensor[1, float]) value predictions",
     reward: "(th.Tensor[1, float]) reward",
-    done: "(th.Tensor[1, bool]) mark beginning of episodes",
     gamma: "(float)",
 ):
 
-    done = done.to(dtype=th.float32)
     # print("backward discounted", reward.shape, first.shape, first)
     # assert first.dim() == 2
     nstep = reward.shape[0]
@@ -163,7 +159,7 @@ def backward_discounted_sum(
     # print("reward init", reward.shape, first.shape)
     prevret = ret[0] = reward[0]
     for t in range(1, nstep):
-        prevret = ret[t] = reward[t] + (1 - done[t-1]) * gamma * prevret
+        prevret = ret[t] = reward[t] * gamma * prevret
         # print("reward at nstep", t, first[t-1])
     return ret
 
@@ -219,8 +215,8 @@ def compute_advantages(rollout,
 
     if use_gae:
 
-        print("before normalizer", traj[SampleBatch.REWARDS], traj[SampleBatch.DONES])
-        traj[SampleBatch.REWARDS] = reward_normalizer(th.from_numpy(traj[SampleBatch.REWARDS]), th.from_numpy(traj[SampleBatch.DONES])).numpy()
+        print("before normalizer", traj[SampleBatch.REWARDS])
+        traj[SampleBatch.REWARDS] = reward_normalizer(th.from_numpy(traj[SampleBatch.REWARDS])).numpy()
         print("after normalizer", traj[SampleBatch.REWARDS])
 
         vpred_t = np.concatenate(
