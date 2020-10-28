@@ -81,7 +81,7 @@ class RunningMeanStd(nn.Module):
         self.register_buffer("mean", th.zeros(shape))
         self.register_buffer("var", th.ones(shape))
         self.register_buffer("count", th.tensor(epsilon))
-        self.distributed = distributed and tu.is_distributed()
+        self.distributed = distributed and is_distributed()
 
     def update(self, x):
         batch_mean = x.mean(dim=0)
