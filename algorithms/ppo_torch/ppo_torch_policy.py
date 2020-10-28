@@ -226,7 +226,6 @@ def vf_preds_fetches(policy, input_dict, state_batches, model, action_dist):
     fetches = {
         SampleBatch.VF_PREDS: policy.model.value_function(),
     }
-    fetches[SampleBatch.VF_PREDS].requires_grad = True
     print("set vf preds", fetches)
     return fetches
 
