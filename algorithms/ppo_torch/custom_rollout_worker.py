@@ -678,7 +678,7 @@ class RolloutWorker(ParallelIteratorWorker):
             return self.policy_map[DEFAULT_POLICY_ID].apply_gradients(grads)
 
     @DeveloperAPI
-    def learn_on_batch(self, samples, extra):
+    def learn_on_batch(self, samples):
         """Update policies based on the given batch.
 
         This is the equivalent to apply_gradients(compute_gradients(samples)),
@@ -691,7 +691,6 @@ class RolloutWorker(ParallelIteratorWorker):
             >>> batch = worker.sample()
             >>> worker.learn_on_batch(samples)
         """
-        print("custom rollout worker extra", extra)
         if log_once("learn_on_batch"):
             logger.info(
                 "Training on concatenated sample batches:\n\n{}\n".format(

@@ -331,11 +331,10 @@ class TorchPolicy(Policy):
     #     return {LEARNER_STATS_KEY: grad_info}
 
     @override(Policy)
-    def learn_on_batch(self, postprocessed_batch, extra):
+    def learn_on_batch(self, postprocessed_batch):
         # print("LEARN ON BATCH")
 
         # Get batch ready for RNNs, if applicable.
-        print("THE EXTRA", extra)
         pad_batch_to_sequences_of_same_size(
             postprocessed_batch,
             max_seq_len=self.max_seq_len,
