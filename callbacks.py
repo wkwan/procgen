@@ -30,6 +30,21 @@ def have_cuda():
         th.has_cuda and th.cuda.is_available() and not os.getenv("RCALL_NUM_GPU") == "0"
     )
 
+def is_distributed():
+    return dist.is_initialized()
+
+def dist_all_reduce(*args, **kwargs):
+    if not is_distributed():
+        return
+    dist.all_reduce(*args, **kwargs)
+
+
+def dist_get_world_size(group=dist.group.WORLD):
+    if not is_distributed():
+        return 1
+    return dist.get_world_size(group=group)
+
+
 def default_device_type():
     return "cuda" if have_cuda() else "cpu"
 
