@@ -104,7 +104,8 @@ class CustomCallbacks(DefaultCallbacks):
                 trajectory data. You should not mutate this object.
             kwargs: Forward compatibility placeholder.
         """
-        print("postprocess trajectory", postprocessed_batch[SampleBatch.PREV_REWARDS].shape, postprocessed_batch[SampleBatch.PREV_REWARDS])
+        print("postprocess trajectory", postprocessed_batch[SampleBatch.PREV_REWARDS].shape, postprocessed_batch[SampleBatch.DONES].shape)
+        
         pass
 
     def on_sample_end(self, worker: RolloutWorker, samples: SampleBatch,
