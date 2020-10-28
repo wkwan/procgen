@@ -37,7 +37,7 @@ def postprocess_ppo_gae(policy,
                                sample_batch[SampleBatch.ACTIONS][-1],
                                sample_batch[SampleBatch.REWARDS][-1],
                                *next_state)
-    print("post process ppo gae", sample_batch.shape)
+    print("post process ppo gae", sample_batch[SampleBatch.REWARDS].shape)
 
     batch = compute_advantages(
         sample_batch,
