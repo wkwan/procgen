@@ -161,10 +161,10 @@ def backward_discounted_sum(
 ):
     # first = first.to(dtype=th.float32)
     # assert first.dim() == 2
-    _nenv, nstep = reward.shape
+    nstep = len(reward)
     ret = th.zeros_like(reward)
     for t in range(nstep):
-        prevret = ret[:, t] = reward[:, t] + gamma * prevret
+        prevret = ret[t] = reward[t] + gamma * prevret
     return ret
 
 
