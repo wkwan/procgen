@@ -143,7 +143,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         logits = self.logits_fc(x)
         print("x before detach", x)
         x.detach() #detach during policy phase only
-        print("x after detach", x)
+        print("x after de'tach", x)
         value = self.value_fc(x)
         print("value before squeeze", value)
         self._value = value.squeeze(1)
@@ -169,6 +169,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
 
     @override(TorchModelV2)
     def value_function(self):
+        print("call value function", self._value)
         assert self._value is not None, "must call forward() first"
         return self._value
 
