@@ -270,11 +270,72 @@ class TorchPolicy(Policy):
             #do we need to sync grads here?
             opt.step()
 
+
+    # @override(Policy)
+    # def learn_on_batch(self, postprocessed_batch):
+    #     # Get batch ready for RNNs, if applicable.
+    #     pad_batch_to_sequences_of_same_size(
+    #         postprocessed_batch,
+    #         max_seq_len=self.max_seq_len,
+    #         shuffle=False,
+    #         batch_divisibility_req=self.batch_divisibility_req)
+
+    #     train_batch = self._lazy_tensor_dict(postprocessed_batch)
+    #     # loss_out = force_list(
+    #     #     self._loss(self, self.model, self.dist_class, train_batch))
+    #     loss_out = self._loss(self, self.model, self.dist_class, train_batch, self._lazy_tensor_dict)	
+    #     if loss_out is None:	
+    #         return	
+    #     loss_out = force_list(loss_out)	
+
+    #     assert len(loss_out) == len(self._optimizers)
+    #     # assert not any(torch.isnan(l) for l in loss_out)
+
+    #     # Loop through all optimizers.
+    #     grad_info = {"allreduce_latency": 0.0}
+    #     for i, opt in enumerate(self._optimizers):
+    #         # Erase gradients in all vars of this optimizer.
+    #         opt.zero_grad()
+    #         # Recompute gradients of loss over all variables.
+    #         loss_out[i].backward(retain_graph=(i < len(self._optimizers) - 1))
+    #         grad_info.update(self.extra_grad_process(opt, loss_out[i]))
+    #         if self.distributed_world_size:
+    #             grads = []
+    #             for param_group in opt.param_groups:
+    #                 for p in param_group["params"]:
+    #                     if p.grad is not None:
+    #                         grads.append(p.grad)
+
+    #             start = time.time()
+    #             if torch.cuda.is_available():
+    #                 # Sadly, allreduce_coalesced does not work with CUDA yet.
+    #                 for g in grads:
+    #                     torch.distributed.all_reduce(
+    #                         g, op=torch.distributed.ReduceOp.SUM)
+    #             else:
+    #                 torch.distributed.all_reduce_coalesced(
+    #                     grads, op=torch.distributed.ReduceOp.SUM)
+
+    #             for param_group in opt.param_groups:
+    #                 for p in param_group["params"]:
+    #                     if p.grad is not None:
+    #                         p.grad /= self.distributed_world_size
+
+    #             grad_info["allreduce_latency"] += time.time() - start
+
+    #         # Step the optimizer.
+    #         opt.step()
+
+    #     grad_info["allreduce_latency"] /= len(self._optimizers)
+    #     grad_info.update(self.extra_grad_info(train_batch))
+    #     return {LEARNER_STATS_KEY: grad_info}
+
     @override(Policy)
-    def learn_on_batch(self, postprocessed_batch):
+    def learn_on_batch(self, postprocessed_batch, extra):
         # print("LEARN ON BATCH")
 
         # Get batch ready for RNNs, if applicable.
+        print("THE EXTRA", extra)
         pad_batch_to_sequences_of_same_size(
             postprocessed_batch,
             max_seq_len=self.max_seq_len,

@@ -160,7 +160,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 batch_fetches = (local_worker.learn_on_batch(
                     MultiAgentBatch({
                         policy_id: minibatch
-                    }, minibatch.count)))[policy_id]
+                    }, minibatch.count), "blahblah"))[policy_id]
                 minibatch.data["vtarg"] = batch_fetches["vtarg"]
                 minibatch.data["oldpd"] = batch_fetches["oldpd"]
                 minibatch.data["dones"] = batch_fetches["dones"]
