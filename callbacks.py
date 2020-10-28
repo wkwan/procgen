@@ -162,7 +162,7 @@ def backward_discounted_sum(
     # first = first.to(dtype=th.float32)
     # assert first.dim() == 2
     nstep = len(reward)
-    ret = th.zeros_like(reward)
+    ret = np.zeros(nstep)
     for t in range(nstep):
         prevret = ret[t] = reward[t] + gamma * prevret
     return ret
