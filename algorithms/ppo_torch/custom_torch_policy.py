@@ -372,7 +372,7 @@ class TorchPolicy(Policy):
         print("COMPUTE GRADIENTS")
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
-            self._loss(self, self.model, self.dist_class, train_batch))
+            self._loss(self, self.model, self.dist_class, train_batch, "YOooo"))
         # assert len(loss_out) == len(self._optimizers)
 
         grad_process_info = {}

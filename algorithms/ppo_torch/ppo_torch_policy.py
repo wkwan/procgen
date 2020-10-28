@@ -153,7 +153,9 @@ class PPOLoss:
         # self.loss = loss
 
 
-def ppo_surrogate_loss(policy, model, dist_class, train_batch):
+def ppo_surrogate_loss(policy, model, dist_class, train_batch, extra):
+
+    print("PPO SURROGATE LOSS EXTRA", extra)
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
     # print("action dist in surrogate loss fn", action_dist)
