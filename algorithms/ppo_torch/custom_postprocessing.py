@@ -206,7 +206,7 @@ def compute_advantages(rollout,
 
     traj = {}
     trajsize = len(rollout[SampleBatch.ACTIONS])
-    print("len trajsize", len(trajsize))
+    print("trajsize", trajsize)
     # print("trajsize is", trajsize)
     for key in rollout:
         traj[key] = np.stack(rollout[key])
