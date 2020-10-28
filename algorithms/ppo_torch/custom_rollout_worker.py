@@ -716,7 +716,7 @@ class RolloutWorker(ParallelIteratorWorker):
         else:
             info_out = {
                 DEFAULT_POLICY_ID: self.policy_map[DEFAULT_POLICY_ID]
-                .learn_on_batch(samples)
+                .learn_on_batch(samples, extra)
             }
         if log_once("learn_out"):
             logger.debug("Training out:\n\n{}\n".format(summarize(info_out)))
