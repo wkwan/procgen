@@ -75,7 +75,7 @@ class RunningMeanStd(nn.Module):
         if self.distributed:
             # flatten+unflatten so we just need one allreduce
             flat = flatten_tensors([batch_mean, batch_var, batch_count])
-            flat = flat.to(device=DEFAULT_DEVICE  # Otherwise all_mean_ will fail
+            flat = flat.to(device=DEFAULT_DEVICE)  # Otherwise all_mean_ will fail
             all_mean_(flat)
             unflatten_to(flat, [batch_mean, batch_var, batch_count])
             batch_count *= dist.get_world_size()
