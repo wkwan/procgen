@@ -168,18 +168,18 @@ class UpdateKL:
 
 
 def execution_plan(workers, config):
-    print("workers", workers)
+    logger.warning("workers" + len(workers))
     rollouts = ParallelRollouts(workers, mode="bulk_sync")
-    print("rollouts parallel", rollouts)
+    logger.warning("rollouts parallel" + rollouts)
     # Collect large batches of relevant experiences & standardize.
     rollouts = rollouts.for_each(
         SelectExperiences(workers.trainable_policies()))
-    print("rollouts select", rollouts)
+    logger.warning("rollouts select" + rollouts)
     rollouts = rollouts.combine(
         ConcatBatches(min_batch_size=config["train_batch_size"]))
-    print("rollouts combine", rollouts)
+    logger.warning("rollouts combine" + rollouts)
     rollouts = rollouts.for_each(StandardizeFields(["advantages"]))
-    print("rollouts standardized", rollouts)
+    logger.warning("rollouts standardized" + rollouts)
 
     if config["simple_optimizer"]:
         train_op = rollouts.for_each(
