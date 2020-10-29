@@ -168,7 +168,7 @@ class UpdateKL:
 
 
 def execution_plan(workers, config):
-    logger.warning("workers" + len(workers))
+    logger.warning("workers" + workers)
     rollouts = ParallelRollouts(workers, mode="bulk_sync")
     logger.warning("rollouts parallel" + rollouts)
     # Collect large batches of relevant experiences & standardize.
