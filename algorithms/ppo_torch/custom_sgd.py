@@ -163,19 +163,23 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     }, minibatch.count)))[policy_id]
                 minibatch.data["vtarg"] = batch_fetches["vtarg"]
                 minibatch.data["oldpd"] = batch_fetches["oldpd"]
-                minibatch.data["dones"] = batch_fetches["dones"]
 
-                seg_buf.append(tree_map(lambda x: x, minibatch.data))
+                # seg_buf.append(minibatch.data)
+                seg_buf.append({
+                    "obs": minibatch.data["obs"],
+                    "vtarg": minibatch.data["vtarg"],
+                    "old": minibatch.data["oldpd"]
+                })
 
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
-            needed_keys = {"obs", "dones", "oldpd", "vtarg"}
+            # needed_keys = {"obs", "oldpd", "vtarg"}
 
-            seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
+            # seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
             # print("done the first phase")
-            MB_SIZE = 512
+            MB_SIZE = 256
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
                 return logits, state               

@@ -368,7 +368,7 @@ class TorchPolicy(Policy):
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch))
-        return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.VALUE_TARGETS], 'oldpd': self.action_dist_cache, 'dones': train_batch["dones"]}
+        return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.VALUE_TARGETS], 'oldpd': self.action_dist_cache}
 
     @override(Policy)
     def compute_gradients(self, postprocessed_batch):
