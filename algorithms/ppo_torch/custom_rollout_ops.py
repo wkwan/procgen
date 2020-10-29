@@ -159,6 +159,7 @@ class ConcatBatches:
 
     def __call__(self, batch: SampleBatchType) -> List[SampleBatchType]:
         _check_sample_batch_type(batch)
+        print("append batch", batch.count)
         self.buffer.append(batch)
         self.count += batch.count
         if self.count >= self.min_batch_size:
