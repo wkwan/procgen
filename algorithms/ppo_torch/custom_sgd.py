@@ -132,9 +132,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     # Get batch
 
     if isinstance(samples, SampleBatch):
+        print("is samples batch instance")
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
 
     # print("samples batch policy batches", samples.policy_batches['default_policy']['dones'].shape)
+    print("samples batch count", samples.count)
     # global nepochs
     seg_buf = []
     fetches = {}
@@ -160,6 +162,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 # nepochs += 1
                 #compute losses and do backprop
                 
+                print("minibatch data 0 iter 1", minibatch.data["obs"][0][0])
 
                 batch_fetches = (local_worker.learn_on_batch(
                     MultiAgentBatch({
@@ -188,12 +191,14 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             # print("done the first phase")
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
-                return logits, state               
+                return logits, state      
+
+            MB_SIZE = 1024         
 
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                logits, state = model.forward(seg, None, None)
+                logits, state = tu.minibatched_call(forward, MB_SIZE, seg=seg)
                 # print("presleep logits", logits.shape, logits)
                 # print("logits splice", logits[2:])
                 seg["oldpd"] = logits
@@ -202,12 +207,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 # print("calculated old pd", seg["oldpd"])
             # print("done computing presleep")
             #train on replay buffer
-            
             for i in range(12):
                 # print("aux iter", i)
                 # z = 0
                 # for minibatch in minibatches(batch, 1024):
-                for mb in make_minibatches(seg_buf, 1024):
+                for mb in make_minibatches(seg_buf, MB_SIZE):
                     # print("mb ind", z)
                     # z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
