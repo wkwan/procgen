@@ -339,7 +339,7 @@ class TorchPolicy(Policy):
             batch_divisibility_req=self.batch_divisibility_req)
 
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
-        
+        print("train batch learn on batch", train_batch[SampleBatch.VF_PREDS])
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch, True))
         # assert len(loss_out) == len(self._optimizers)
