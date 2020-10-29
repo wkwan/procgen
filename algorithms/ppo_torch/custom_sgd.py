@@ -110,7 +110,7 @@ def minibatches(samples, sgd_minibatch_size):
         yield samples.slice(i, j)
 
 
-nepochs = 0
+# nepochs = 0
 
 def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                      sgd_minibatch_size, standardize_fields):
@@ -133,7 +133,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     if isinstance(samples, SampleBatch):
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
 
-    global nepochs
+    # global nepochs
     seg_buf = []
     fetches = {}
 
@@ -155,7 +155,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #get minibatch
 
             for minibatch in minibatches(batch, sgd_minibatch_size):
-                nepochs += 1
+                # nepochs += 1
                 #compute losses and do backprop
                 batch_fetches = (local_worker.learn_on_batch(
                     MultiAgentBatch({
@@ -193,10 +193,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             # print("done computing presleep")
             #train on replay buffer
             for i in range(16):
-                z = 0
+                print("aux iter", i)
+                # z = 0
                 for mb in make_minibatches(seg_buf, MB_SIZE):
                     # print("mb ind", z)
-                    z += 1
+                    # z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     # print("mb shape", mb['obs'].shape)
                     # print("old logits", mb['oldpd'].shape, mb['oldpd'])
