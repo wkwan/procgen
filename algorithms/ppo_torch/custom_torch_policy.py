@@ -265,7 +265,7 @@ class TorchPolicy(Policy):
             opt.zero_grad()
             loss.backward()
             #do we need to sync grads here?
-            tu.sync_grads(model.parameters())
+            tu.sync_grads(self.model.parameters())
             opt.step()
 
 
