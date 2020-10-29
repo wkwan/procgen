@@ -152,7 +152,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         for field in standardize_fields:
             batch[field] = standardized(batch[field])
 
-        print("append a batch")
+        print("append a batch", batch.data["dones"].shape)
         seg_buf.append(batch)
 
         for i in range(num_sgd_iter):
