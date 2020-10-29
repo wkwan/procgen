@@ -131,6 +131,7 @@ class PPOLoss:
             # vf_loss2 = torch.pow(vf_clipped - value_targets, 2.0)
             # vf_loss = torch.max(vf_loss1, vf_loss2)
             # self.mean_vf_loss = reduce_mean_valid(vf_loss)
+            print("compute mean vf loss", value_fn.shape, value_targets.shape, vf_preds.shape)
             self.mean_vf_loss = vf_loss_coeff * reduce_mean_valid(torch.pow(value_fn - value_targets, 2.0))
 
             # loss = reduce_mean_valid(
