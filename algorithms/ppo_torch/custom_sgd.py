@@ -192,9 +192,10 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 # print("calculated old pd", seg["oldpd"])
             # print("done computing presleep")
             #train on replay buffer
-            for i in range(16):
+            for i in range(12):
                 # print("aux iter", i)
                 # z = 0
+                # for minibatch in minibatches(batch, 1024):
                 for mb in make_minibatches(seg_buf, MB_SIZE):
                     # print("mb ind", z)
                     # z += 1
