@@ -169,6 +169,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 batch_fetches = policy.custom_learn_batch(MultiAgentBatch({
                         policy_id: minibatch
                     }, minibatch.count))
+                    
+                print("batch fetches", policy_id, batch_fetches)
 
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)
