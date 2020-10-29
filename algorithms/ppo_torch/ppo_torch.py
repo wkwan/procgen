@@ -177,26 +177,26 @@ def execution_plan(workers, config):
         ConcatBatches(min_batch_size=config["train_batch_size"]))
     rollouts = rollouts.for_each(StandardizeFields(["advantages"]))
 
-    # if config["simple_optimizer"]:
-    #     print("use the simple worker")
-    #     train_op = rollouts.for_each(
-    #         TrainOneStep(
-    #             workers,
-    #             num_sgd_iter=config["num_sgd_iter"],
-    #             sgd_minibatch_size=config["sgd_minibatch_size"]))
-    # else:
-    print("use the multi gpu worker")
-    train_op = rollouts.for_each(
-        TrainTFMultiGPU(
-            workers,
-            sgd_minibatch_size=config["sgd_minibatch_size"],
-            num_sgd_iter=config["num_sgd_iter"],
-            num_gpus=config["num_gpus"],
-            rollout_fragment_length=config["rollout_fragment_length"],
-            num_envs_per_worker=config["num_envs_per_worker"],
-            train_batch_size=config["train_batch_size"],
-            shuffle_sequences=config["shuffle_sequences"],
-            _fake_gpus=config["_fake_gpus"]))
+    if config["simple_optimizer"]:
+        print("use the simple worker")
+        train_op = rollouts.for_each(
+            TrainOneStep(
+                workers,
+                num_sgd_iter=config["num_sgd_iter"],
+                sgd_minibatch_size=config["sgd_minibatch_size"]))
+    else:
+        print("use the multi gpu worker")
+        train_op = rollouts.for_each(
+            TrainTFMultiGPU(
+                workers,
+                sgd_minibatch_size=config["sgd_minibatch_size"],
+                num_sgd_iter=config["num_sgd_iter"],
+                num_gpus=config["num_gpus"],
+                rollout_fragment_length=config["rollout_fragment_length"],
+                num_envs_per_worker=config["num_envs_per_worker"],
+                train_batch_size=config["train_batch_size"],
+                shuffle_sequences=config["shuffle_sequences"],
+                _fake_gpus=config["_fake_gpus"]))
 
     # Update KL after each round of training.
     train_op = train_op.for_each(lambda t: t[1]).for_each(UpdateKL(workers))
