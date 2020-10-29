@@ -136,13 +136,12 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     global seg_buf
     if isinstance(samples, SampleBatch):
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
-    seg_buf.append(samples)
     # print("samples batch policy batches", samples.policy_batches['default_policy']['dones'].shape)
     
     fetches = {}
 
     for policy_id, policy in policies.items():
-
+        print("for policy id and policy", po)
         model = policy.model
 
         dist_class = policy.dist_class
@@ -153,6 +152,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         batch = samples.policy_batches[policy_id]
         for field in standardize_fields:
             batch[field] = standardized(batch[field])
+
+        print("append a batch")
+        seg_buf.append(batch)
 
         for i in range(num_sgd_iter):
             iter_extra_fetches = defaultdict(list)
@@ -183,7 +185,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #     return logits, state      
 
             REPLAY_MB_SIZE = 512
-            replay_batch = MultiAgentBatch.concat_samples(seg_buf)
+            replay_batch = SampleBatch.concat_samples(seg_buf)
 
             for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                 mb = tree_map(lambda x: x.to(tu.dev()), mb)
