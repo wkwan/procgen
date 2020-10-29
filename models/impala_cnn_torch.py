@@ -4,7 +4,7 @@ from ray.rllib.utils.annotations import override
 from ray.rllib.utils import try_import_torch
 
 torch, nn = try_import_torch()
-
+import math
 
 class ResidualBlock(nn.Module):
     def __init__(self, channels):
@@ -27,7 +27,9 @@ class ConvSequence(nn.Module):
         self._input_shape = input_shape
         self._out_channels = out_channels
         self.conv = nn.Conv2d(in_channels=self._input_shape[0], out_channels=self._out_channels, kernel_size=3, padding=1)
-        self.conv.weight.data *= 1 / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
+        scale = math.sqrt(1 / (math.sqrt(2) * math.sqrt(3)))
+        print('conv seq scale', scale)
+        self.conv.weight.data *= scale / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
         self.conv.bias.data *= 0
         self.res_block0 = ResidualBlock(self._out_channels)
         self.res_block1 = ResidualBlock(self._out_channels)
@@ -114,16 +116,17 @@ class ImpalaCNN(TorchModelV2, nn.Module):
             shape = conv_seq.get_output_shape()
             conv_seqs.append(conv_seq)
         self.conv_seqs = nn.ModuleList(conv_seqs)
+        print('hidden fc', shape[0] * shape[1] * shape[2])
         self.hidden_fc = nn.Linear(in_features=shape[0] * shape[1] * shape[2], out_features=256)
         self.hidden_fc.weight.data *= 1.4 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.hidden_fc.bias.data *= 0
 
         self.logits_fc = nn.Linear(in_features=256, out_features=num_outputs)
-        self.hidden_fc.weight.data *= 1.4 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
+        self.logits_fc.weight.data *= 0.1 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.logits_fc.bias.data * 0
 
         self.value_fc = nn.Linear(in_features=256, out_features=1)
-        self.hidden_fc.weight.data *= 1.4 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
+        self.value_fc.weight.data *= 0.1 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.value_fc.bias.data *= 0
 
         self.aux_vf_head = NormedLinear(256, 1, scale=0.1)
