@@ -160,12 +160,15 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #get minibatch
 
             for minibatch in minibatches(batch, sgd_minibatch_size):
-                # nepochs += 1
                 #compute losses and do backprop                
-                batch_fetches = (local_worker.learn_on_batch(
-                    MultiAgentBatch({
+                # batch_fetches = (local_worker.learn_on_batch(
+                #     MultiAgentBatch({
+                #         policy_id: minibatch
+                #     }, minibatch.count)))[policy_id]
+
+                batch_fetches = policy.custom_learn_batch(MultiAgentBatch({
                         policy_id: minibatch
-                    }, minibatch.count)))[policy_id]
+                    }, minibatch.count))
 
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)
@@ -184,6 +187,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             REPLAY_MB_SIZE = 512
             replay_batch = SampleBatch.concat_samples(seg_buf)
 
+
+            #TODO: this needs to be properly saved
             for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                 # mb = tree_map(lambda x: x.to(tu.dev()), mb)
                 mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())

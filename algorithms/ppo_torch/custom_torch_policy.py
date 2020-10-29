@@ -371,6 +371,48 @@ class TorchPolicy(Policy):
         return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.VALUE_TARGETS], 'oldpd': self.action_dist_cache}
 
     @override(Policy)
+    def custom_learn_on_batch(self, postprocessed_batch):
+        # print("LEARN ON BATCH")
+
+        # Get batch ready for RNNs, if applicable.
+        pad_batch_to_sequences_of_same_size(
+            postprocessed_batch,
+            max_seq_len=self.max_seq_len,
+            shuffle=False,
+            batch_divisibility_req=self.batch_divisibility_req)
+
+        train_batch = self._lazy_tensor_dict(postprocessed_batch)
+        loss_out = force_list(
+            self._loss(self, self.model, self.dist_class, train_batch, True))
+        # assert len(loss_out) == len(self._optimizers)
+        # assert not any(torch.isnan(l) for l in loss_out)
+
+        # Loop through all optimizers.
+        grad_info = {"allreduce_latency": 0.0}
+        for i, opt in enumerate(self._optimizers):
+            opt.zero_grad()
+            pi_loss = loss_out[i]
+            # print("train on pi loss", pi_loss)
+            self.backprop(grad_info, opt, pi_loss, False)
+            tu.sync_grads(self.model.parameters())
+            opt.step()
+
+        loss_out = force_list(
+            self._loss(self, self.model, self.dist_class, train_batch, False))
+
+        for i, opt in enumerate(self._optimizers):
+            opt.zero_grad()
+            vf_loss = loss_out[i]
+            # print("train on vf loss", vf_loss)
+            self.backprop(grad_info, opt, vf_loss, False)
+            tu.sync_grads(self.model.parameters())
+            opt.step()
+
+        grad_info["allreduce_latency"] /= len(self._optimizers)
+        grad_info.update(self.extra_grad_info(train_batch))
+        return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.VALUE_TARGETS], 'oldpd': self.action_dist_cache}
+
+    @override(Policy)
     def compute_gradients(self, postprocessed_batch):
         print("COMPUTE GRADIENTS")
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
