@@ -107,41 +107,7 @@ class PPOLoss:
             def reduce_mean_valid(t):
                 return torch.mean(t)
 
-        # prev_dist = dist_class(prev_logits, model)
-        # Make loss functions.
-        logp_ratio = torch.exp(
-            curr_action_dist.logp(actions) - prev_actions_logp)
-        # action_kl = prev_dist.kl(curr_action_dist)
-        # self.mean_kl = 0.5*reduce_mean_valid(action_kl)
 
-        curr_entropy = curr_action_dist.entropy()
-        self.mean_entropy = reduce_mean_valid(curr_entropy)
-
-        # advantages = (advantages - reduce_mean_valid(advantages)) / (torch.std(advantages) + 1e-8)
-        surrogate_loss = torch.max(
-            -advantages * logp_ratio,
-            -advantages * torch.clamp(logp_ratio, 1 - clip_param,
-                                     1 + clip_param))
-        self.mean_policy_loss = reduce_mean_valid(surrogate_loss)
-
-        if use_gae:
-            # vf_loss1 = torch.pow(value_fn - value_targets, 2.0)
-            # vf_clipped = vf_preds + torch.clamp(value_fn - vf_preds,
-            #                                     -vf_clip_param, vf_clip_param)
-            # vf_loss2 = torch.pow(vf_clipped - value_targets, 2.0)
-            # vf_loss = torch.max(vf_loss1, vf_loss2)
-            # self.mean_vf_loss = reduce_mean_valid(vf_loss)
-            # print("compute mean vf loss", value_fn.shape, value_targets.shape, vf_preds.shape)
-            self.mean_vf_loss = vf_loss_coeff * reduce_mean_valid(torch.pow(value_fn - value_targets, 2.0))
-
-            # loss = reduce_mean_valid(
-            #     -surrogate_loss + cur_kl_coeff * action_kl +
-            #     vf_loss_coeff * vf_loss - entropy_coeff * curr_entropy)
-        else:
-            self.mean_vf_loss = 0.0
-            # loss = reduce_mean_valid(-surrogate_loss +
-            #                          cur_kl_coeff * action_kl -
-            #                          entropy_coeff * curr_entropy)
 
         # self.loss = torch.stack((self.mean_policy_loss, self.mean_vf_loss))
         # print("negent", -entropy_coeff * self.mean_entropy)
@@ -154,8 +120,45 @@ class PPOLoss:
         # print("value targets", value_targets)
 
         if is_policy_loss:
+            # prev_dist = dist_class(prev_logits, model)
+            # Make loss functions.
+            logp_ratio = torch.exp(
+                curr_action_dist.logp(actions) - prev_actions_logp)
+            # action_kl = prev_dist.kl(curr_action_dist)
+            # self.mean_kl = 0.5*reduce_mean_valid(action_kl)
+
+            curr_entropy = curr_action_dist.entropy()
+            self.mean_entropy = reduce_mean_valid(curr_entropy)
+
+            # advantages = (advantages - reduce_mean_valid(advantages)) / (torch.std(advantages) + 1e-8)
+            surrogate_loss = torch.max(
+                -advantages * logp_ratio,
+                -advantages * torch.clamp(logp_ratio, 1 - clip_param,
+                                        1 + clip_param))
+            self.mean_policy_loss = reduce_mean_valid(surrogate_loss)
+
             self.loss = -entropy_coeff * self.mean_entropy + self.mean_policy_loss
         else:
+            if use_gae:
+                
+                # vf_loss1 = torch.pow(value_fn - value_targets, 2.0)
+                # vf_clipped = vf_preds + torch.clamp(value_fn - vf_preds,
+                #                                     -vf_clip_param, vf_clip_param)
+                # vf_loss2 = torch.pow(vf_clipped - value_targets, 2.0)
+                # vf_loss = torch.max(vf_loss1, vf_loss2)
+                # self.mean_vf_loss = reduce_mean_valid(vf_loss)
+                # print("compute mean vf loss", value_fn.shape, value_targets.shape, vf_preds.shape)
+                self.mean_vf_loss = vf_loss_coeff * reduce_mean_valid(torch.pow(value_fn - value_targets, 2.0))
+
+                # loss = reduce_mean_valid(
+                #     -surrogate_loss + cur_kl_coeff * action_kl +
+                #     vf_loss_coeff * vf_loss - entropy_coeff * curr_entropy)
+            else:
+                self.mean_vf_loss = 0.0
+                # loss = reduce_mean_valid(-surrogate_loss +
+                #                          cur_kl_coeff * action_kl -
+                #                          entropy_coeff * curr_entropy)
+
             self.loss = self.mean_vf_loss
             # self.loss.requires_grad = True
             # print("mean vl after setting requires grad", self.loss)
