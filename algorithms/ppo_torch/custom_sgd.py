@@ -187,7 +187,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         fetches[policy_id] = averaged(iter_extra_fetches)
     
         nepochs += 1
-        if nepochs % 2 == 0:
+        if nepochs % 15 == 0:
             print("do auxiliary phase")
             # def forward(seg):
             #     logits, state = model.forward(seg, None, None)
@@ -196,7 +196,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             REPLAY_MB_SIZE = 512
             replay_batch = SampleBatch.concat_samples(seg_buf)
 
-
+            seg_buf.clear()
             #TODO: this needs to be properly saved
             for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                 # mb = tree_map(lambda x: x.to(tu.dev()), mb)
@@ -204,7 +204,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 logits, state = model.forward(mb, None, None)
                 mb["oldpd"] = logits
                 print("calculate presleep", mb["oldpd"])
+                seg_buf.append(mb)
 
+            replay_batch = SampleBatch.concat_samples(seg_buf)
 
             # #compute presleep outputs for replay buffer (what does this mean?)
             # for seg in seg_buf:
