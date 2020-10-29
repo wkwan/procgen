@@ -175,14 +175,14 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
         seg_buf.append(batch)
 
-        if nepochs % 4 == 0:
+        if nepochs % 2 == 0:
             print("do auxiliary phase")
             # def forward(seg):
             #     logits, state = model.forward(seg, None, None)
             #     return logits, state      
 
             REPLAY_MB_SIZE = 512
-            replay_batch = SampleBatch.concat_samples(seg_buf)
+            replay_batch = MultiAgentBatch.concat_samples(seg_buf)
 
             for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                 mb = tree_map(lambda x: x.to(tu.dev()), mb)
