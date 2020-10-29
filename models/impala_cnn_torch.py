@@ -122,11 +122,11 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         self.hidden_fc.bias.data *= 0
 
         self.logits_fc = nn.Linear(in_features=256, out_features=num_outputs)
-        self.logits_fc.weight.data *= 0.1 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
+        self.logits_fc.weight.data *= 0.1 / self.logits_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.logits_fc.bias.data * 0
 
         self.value_fc = nn.Linear(in_features=256, out_features=1)
-        self.value_fc.weight.data *= 0.1 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
+        self.value_fc.weight.data *= 0.1 / self.value_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.value_fc.bias.data *= 0
 
         self.aux_vf_head = NormedLinear(256, 1, scale=0.1)
