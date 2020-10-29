@@ -11,11 +11,11 @@ class ResidualBlock(nn.Module):
         super().__init__()
         print("residual block scale", scale)
         self.conv0 = nn.Conv2d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1)
-        self.conv0.weight.data *= scale / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
+        self.conv0.weight.data *= scale / self.conv0.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
         self.conv0.bias.data *= 0
 
         self.conv1 = nn.Conv2d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1)
-        self.conv1.weight.data *= scale / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
+        self.conv1.weight.data *= scale / self.conv1.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
         self.conv1.bias.data *= 0
     
     def forward(self, x):
