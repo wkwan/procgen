@@ -149,6 +149,7 @@ class PPOLoss:
         print("mean pl", self.mean_policy_loss)
         print("mean vl", self.mean_vf_loss)
         print("vf preds", vf_preds)
+        print("value fn", value_fn)
         print("value targets", value_targets)
 
         if is_policy_loss:
