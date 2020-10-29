@@ -132,12 +132,13 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         averaged info fetches over the last SGD epoch taken.
     """
     # Get batch
-
+    global nepochs
+    global seg_buf
     if isinstance(samples, SampleBatch):
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
-
+    seg_buf.append(samples)
     # print("samples batch policy batches", samples.policy_batches['default_policy']['dones'].shape)
-    global nepochs
+    
     fetches = {}
 
     for policy_id, policy in policies.items():
@@ -173,7 +174,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         fetches[policy_id] = averaged(iter_extra_fetches)
         nepochs += 1
 
-        seg_buf.append(batch)
+        
 
         if nepochs % 2 == 0:
             print("do auxiliary phase")
