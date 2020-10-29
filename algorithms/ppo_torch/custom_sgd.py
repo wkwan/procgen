@@ -187,7 +187,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         fetches[policy_id] = averaged(iter_extra_fetches)
     
         nepochs += 1
-        if nepochs % 15 == 0:
+        if nepochs % 2 == 0:
             print("do auxiliary phase")
             # def forward(seg):
             #     logits, state = model.forward(seg, None, None)
