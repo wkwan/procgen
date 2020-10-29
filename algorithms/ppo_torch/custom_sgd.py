@@ -132,11 +132,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     # Get batch
 
     if isinstance(samples, SampleBatch):
-        print("is samples batch instance")
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
 
     # print("samples batch policy batches", samples.policy_batches['default_policy']['dones'].shape)
-    print("samples batch count", samples.count)
     # global nepochs
     seg_buf = []
     fetches = {}
@@ -195,7 +193,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                logits, state = model.forward(seg["obs"], None, None)
+                logits, state = model.forward(seg, None, None)
                 # print("presleep logits", logits.shape, logits)
                 # print("logits splice", logits[2:])
                 seg["oldpd"] = logits
@@ -209,7 +207,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 # print("aux iter", i)
                 # z = 0
                 # for minibatch in minibatches(batch, 1024):
-                for mb in make_minibatches(seg_buf, sgd_minibatch_size):
+                for mb in make_minibatches(seg_buf, 1024):
                     # print("mb ind", z)
                     # z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
