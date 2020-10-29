@@ -204,7 +204,7 @@ procgen-ppg:
         # Number of environments to evaluate vectorwise per worker. This enables
         # model inference batching, which can improve performance for inference
         # bottlenecked workloads.
-        num_envs_per_worker: 12
+        num_envs_per_worker: 10
 
         # Divide episodes into fragments of this many steps each during rollouts.
         # Sample batches of this size are collected from rollout workers and
@@ -221,7 +221,7 @@ procgen-ppg:
         #
         # The dataflow here can vary per algorithm. For example, PPO further
         # divides the train batch into minibatches for multi-epoch SGD.
-        rollout_fragment_length: 256
+        rollout_fragment_length: 64
 
         # Whether to rollout "complete_episodes" or "truncate_episodes" to
         # `rollout_fragment_length` length unrolls. Episode truncation guarantees
