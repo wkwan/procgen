@@ -31,7 +31,7 @@ DEFAULT_CONFIG = with_common_config({
     "rollout_fragment_length": 200,
     # Number of timesteps collected for each SGD round. This defines the size
     # of each SGD epoch.
-    "train_batch_size": 4000,
+    "train_batch_size": 1024,
     # Total SGD batch size across all devices for SGD. This defines the
     # minibatch size within each epoch.
     "sgd_minibatch_size": 128,
@@ -178,12 +178,14 @@ def execution_plan(workers, config):
     rollouts = rollouts.for_each(StandardizeFields(["advantages"]))
 
     if config["simple_optimizer"]:
+        print("use the simple worker")
         train_op = rollouts.for_each(
             TrainOneStep(
                 workers,
                 num_sgd_iter=config["num_sgd_iter"],
                 sgd_minibatch_size=config["sgd_minibatch_size"]))
     else:
+        print("use the multi gpu worker")
         train_op = rollouts.for_each(
             TrainTFMultiGPU(
                 workers,

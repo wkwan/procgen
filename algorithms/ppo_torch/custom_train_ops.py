@@ -109,6 +109,7 @@ class TrainTFMultiGPU:
                  shuffle_sequences: bool,
                  policies: List[PolicyID] = frozenset([]),
                  _fake_gpus: bool = False):
+        print("train batch size is", train_batch_size)
         self.workers = workers
         self.policies = policies or workers.local_worker().policies_to_train
         self.num_sgd_iter = num_sgd_iter
