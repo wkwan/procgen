@@ -16,9 +16,12 @@ from .custom_postprocessing import Postprocessing
 
 from . import torch_util as tu
 
+from ray.rllib.policy.sample_batch import SampleBatch, DEFAULT_POLICY_ID, \
+    MultiAgentBatch
 
 torch, _ = try_import_torch()
 
+import random
 
 class TorchPolicy(Policy):
     """Template for a PyTorch policy and loss to use with RLlib.
@@ -328,9 +331,9 @@ class TorchPolicy(Policy):
     #     grad_info.update(self.extra_grad_info(train_batch))
     #     return {LEARNER_STATS_KEY: grad_info}
 
-    @override(Policy)
-    def learn_on_batch(self, postprocessed_batch):
-        print("LEARN ON WHOLE BATCH")
+    # @override(Policy)
+    # def learn_on_batch(self, postprocessed_batch):
+    #     print("LEARN ON WHOLE BATCH")
 
         # # Get batch ready for RNNs, if applicable.
         # pad_batch_to_sequences_of_same_size(
@@ -368,48 +371,98 @@ class TorchPolicy(Policy):
 
         # grad_info["allreduce_latency"] /= len(self._optimizers)
         # grad_info.update(self.extra_grad_info(train_batch))
-        return {LEARNER_STATS_KEY: None}
+        # return {LEARNER_STATS_KEY: None}
         # return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.VALUE_TARGETS], 'oldpd': self.action_dist_cache}
 
-    def custom_learn_on_batch(self, postprocessed_batch):
+    @override(Policy)
+    def learn_on_batch(self, postprocessed_batch):
         # print("LEARN ON BATCH")
-
-        # Get batch ready for RNNs, if applicable.
-        pad_batch_to_sequences_of_same_size(
-            postprocessed_batch,
-            max_seq_len=self.max_seq_len,
-            shuffle=False,
-            batch_divisibility_req=self.batch_divisibility_req)
-
-        train_batch = self._lazy_tensor_dict(postprocessed_batch)
-        loss_out = force_list(
-            self._loss(self, self.model, self.dist_class, train_batch, True))
-        # assert len(loss_out) == len(self._optimizers)
-        # assert not any(torch.isnan(l) for l in loss_out)
-
-        # Loop through all optimizers.
         grad_info = {"allreduce_latency": 0.0}
-        for i, opt in enumerate(self._optimizers):
-            opt.zero_grad()
-            pi_loss = loss_out[i]
-            # print("train on pi loss", pi_loss)
-            self.backprop(grad_info, opt, pi_loss, False)
-            tu.sync_grads(self.model.parameters())
-            opt.step()
 
-        loss_out = force_list(
-            self._loss(self, self.model, self.dist_class, train_batch, False))
+        def minibatches(samples, sgd_minibatch_size):
+            """Return a generator yielding minibatches from a sample batch.
 
-        for i, opt in enumerate(self._optimizers):
-            opt.zero_grad()
-            vf_loss = loss_out[i]
-            # print("train on vf loss", vf_loss)
-            self.backprop(grad_info, opt, vf_loss, False)
-            tu.sync_grads(self.model.parameters())
-            opt.step()
+            Arguments:
+                samples (SampleBatch): batch of samples to split up.
+                sgd_minibatch_size (int): size of minibatches to return.
 
-        grad_info["allreduce_latency"] /= len(self._optimizers)
-        grad_info.update(self.extra_grad_info(train_batch))
+            Returns:
+                generator that returns mini-SampleBatches of size sgd_minibatch_size.
+            """
+            if not sgd_minibatch_size:
+                yield samples
+                return
+
+            if isinstance(samples, MultiAgentBatch):
+                raise NotImplementedError(
+                    "Minibatching not implemented for multi-agent in simple mode")
+
+            samples.shuffle()
+
+            i = 0
+            slices = []
+            while i < samples.count:
+                slices.append((i, i + sgd_minibatch_size))
+                i += sgd_minibatch_size
+            random.shuffle(slices)
+
+            for i, j in slices:
+                yield samples.slice(i, j)
+
+
+        for minibatch in minibatches(postprocessed_batch, 512):
+            # Get batch ready for RNNs, if applicable.
+            pad_batch_to_sequences_of_same_size(
+                minibatch,
+                max_seq_len=self.max_seq_len,
+                shuffle=False,
+                batch_divisibility_req=self.batch_divisibility_req)
+
+            train_batch = self._lazy_tensor_dict(minibatch)
+
+            print("train pi")
+
+            loss_out = force_list(
+                self._loss(self, self.model, self.dist_class, train_batch, True))
+            # assert len(loss_out) == len(self._optimizers)
+            # assert not any(torch.isnan(l) for l in loss_out)
+
+            # Loop through all optimizers.
+            for i, opt in enumerate(self._optimizers):
+                opt.zero_grad()
+                pi_loss = loss_out[i]
+                # print("train on pi loss", pi_loss)
+                self.backprop(grad_info, opt, pi_loss, False)
+                tu.sync_grads(self.model.parameters())
+                opt.step()
+
+            grad_info["allreduce_latency"] /= len(self._optimizers)
+            grad_info.update(self.extra_grad_info(train_batch))
+
+        for minibatch in minibatches(postprocessed_batch, 512):
+            # Get batch ready for RNNs, if applicable.
+            pad_batch_to_sequences_of_same_size(
+                minibatch,
+                max_seq_len=self.max_seq_len,
+                shuffle=False,
+                batch_divisibility_req=self.batch_divisibility_req)
+
+            train_batch = self._lazy_tensor_dict(minibatch)
+            print("train vf")
+
+            loss_out = force_list(
+                self._loss(self, self.model, self.dist_class, train_batch, False))
+
+            for i, opt in enumerate(self._optimizers):
+                opt.zero_grad()
+                vf_loss = loss_out[i]
+                # print("train on vf loss", vf_loss)
+                self.backprop(grad_info, opt, vf_loss, False)
+                tu.sync_grads(self.model.parameters())
+                opt.step()
+
+            grad_info["allreduce_latency"] /= len(self._optimizers)
+            grad_info.update(self.extra_grad_info(train_batch))
         return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.VALUE_TARGETS], 'oldpd': self.action_dist_cache}
 
     @override(Policy)
