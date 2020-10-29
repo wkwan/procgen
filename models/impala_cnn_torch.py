@@ -7,10 +7,16 @@ torch, nn = try_import_torch()
 import math
 
 class ResidualBlock(nn.Module):
-    def __init__(self, channels):
+    def __init__(self, channels, scale):
         super().__init__()
+        print("residual block scale", scale)
         self.conv0 = nn.Conv2d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1)
+        self.conv0.weight.data *= scale / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
+        self.conv0.bias.data *= 0
+
         self.conv1 = nn.Conv2d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1)
+        self.conv1.weight.data *= scale / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
+        self.conv1.bias.data *= 0
     
     def forward(self, x):
         inputs = x
@@ -27,12 +33,15 @@ class ConvSequence(nn.Module):
         self._input_shape = input_shape
         self._out_channels = out_channels
         self.conv = nn.Conv2d(in_channels=self._input_shape[0], out_channels=self._out_channels, kernel_size=3, padding=1)
-        scale = math.sqrt(1 / (math.sqrt(2) * math.sqrt(3)))
-        print('conv seq scale', scale)
+        # scale = math.sqrt(1 / (math.sqrt(2) * math.sqrt(3)))
+        scale = 1 / math.sqrt(3)
+        print("first conv seq scale", scale)
+
         self.conv.weight.data *= scale / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
         self.conv.bias.data *= 0
-        self.res_block0 = ResidualBlock(self._out_channels)
-        self.res_block1 = ResidualBlock(self._out_channels)
+        scale = 1 / math.sqrt(2)
+        self.res_block0 = ResidualBlock(self._out_channels, scale)
+        self.res_block1 = ResidualBlock(self._out_channels, scale)
 
     def forward(self, x):
         x = self.conv(x)
@@ -116,7 +125,6 @@ class ImpalaCNN(TorchModelV2, nn.Module):
             shape = conv_seq.get_output_shape()
             conv_seqs.append(conv_seq)
         self.conv_seqs = nn.ModuleList(conv_seqs)
-        print('hidden fc', shape[0] * shape[1] * shape[2])
         self.hidden_fc = nn.Linear(in_features=shape[0] * shape[1] * shape[2], out_features=256)
         self.hidden_fc.weight.data *= 1.4 / self.hidden_fc.weight.norm(dim=1, p=2, keepdim=True)
         self.hidden_fc.bias.data *= 0
