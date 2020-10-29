@@ -181,17 +181,14 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)
 
-            for minibatch in minibatches(batch, sgd_minibatch_size):
                 # nepochs += 1
                 #compute losses and do backprop
-                print("minibatch data 0 iter 2", minibatch.data["obs"][0][0])
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
             # needed_keys = {"obs", "oldpd", "vtarg"}
 
             # seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
             
             # print("done the first phase")
-            MB_SIZE = 256
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
                 return logits, state               
@@ -199,7 +196,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                logits, state = tu.minibatched_call(forward, MB_SIZE, seg=seg)
+                logits, state = model.forward(seg["obs"], None, None)
                 # print("presleep logits", logits.shape, logits)
                 # print("logits splice", logits[2:])
                 seg["oldpd"] = logits
@@ -208,11 +205,12 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 # print("calculated old pd", seg["oldpd"])
             # print("done computing presleep")
             #train on replay buffer
+            
             for i in range(12):
                 # print("aux iter", i)
                 # z = 0
                 # for minibatch in minibatches(batch, 1024):
-                for mb in make_minibatches(seg_buf, MB_SIZE):
+                for mb in make_minibatches(seg_buf, sgd_minibatch_size):
                     # print("mb ind", z)
                     # z += 1
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
