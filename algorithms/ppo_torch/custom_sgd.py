@@ -202,7 +202,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for i in range(1):
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
 
-                    mb = tree_map(lambda x: x.to(tu.dev()), mb)
+                    # mb = tree_map(lambda x: x.to(tu.dev()), mb)
+                    mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
 
                     logits, vpredaux = model.forward_aux(mb)
 
