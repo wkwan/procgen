@@ -36,7 +36,7 @@ class ConvSequence(nn.Module):
         scale = 1 / math.sqrt(3)
         print("first conv seq scale", scale)
 
-        self.conv.weight.data *= scale / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
+        self.conv.weight.data *= 1 / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
         self.conv.bias.data *= 0
         scale = math.sqrt(scale / math.sqrt(2))
         self.res_block0 = ResidualBlock(self._out_channels, scale)
