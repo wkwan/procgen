@@ -133,7 +133,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     if isinstance(samples, SampleBatch):
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
 
-    print("samples batch policy batches", samples.policy_batches)
+    print("samples batch policy batches", samples.policy_batches.keys())
     print("samples batch count", samples.count)
     # global nepochs
     seg_buf = []
