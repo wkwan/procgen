@@ -216,7 +216,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 
                     vf_aux = 0.5 * ((vpredaux - mb["vtarg"]) ** 2).mean() 
                     vf_true = 0.5 * ((vpredtrue - mb["vtarg"]) ** 2).mean()
-                    # print("vf aux", vf_aux, "vf_true", vf_true)
+                    print("vf aux", vf_aux, "vf_true", vf_true)
 
                     loss = pol_distance + vf_aux + vf_true
 
