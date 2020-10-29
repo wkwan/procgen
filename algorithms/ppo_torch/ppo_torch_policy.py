@@ -256,7 +256,6 @@ class ValueNetworkMixin:
                     "is_training": False,
                 }, [self._convert_to_tensor(s) for s in state],
                                           self._convert_to_tensor([1]))
-                print("value mixin", self.model.value_function()[0])
                 return self.model.value_function()[0]
 
         else:
