@@ -159,30 +159,29 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             iter_extra_fetches = defaultdict(list)
             #get minibatch
 
-        #     # compute losses and do backprop                
-        #     batch_fetches = (local_worker.learn_on_batch(
-        #         MultiAgentBatch({
-        #             policy_id: batch
-        #         }, batch.count)))[policy_id]
+            batch_fetches = (local_worker.learn_on_batch(
+                MultiAgentBatch({
+                    policy_id: batch
+                }, batch.count)))[policy_id]
 
-        #     for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
-        #         iter_extra_fetches[k].append(v)
+            for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
+                iter_extra_fetches[k].append(v)
 
 
-            for minibatch in minibatches(batch, sgd_minibatch_size):
-                #compute losses and do backprop            
-                print("minibatch shape", minibatch.data["dones"].shape)    
-                batch_fetches = (local_worker.learn_on_batch(
-                    MultiAgentBatch({
-                        policy_id: minibatch
-                    }, minibatch.count)))[policy_id]
+            # for minibatch in minibatches(batch, sgd_minibatch_size):
+            #     #compute losses and do backprop            
+            #     print("minibatch shape", minibatch.data["dones"].shape)    
+            #     batch_fetches = (local_worker.learn_on_batch(
+            #         MultiAgentBatch({
+            #             policy_id: minibatch
+            #         }, minibatch.count)))[policy_id]
 
-                # print("batch fetches", policy_id, batch_fetches)
+            #     # print("batch fetches", policy_id, batch_fetches)
 
-                for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
-                    iter_extra_fetches[k].append(v)
+            #     for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
+            #         iter_extra_fetches[k].append(v)
 
-                logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
+            logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
 
         fetches[policy_id] = averaged(iter_extra_fetches)
     
