@@ -206,8 +206,7 @@ def compute_advantages(rollout,
 
     traj = {}
     trajsize = len(rollout[SampleBatch.ACTIONS])
-    # print("trajsize", trajsize)
-    # print("trajsize is", trajsize)
+
     for key in rollout:
         traj[key] = np.stack(rollout[key])
 
@@ -218,9 +217,7 @@ def compute_advantages(rollout,
 
     if use_gae:
 
-        # print("before normalizer", traj[SampleBatch.REWARDS])
         traj[SampleBatch.REWARDS] = reward_normalizer(th.from_numpy(traj[SampleBatch.REWARDS])).numpy()
-        # print("after normalizer", traj[SampleBatch.REWARDS])
 
         vpred_t = np.concatenate(
             [rollout[SampleBatch.VF_PREDS],

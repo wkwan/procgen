@@ -116,74 +116,74 @@ class TorchPolicy(Policy):
 
         explore = explore if explore is not None else self.config["explore"]
         timestep = timestep if timestep is not None else self.global_timestep
-        # with torch.no_grad():
-        seq_lens = torch.ones(len(obs_batch), dtype=torch.int32)
-        input_dict = self._lazy_tensor_dict({
-            SampleBatch.CUR_OBS: obs_batch,
-            "is_training": False,
-        })
-        if prev_action_batch is not None:
-            input_dict[SampleBatch.PREV_ACTIONS] = prev_action_batch
-        if prev_reward_batch is not None:
-            input_dict[SampleBatch.PREV_REWARDS] = prev_reward_batch
-        state_batches = [
-            self._convert_to_tensor(s) for s in (state_batches or [])
-        ]
+        with torch.no_grad():
+            seq_lens = torch.ones(len(obs_batch), dtype=torch.int32)
+            input_dict = self._lazy_tensor_dict({
+                SampleBatch.CUR_OBS: obs_batch,
+                "is_training": False,
+            })
+            if prev_action_batch is not None:
+                input_dict[SampleBatch.PREV_ACTIONS] = prev_action_batch
+            if prev_reward_batch is not None:
+                input_dict[SampleBatch.PREV_REWARDS] = prev_reward_batch
+            state_batches = [
+                self._convert_to_tensor(s) for s in (state_batches or [])
+            ]
 
-        if self.action_sampler_fn:
-            action_dist = dist_inputs = None
-            state_out = []
-            actions, logp = self.action_sampler_fn(
-                self,
-                self.model,
-                input_dict[SampleBatch.CUR_OBS],
-                explore=explore,
-                timestep=timestep)
-        else:
-            # Call the exploration before_compute_actions hook.
-            self.exploration.before_compute_actions(
-                explore=explore, timestep=timestep)
-            if self.action_distribution_fn:
-                dist_inputs, dist_class, state_out = \
-                    self.action_distribution_fn(
-                        self,
-                        self.model,
-                        input_dict[SampleBatch.CUR_OBS],
-                        explore=explore,
-                        timestep=timestep,
-                        is_training=False)
+            if self.action_sampler_fn:
+                action_dist = dist_inputs = None
+                state_out = []
+                actions, logp = self.action_sampler_fn(
+                    self,
+                    self.model,
+                    input_dict[SampleBatch.CUR_OBS],
+                    explore=explore,
+                    timestep=timestep)
             else:
-                dist_class = self.dist_class
-                dist_inputs, state_out = self.model(
-                    input_dict, state_batches, seq_lens)
-            action_dist = dist_class(dist_inputs, self.model)
-            self.action_dist_cache = action_dist
+                # Call the exploration before_compute_actions hook.
+                self.exploration.before_compute_actions(
+                    explore=explore, timestep=timestep)
+                if self.action_distribution_fn:
+                    dist_inputs, dist_class, state_out = \
+                        self.action_distribution_fn(
+                            self,
+                            self.model,
+                            input_dict[SampleBatch.CUR_OBS],
+                            explore=explore,
+                            timestep=timestep,
+                            is_training=False)
+                else:
+                    dist_class = self.dist_class
+                    dist_inputs, state_out = self.model(
+                        input_dict, state_batches, seq_lens)
+                action_dist = dist_class(dist_inputs, self.model)
+                self.action_dist_cache = action_dist
 
-            # Get the exploration action from the forward results.
-            actions, logp = \
-                self.exploration.get_exploration_action(
-                    action_distribution=action_dist,
-                    timestep=timestep,
-                    explore=explore)
+                # Get the exploration action from the forward results.
+                actions, logp = \
+                    self.exploration.get_exploration_action(
+                        action_distribution=action_dist,
+                        timestep=timestep,
+                        explore=explore)
 
-        input_dict[SampleBatch.ACTIONS] = actions
+            input_dict[SampleBatch.ACTIONS] = actions
 
-        # Add default and custom fetches.
-        extra_fetches = self.extra_action_out(input_dict, state_batches,
-                                                self.model, action_dist)
+            # Add default and custom fetches.
+            extra_fetches = self.extra_action_out(input_dict, state_batches,
+                                                    self.model, action_dist)
 
-        # print("extra fetches", extra_fetches)
-        # Action-logp and action-prob.
-        if logp is not None:
-            logp = convert_to_non_torch_type(logp)
-            extra_fetches[SampleBatch.ACTION_PROB] = np.exp(logp)
-            extra_fetches[SampleBatch.ACTION_LOGP] = logp
-        # Action-dist inputs.
-        if dist_inputs is not None:
-            extra_fetches[SampleBatch.ACTION_DIST_INPUTS] = dist_inputs
-            # extra_fetches['oldpd'] = action_dist
-        return convert_to_non_torch_type((actions, state_out,
-                                            extra_fetches))
+            # print("extra fetches", extra_fetches)
+            # Action-logp and action-prob.
+            if logp is not None:
+                logp = convert_to_non_torch_type(logp)
+                extra_fetches[SampleBatch.ACTION_PROB] = np.exp(logp)
+                extra_fetches[SampleBatch.ACTION_LOGP] = logp
+            # Action-dist inputs.
+            if dist_inputs is not None:
+                extra_fetches[SampleBatch.ACTION_DIST_INPUTS] = dist_inputs
+                # extra_fetches['oldpd'] = action_dist
+            return convert_to_non_torch_type((actions, state_out,
+                                                extra_fetches))
 
     @override(Policy)
     def compute_log_likelihoods(self,
@@ -339,7 +339,6 @@ class TorchPolicy(Policy):
             batch_divisibility_req=self.batch_divisibility_req)
 
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
-        print("train batch learn on batch", train_batch[SampleBatch.VF_PREDS])
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch, True))
         # assert len(loss_out) == len(self._optimizers)

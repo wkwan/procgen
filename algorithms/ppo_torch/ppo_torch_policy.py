@@ -144,13 +144,13 @@ class PPOLoss:
 
         # self.loss = torch.stack((self.mean_policy_loss, self.mean_vf_loss))
         # print("negent", -entropy_coeff * self.mean_entropy)
-        print("advantages", advantages)
-        print("logp ratio", logp_ratio)
-        print("mean pl", self.mean_policy_loss)
-        print("mean vl", self.mean_vf_loss)
-        print("vf preds", vf_preds)
-        print("value fn", value_fn)
-        print("value targets", value_targets)
+        # print("advantages", advantages)
+        # print("logp ratio", logp_ratio)
+        # print("mean pl", self.mean_policy_loss)
+        # print("mean vl", self.mean_vf_loss)
+        # print("vf preds", vf_preds)
+        # print("value fn", value_fn)
+        # print("value targets", value_targets)
 
         if is_policy_loss:
             self.loss = -entropy_coeff * self.mean_entropy + self.mean_policy_loss
@@ -181,7 +181,6 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, is_policy_loss):
         mask = sequence_mask(train_batch["seq_lens"], max_seq_len)
         mask = torch.reshape(mask, [-1])
 
-    print("before constructing ppo loss vf preds", train_batch[SampleBatch.VF_PREDS])
     policy.loss_obj = PPOLoss(
         is_policy_loss,
         dist_class,
@@ -225,13 +224,9 @@ def kl_and_loss_stats(policy, train_batch):
 
 def vf_preds_fetches(policy, input_dict, state_batches, model, action_dist):
     """Adds value function outputs to experience train_batches."""
-
-    fetches = {
+    return {
         SampleBatch.VF_PREDS: policy.model.value_function(),
     }
-    print("set vf preds", fetches)
-    return fetches
-
 
 class KLCoeffMixin:
     def __init__(self, config):
