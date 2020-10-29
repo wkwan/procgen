@@ -370,7 +370,6 @@ class TorchPolicy(Policy):
         grad_info.update(self.extra_grad_info(train_batch))
         return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.VALUE_TARGETS], 'oldpd': self.action_dist_cache}
 
-    @override(Policy)
     def custom_learn_on_batch(self, postprocessed_batch):
         # print("LEARN ON BATCH")
 
