@@ -21,6 +21,7 @@ from torch import distributions as td
 import itertools
 
 from torch import nn
+from .custom_postprocessing import Postprocessing
 
 
 def make_minibatches(segs, mbsize):
@@ -161,16 +162,15 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for minibatch in minibatches(batch, sgd_minibatch_size):
                 # nepochs += 1
                 #compute losses and do backprop
+                print("vtarg before learn", minibatch.data[Postprocessing.VALUE_TARGETS] )
                 
-                print("minibatch data 0 iter 1", minibatch.data["obs"][0][0])
-
                 batch_fetches = (local_worker.learn_on_batch(
                     MultiAgentBatch({
                         policy_id: minibatch
                     }, minibatch.count)))[policy_id]
                 minibatch.data["vtarg"] = batch_fetches["vtarg"]
                 minibatch.data["oldpd"] = batch_fetches["oldpd"]
-
+                print("vtarg after learn", minibatch.data["vtarg"])
                 # seg_buf.append(minibatch.data)
                 seg_buf.append({
                     "obs": minibatch.data["obs"],
