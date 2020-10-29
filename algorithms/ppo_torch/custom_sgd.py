@@ -97,6 +97,7 @@ def minibatches(samples, sgd_minibatch_size):
         if log_once("not_shuffling_rnn_data_in_simple_mode"):
             logger.warning("Not shuffling RNN data for SGD in simple mode")
     else:
+        print("shuffle minibatchs for gen")
         samples.shuffle()
 
     i = 0
