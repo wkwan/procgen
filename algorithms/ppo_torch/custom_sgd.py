@@ -98,7 +98,6 @@ def minibatches(samples, sgd_minibatch_size):
         if log_once("not_shuffling_rnn_data_in_simple_mode"):
             logger.warning("Not shuffling RNN data for SGD in simple mode")
     else:
-        print("shuffle minibatchs for gen")
         samples.shuffle()
 
     i = 0
@@ -176,7 +175,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
         seg_buf.append(batch)
 
-        if nepochs % 16 == 0:
+        if nepochs % 4 == 0:
             print("do auxiliary phase")
             # def forward(seg):
             #     logits, state = model.forward(seg, None, None)
@@ -185,7 +184,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             REPLAY_MB_SIZE = 512
             replay_batch = SampleBatch.concat_samples(seg_buf)
 
-            for minibatch in minibatches(batch, REPLAY_MB_SIZE):
+            for mb in minibatches(batch, REPLAY_MB_SIZE):
                 mb = tree_map(lambda x: x.to(tu.dev()), mb)
                 logits, state = model.forward(mb, None, None)
                 mb["oldpd"] = logits
