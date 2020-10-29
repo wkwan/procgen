@@ -166,7 +166,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 #         policy_id: minibatch
                 #     }, minibatch.count)))[policy_id]
 
-                batch_fetches = policy.custom_learn_batch(MultiAgentBatch({
+                batch_fetches = policy.custom_learn_on_batch(MultiAgentBatch({
                         policy_id: minibatch
                     }, minibatch.count))
                     
