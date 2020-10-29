@@ -112,7 +112,9 @@ def minibatches(samples, sgd_minibatch_size):
         yield samples.slice(i, j)
 
 
-# nepochs = 0
+nepochs = 0
+seg_buf = []
+
 
 def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                      sgd_minibatch_size, standardize_fields):
@@ -133,13 +135,10 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     # Get batch
 
     if isinstance(samples, SampleBatch):
-        print("is samples batch instance")
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
 
     # print("samples batch policy batches", samples.policy_batches['default_policy']['dones'].shape)
-    print("samples batch count", samples.count)
-    # global nepochs
-    seg_buf = []
+    global nepochs
     fetches = {}
 
     for policy_id, policy in policies.items():
@@ -161,87 +160,67 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             for minibatch in minibatches(batch, sgd_minibatch_size):
                 # nepochs += 1
-                #compute losses and do backprop
-                print("vtarg before learn", minibatch.data[Postprocessing.VALUE_TARGETS] )
-                
+                #compute losses and do backprop                
                 batch_fetches = (local_worker.learn_on_batch(
                     MultiAgentBatch({
                         policy_id: minibatch
                     }, minibatch.count)))[policy_id]
-                minibatch.data["vtarg"] = batch_fetches["vtarg"]
-                minibatch.data["oldpd"] = batch_fetches["oldpd"]
-                print("vtarg after learn", minibatch.data["vtarg"])
-                # seg_buf.append(minibatch.data)
-                seg_buf.append({
-                    "obs": minibatch.data["obs"],
-                    "vtarg": minibatch.data["vtarg"],
-                    "old": minibatch.data["oldpd"]
-                })
 
                 for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                     iter_extra_fetches[k].append(v)
 
-                # nepochs += 1
-                #compute losses and do backprop
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
-            # needed_keys = {"obs", "oldpd", "vtarg"}
 
-            # seg_buf = [{k: seg[k] for k in needed_keys} for seg in seg_buf]
-            
-            # print("done the first phase")
-            def forward(seg):
-                logits, state = model.forward(seg, None, None)
-                return logits, state      
+        fetches[policy_id] = averaged(iter_extra_fetches)
+        nepochs += 1
 
-            MB_SIZE = 1024         
+        seg_buf.append(batch)
 
-            #compute presleep outputs for replay buffer (what does this mean?)
-            for seg in seg_buf:
-                seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-                logits, state = tu.minibatched_call(forward, MB_SIZE, seg=seg)
-                # print("presleep logits", logits.shape, logits)
-                # print("logits splice", logits[2:])
-                seg["oldpd"] = logits
-                # print("seg presleep oldpd", logits.shape, logits)
-                # print("presleep oldpd", seg["oldpd"])
-                # print("calculated old pd", seg["oldpd"])
-            # print("done computing presleep")
+        if nepochs % 16 == 0:
+            print("do auxiliary phase")
+            # def forward(seg):
+            #     logits, state = model.forward(seg, None, None)
+            #     return logits, state      
+
+            REPLAY_MB_SIZE = 512
+            replay_batch = SampleBatch.concat_samples(seg_buf)
+
+            for minibatch in minibatches(batch, REPLAY_MB_SIZE):
+                mb = tree_map(lambda x: x.to(tu.dev()), mb)
+                logits, state = model.forward(mb, None, None)
+                mb["oldpd"] = logits
+                print("calculate presleep", mb["oldpd"])
+
+
+            # #compute presleep outputs for replay buffer (what does this mean?)
+            # for seg in seg_buf:
+            #     seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
+            #     logits, state = tu.minibatched_call(forward, MB_SIZE, seg=seg)
+            #     seg["oldpd"] = logits
+
             #train on replay buffer
-            for i in range(12):
-                # print("aux iter", i)
-                # z = 0
-                # for minibatch in minibatches(batch, 1024):
-                for mb in make_minibatches(seg_buf, MB_SIZE):
-                    # print("mb ind", z)
-                    # z += 1
+            for i in range(1):
+                for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
+
                     mb = tree_map(lambda x: x.to(tu.dev()), mb)
-                    # print("mb shape", mb['obs'].shape)
-                    # print("old logits", mb['oldpd'].shape, mb['oldpd'])
+
                     logits, vpredaux = model.forward_aux(mb)
-                    # print("new logits", logits.shape, logits)
 
                     oldpd = dist_class(mb['oldpd'])
+                    print("the old logits from presleep", mb['oldpd'])
                     pd = dist_class(logits, model)
-                    # print("newpd", pd)
                     pol_distance = oldpd.kl(pd).mean()
-                    # print("pol dist", pol_distance)
 
-                    # print("vpredaux", vpredaux)
                     vpredtrue = model.value_function()
-                    # print("vpredtrue", vpredtrue)
-                    # print("distribution", pd)
+
                 
                     vf_aux = 0.5 * ((vpredaux - mb["vtarg"]) ** 2).mean() 
                     vf_true = 0.5 * ((vpredtrue - mb["vtarg"]) ** 2).mean()
-                    # print("vf aux", vf_aux, "vf_true", vf_true)
 
                     loss = pol_distance + vf_aux + vf_true
 
                     policy.aux_learn(loss)
-                    # vpredaux = aux_vf_head(x)
-                    # print("v pred aux", vpredaux)
-                    # name2loss.update(compute_aux_loss(aux, mb))
+
             seg_buf.clear()
-            # print("done aux train")
-        fetches[policy_id] = averaged(iter_extra_fetches)
+
     return fetches
