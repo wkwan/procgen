@@ -152,7 +152,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         for field in standardize_fields:
             batch[field] = standardized(batch[field])
 
-        print("append a batch", batch.data["dones"].shape)
         seg_buf.append(batch)
 
         for i in range(num_sgd_iter):
@@ -185,7 +184,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 np_data["obs"] = th.from_numpy(seg.data["obs"]).to(th.cuda.current_device())
                 logits, state = tu.minibatched_call(forward, REPLAY_MB_SIZE, seg=np_data)
                 seg.data["oldpd"] = logits.cpu().numpy()
-                print("presleep", logits)
 
             replay_batch = SampleBatch.concat_samples(seg_buf)
             seg_buf.clear()
@@ -208,6 +206,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     vf_true = 0.5 * th.mean(th.pow(vpredtrue - vtarg, 2.0))
 
                     loss = pol_distance + vf_aux + vf_true
+                    print("losses", pol_distance, vf_aux, v_true, loss)
 
                     policy.aux_learn(loss)
 
