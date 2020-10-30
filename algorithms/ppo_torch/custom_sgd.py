@@ -26,23 +26,6 @@ from .custom_postprocessing import Postprocessing
 from ray.rllib.policy.rnn_sequencing import pad_batch_to_sequences_of_same_size
 
 
-def make_minibatches(segs, mbsize):
-    """
-    Yield one epoch of minibatch over the dataset described by segs
-    Each minibatch mixes data between different segs
-    """
-    # nenv = tu.batch_len(segs[0])
-    nenv = 1024
-    nseg = len(segs)
-    envs_segs = th.tensor(list(itertools.product(range(nenv), range(nseg))))
-    for perminds in th.randperm(len(envs_segs)).split(mbsize):
-        esinds = envs_segs[perminds]
-        # print("for perminds", perminds.shape, esinds.shape)
-        yield tu.tree_stack(
-            [tu.tree_slice(segs[segind], envind) for (envind, segind) in esinds]
-        )
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -171,14 +154,14 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         fetches[policy_id] = averaged(iter_extra_fetches)
     
         nepochs += 1
-        if nepochs % 16 == 0:
+        if nepochs % 2 == 0:
             # print("do auxiliary phase")
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
                 return logits, state      
 
-            REPLAY_MB_SIZE = 1024
-
+            REPLAY_MB_SIZE = 2048
+            print("before compute presleep")
             # #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 np_data = {}
@@ -189,7 +172,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             replay_batch = SampleBatch.concat_samples(seg_buf)
             seg_buf.clear()
             #train on replay buffer
-            for i in range(8):    
+            for i in range(8):   
+                print("do aux phase", i) 
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     pad_batch_to_sequences_of_same_size(mb,
