@@ -189,42 +189,44 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         nepochs += 1
         if nepochs % 2 == 0:
             print("do auxiliary phase")
-            # def forward(seg):
-            #     logits, state = model.forward(seg, None, None)
-            #     return logits, state      
+            def forward(seg):
+                logits, state = model.forward(seg, None, None)
+                return logits, state      
 
             REPLAY_MB_SIZE = 512
-            replay_batch = SampleBatch.concat_samples(seg_buf)
 
-            seg_buf.clear()
-            #TODO: this needs to be properly saved
-            for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
-                # mb = tree_map(lambda x: x.to(tu.dev()), mb)
-                mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
-                logits, state = model.forward(mb, None, None)
-                mb["oldpd"] = logits
-                print("calculate presleep")
-                seg_buf.append(mb)
-                print("done appending mb to seg buf again", len(seg_buf))
+            # seg_buf.clear()
+            # #TODO: this needs to be properly saved
+            # for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
+            #     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
+            #     mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
+            #     logits, state = model.forward(mb, None, None)
+            #     mb["oldpd"] = logits
+            #     print("calculate presleep")
+            #     seg_buf.append(mb)
+            #     print("done appending mb to seg buf again", len(seg_buf))
 
-            print("before concat samples again", len(seg_buf))
-            # replay_batch.clear()
-            for policy_batch in replay_batch.policy_batches:
-                print("clear a policy batch")
-                policy_batch.data.clear()
-            replay_batch = SampleBatch.concat_samples(seg_buf)
-            print("before seg clearning")
-            seg_buf.clear()
+            # print("before concat samples again", len(seg_buf))
+            # # replay_batch.clear()
+            # for policy_batch in replay_batch.policy_batches:
+            #     print("clear a policy batch")
+            #     policy_batch.data.clear()
+            # replay_batch = SampleBatch.concat_samples(seg_buf)
+            # print("before seg clearning")
+            # seg_buf.clear()
 
             # #compute presleep outputs for replay buffer (what does this mean?)
-            # for seg in seg_buf:
-            #     seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
-            #     logits, state = tu.minibatched_call(forward, MB_SIZE, seg=seg)
-            #     seg["oldpd"] = logits
+            for seg in seg_buf:
+                seg["obs"] = th.from_numpy(seg["obs"]).to(th.cuda.current_device())
+                logits, state = tu.minibatched_call(forward, REPLAY_MB_SIZE, seg=seg)
+                seg["oldpd"] = logits
 
+            replay_batch = SampleBatch.concat_samples(seg_buf)
+            seg_buf.clear(seg_buf)
             #train on replay buffer
             for i in range(1):
                 print("before make aux mbs")
+                
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                     print("make an aux mb")
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
