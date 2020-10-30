@@ -205,6 +205,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 mb["oldpd"] = logits
                 print("calculate presleep")
                 seg_buf.append(mb)
+                print("done appending mb to seg buf again", len(seg_buf))
 
             print("before concat samples again", len(seg_buf))
             # replay_batch.clear()
