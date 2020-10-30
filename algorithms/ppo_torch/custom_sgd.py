@@ -23,6 +23,8 @@ import itertools
 from torch import nn
 from .custom_postprocessing import Postprocessing
 
+from ray.rllib.policy.rnn_sequencing import pad_batch_to_sequences_of_same_size
+
 
 def make_minibatches(segs, mbsize):
     """
@@ -190,6 +192,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for i in range(6):    
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
+                    print("pad in aux train")
+                    pad_batch_to_sequences_of_same_size(mb,
+                                                        max_seq_len=20,
+                                                        shuffle=False,
+                                                        batch_divisibility_req=None)
                     mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
 
                     logits, vpredaux = model.forward_aux(mb)

@@ -416,7 +416,7 @@ class TorchPolicy(Policy):
                 max_seq_len=self.max_seq_len,
                 shuffle=False,
                 batch_divisibility_req=self.batch_divisibility_req)
-
+            print("max seq len", self.max_seq_len, self.batch_divisibility_req)
             train_batch = self._lazy_tensor_dict(minibatch)
 
             loss_out = force_list(
