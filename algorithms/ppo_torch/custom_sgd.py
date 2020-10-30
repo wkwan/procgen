@@ -243,9 +243,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
                     vpredtrue = model.value_function()
 
-                
-                    vf_aux = 0.5 * ((vpredaux - mb[Postprocessing.VALUE_TARGETS]) ** 2).mean() 
-                    vf_true = 0.5 * ((vpredtrue - mb[Postprocessing.VALUE_TARGETS]) ** 2).mean()
+
+                    vf_aux = 0.5 * (torch.pow(vpredaux - mb[Postprocessing.VALUE_TARGETS]), 2.0).mean() 
+                    vf_true = 0.5 * (torch.pow(vpredtrue - mb[Postprocessing.VALUE_TARGETS]), 2.0).mean() 
 
                     loss = pol_distance + vf_aux + vf_true
 
