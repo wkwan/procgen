@@ -170,7 +170,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     
         nepochs += 1
         if nepochs % 16 == 0:
-            print("do auxiliary phase")
+            # print("do auxiliary phase")
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
                 return logits, state      
@@ -187,7 +187,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             replay_batch = SampleBatch.concat_samples(seg_buf)
             seg_buf.clear()
             #train on replay buffer
-            for i in range(9):                
+            for i in range(16):                
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
