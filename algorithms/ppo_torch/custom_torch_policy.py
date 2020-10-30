@@ -408,7 +408,7 @@ class TorchPolicy(Policy):
                 yield samples.slice(i, j)
 
         train_batch = None
-        for minibatch in minibatches(postprocessed_batch, 1024):
+        for minibatch in minibatches(postprocessed_batch, 2048):
             # Get batch ready for RNNs, if applicable.
             pad_batch_to_sequences_of_same_size(
                 minibatch,
@@ -431,7 +431,7 @@ class TorchPolicy(Policy):
                 tu.sync_grads(self.model.parameters())
                 opt.step()
 # 
-        for minibatch in minibatches(postprocessed_batch, 1024):
+        for minibatch in minibatches(postprocessed_batch, 2048):
             # Get batch ready for RNNs, if applicable.
             pad_batch_to_sequences_of_same_size(
                 minibatch,
