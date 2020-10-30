@@ -108,6 +108,7 @@ def minibatches(samples, sgd_minibatch_size):
     random.shuffle(slices)
 
     for i, j in slices:
+        print("slice", i, j)
         yield samples.slice(i, j)
 
 
@@ -175,13 +176,13 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 logits, state = model.forward(seg, None, None)
                 return logits, state      
 
-            REPLAY_MB_SIZE = 1024
+            REPLAY_MB_SIZE = 2048
 
             # #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 np_data = {}
                 np_data["obs"] = th.from_numpy(seg.data["obs"]).to(th.cuda.current_device())
-                logits, state = tu.minibatched_call(forward, REPLAY_MB_SIZE, seg=np_data)
+                logits, state = tu.minibatched_call (forward, REPLAY_MB_SIZE, seg=np_data)
                 seg.data["oldpd"] = logits.cpu().numpy()
 
             replay_batch = SampleBatch.concat_samples(seg_buf)
