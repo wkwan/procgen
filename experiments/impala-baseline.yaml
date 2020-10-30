@@ -235,7 +235,7 @@ procgen-ppg:
         ################################################
         ################################################
         # Number of CPUs to allocate per worker.
-        num_cpus_per_worker: 0.875
+        num_cpus_per_worker: 0.874
         # Number of GPUs to allocate per worker. This can be fractional. This is
         # usually needed only if your env itself requires a GPU (i.e., it is a
         # GPU-intensive video game), or model inference is unusually expensive.
