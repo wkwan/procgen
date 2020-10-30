@@ -151,9 +151,23 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         x = self.hidden_fc(x)
         x = nn.functional.relu(x)
         logits = self.logits_fc(x)
+        # value = self.value_fc(x.detach()) #detach during policy phase only
+        # self._value = value.squeeze(1)
+        return logits, state
+
+    def forward_value(self, input_dict):
+        x = input_dict["obs"].float()
+        # print("x shape", x.shape)
+        x = x / 255.0  # scale to 0-1
+        x = x.permute(0, 3, 1, 2)  # NHWC => NCHW
+        for conv_seq in self.conv_seqs:
+            x = conv_seq(x)
+        x = torch.flatten(x, start_dim=1)
+        x = nn.functional.relu(x)
+        x = self.hidden_fc(x)
+        x = nn.functional.relu(x)
         value = self.value_fc(x.detach()) #detach during policy phase only
         self._value = value.squeeze(1)
-        return logits, state
 
     def forward_aux(self, input_dict):
         x = input_dict["obs"].float()
