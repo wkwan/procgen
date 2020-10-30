@@ -209,7 +209,5 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     # print("losses", pol_distance, vf_aux, vf_true, loss)
 
                     policy.aux_learn(loss)
-            print("done the aux phase")
-
 
     return fetches
