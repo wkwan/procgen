@@ -246,6 +246,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     print("v pred aux", vpredaux)
                     print("value targs", mb[Postprocessing.VALUE_TARGETS])
 
+                    vtarg = th.from_numpy(mb[Postprocessing.VALUE_TARGETS]).to(th.cuda.current_device())
                     vf_aux = 0.5 * th.mean(th.pow(vpredaux - mb[Postprocessing.VALUE_TARGETS]), 2.0)
                     vf_true = 0.5 * th.mean(th.pow(vpredtrue - mb[Postprocessing.VALUE_TARGETS]), 2.0)
 
