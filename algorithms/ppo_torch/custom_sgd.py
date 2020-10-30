@@ -188,7 +188,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             replay_batch = SampleBatch.concat_samples(seg_buf)
             seg_buf.clear()
             #train on replay buffer
-            for i in range(16):                
+            for i in range(9):                
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
@@ -206,9 +206,10 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     vf_true = 0.5 * th.mean(th.pow(vpredtrue - vtarg, 2.0))
 
                     loss = pol_distance + vf_aux + vf_true
-                    print("losses", pol_distance, vf_aux, vf_true, loss)
+                    # print("losses", pol_distance, vf_aux, vf_true, loss)
 
                     policy.aux_learn(loss)
+            print("done the aux phase")
 
 
     return fetches

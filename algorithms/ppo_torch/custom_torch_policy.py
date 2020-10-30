@@ -376,7 +376,6 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def learn_on_batch(self, postprocessed_batch):
-        # print("LEARN ON BATCH")
         grad_info = {"allreduce_latency": 0.0}
 
         def minibatches(samples, sgd_minibatch_size):
