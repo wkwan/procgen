@@ -404,6 +404,7 @@ class TorchPolicy(Policy):
             random.shuffle(slices)
 
             for i, j in slices:
+                print("slice", i, j)
                 yield samples.slice(i, j)
 
         train_batch = None
