@@ -454,7 +454,7 @@ class TorchPolicy(Policy):
                 opt.step()
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
-        grad_info.update(self.extra_grad_info(train_batch))
+        grad_info.update(self.extra_grad_info(train_batch)) #is it ok just to update this with the last minibatch?
         return {LEARNER_STATS_KEY: grad_info}
 
     @override(Policy)
