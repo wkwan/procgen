@@ -236,7 +236,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
                     logits, vpredaux = model.forward_aux(mb)
 
-                    oldpd = dist_class(mb['oldpd'])
+                    oldpd = dist_class(th.from_numpy(mb['oldpd']).to(th.cuda.current_device()))
                     print("the old logits from presleep", mb['oldpd'])
                     pd = dist_class(logits, model)
                     pol_distance = oldpd.kl(pd).mean()

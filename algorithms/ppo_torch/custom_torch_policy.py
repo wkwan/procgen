@@ -435,10 +435,7 @@ class TorchPolicy(Policy):
                 self.backprop(grad_info, opt, pi_loss, False)
                 tu.sync_grads(self.model.parameters())
                 opt.step()
-
-            grad_info["allreduce_latency"] /= len(self._optimizers)
-            grad_info.update(self.extra_grad_info(train_batch))
-
+# 
         for minibatch in minibatches(postprocessed_batch, 512):
             # Get batch ready for RNNs, if applicable.
             pad_batch_to_sequences_of_same_size(
@@ -461,8 +458,8 @@ class TorchPolicy(Policy):
                 tu.sync_grads(self.model.parameters())
                 opt.step()
 
-            grad_info["allreduce_latency"] /= len(self._optimizers)
-            grad_info.update(self.extra_grad_info(train_batch))
+        grad_info["allreduce_latency"] /= len(self._optimizers)
+        grad_info.update(self.extra_grad_info(train_batch))
         return {LEARNER_STATS_KEY: grad_info, 'vtarg': train_batch[Postprocessing.VALUE_TARGETS], 'oldpd': self.action_dist_cache}
 
     @override(Policy)
