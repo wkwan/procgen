@@ -217,14 +217,13 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             # #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
-                seg.data["obs"] = th.from_numpy(seg.data["obs"]).to(th.cuda.current_device())
-                logits, state = tu.minibatched_call(forward, REPLAY_MB_SIZE, seg=seg.data)
+                np_obs = th.from_numpy(seg.data["obs"]).to(th.cuda.current_device())
+                logits, state = tu.minibatched_call(forward, REPLAY_MB_SIZE, seg=np_obs)
                 seg.data["oldpd"] = logits.cpu().numpy()
-                seg.data["obs"] = seg.data["obs"].cpu().numpy()
                 print("presleep", logits)
 
             replay_batch = SampleBatch.concat_samples(seg_buf)
-            seg_buf.clear(seg_buf)
+            seg_buf.clear()
             #train on replay buffer
             for i in range(1):
                 print("before make aux mbs")
