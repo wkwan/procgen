@@ -207,9 +207,12 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 seg_buf.append(mb)
 
             print("before concat samples again", len(seg_buf))
-            replay_batch.clear()
+            # replay_batch.clear()
+            for policy_batch in replay_batch.policy_batches:
+                print("clear a policy batch")
+                policy_batch.data.clear()
             replay_batch = SampleBatch.concat_samples(seg_buf)
-            print("before clearnin")
+            print("before seg clearning")
             seg_buf.clear()
 
             # #compute presleep outputs for replay buffer (what does this mean?)
