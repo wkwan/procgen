@@ -108,7 +108,6 @@ def minibatches(samples, sgd_minibatch_size):
     random.shuffle(slices)
 
     for i, j in slices:
-        print("slice", i, j)
         yield samples.slice(i, j)
 
 
@@ -189,7 +188,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             seg_buf.clear()
             #train on replay buffer
             for i in range(6):    
-                print("do one iter of replay")            
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
