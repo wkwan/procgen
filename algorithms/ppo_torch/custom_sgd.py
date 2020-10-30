@@ -206,7 +206,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     vf_true = 0.5 * th.mean(th.pow(vpredtrue - vtarg, 2.0))
 
                     loss = pol_distance + vf_aux + vf_true
-                    print("losses", pol_distance, vf_aux, v_true, loss)
+                    print("losses", pol_distance, vf_aux, vf_true, loss)
 
                     policy.aux_learn(loss)
 
