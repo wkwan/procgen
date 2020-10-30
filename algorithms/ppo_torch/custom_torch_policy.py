@@ -195,8 +195,6 @@ class TorchPolicy(Policy):
                                 state_batches=None,
                                 prev_action_batch=None,
                                 prev_reward_batch=None):
-        print("COMPUTE LOG LIKELIHOODS")
-
         if self.action_sampler_fn and self.action_distribution_fn is None:
             raise ValueError("Cannot compute log-prob/likelihood w/o an "
                              "`action_distribution_fn` and a provided "
@@ -459,7 +457,6 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def compute_gradients(self, postprocessed_batch):
-        print("COMPUTE GRADIENTS")
         train_batch = self._lazy_tensor_dict(postprocessed_batch)
         loss_out = force_list(
             self._loss(self, self.model, self.dist_class, train_batch, "compute grad extra yooo"))
@@ -469,7 +466,6 @@ class TorchPolicy(Policy):
         grads = []
         for i, opt in enumerate(self._optimizers):
             opt.zero_grad()
-            print("LOSS IS", loss_out[i])
             loss_out[i].backward()
 
             grad_process_info = self.extra_grad_process(opt, loss_out[i])
@@ -523,7 +519,6 @@ class TorchPolicy(Policy):
 
     @override(Policy)
     def set_state(self, state):
-        print("SET STATE")
         state = state.copy()  # shallow copy
         # Set optimizer vars first.
         optimizer_vars = state.pop("_optimizer_variables", None)
