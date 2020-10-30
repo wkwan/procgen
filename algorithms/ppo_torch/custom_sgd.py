@@ -193,7 +193,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #     logits, state = model.forward(seg, None, None)
             #     return logits, state      
 
-            REPLAY_MB_SIZE = 256
+            REPLAY_MB_SIZE = 128
             replay_batch = SampleBatch.concat_samples(seg_buf)
 
             seg_buf.clear()
