@@ -121,7 +121,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     global seg_buf
     if isinstance(samples, SampleBatch):
         samples = MultiAgentBatch({DEFAULT_POLICY_ID: samples}, samples.count)
-    print("samples count", samples.count)
     
     fetches = {}
     for policy_id, policy in policies.items():
@@ -161,7 +160,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 return logits, state      
 
             REPLAY_MB_SIZE = 2048
-            print("before compute presleep")
             # #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 np_data = {}
