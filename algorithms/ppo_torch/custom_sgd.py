@@ -220,7 +220,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 seg.data["obs"] = th.from_numpy(seg.data["obs"]).to(th.cuda.current_device())
                 logits, state = tu.minibatched_call(forward, REPLAY_MB_SIZE, seg=seg.data)
                 seg.data["oldpd"] = logits
-                seg.data["obs"] = seg.data["obs"].numpy()
+                seg.data["obs"] = seg.data["obs"].cpu().numpy()
                 print("presleep", logits)
 
             replay_batch = SampleBatch.concat_samples(seg_buf)
