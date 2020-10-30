@@ -193,7 +193,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             #     logits, state = model.forward(seg, None, None)
             #     return logits, state      
 
-            REPLAY_MB_SIZE = 128
+            REPLAY_MB_SIZE = 512
             replay_batch = SampleBatch.concat_samples(seg_buf)
 
             seg_buf.clear()
@@ -203,10 +203,11 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
                 logits, state = model.forward(mb, None, None)
                 mb["oldpd"] = logits
-                print("calculate presleep", mb["oldpd"])
+                print("calculate presleep")
                 seg_buf.append(mb)
 
             replay_batch = SampleBatch.concat_samples(seg_buf)
+            seg_buf.clear()
 
             # #compute presleep outputs for replay buffer (what does this mean?)
             # for seg in seg_buf:
@@ -216,8 +217,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             #train on replay buffer
             for i in range(1):
+                print("before make aux mbs")
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
-
+                    print("make an aux mb")
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
 
@@ -238,6 +240,5 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
                     policy.aux_learn(loss)
 
-            seg_buf.clear()
 
     return fetches
