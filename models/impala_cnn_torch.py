@@ -152,9 +152,11 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         x = nn.functional.relu(x)
         logits = self.logits_fc(x)
         # print("x before detach", x)
-        x = x.detach() #detach during policy phase only
+        x_detached = x.detach() #detach during policy phase only
         # print("x after detach", x)
-        value = self.value_fc(x)
+        value = self.value_fc(x_detached)
+        print("x", x)
+        print("x det", x_detached)
         # print("value before squeeze", value)
         self._value = value.squeeze(1)
         # print("value after squeeze", self._value)
