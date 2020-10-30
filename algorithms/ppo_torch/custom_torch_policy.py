@@ -394,6 +394,7 @@ class TorchPolicy(Policy):
                 raise NotImplementedError(
                     "Minibatching not implemented for multi-agent in simple mode")
 
+            print("samples count", samples.count)
             samples.shuffle()
 
             i = 0
