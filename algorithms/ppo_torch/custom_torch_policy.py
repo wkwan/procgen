@@ -407,7 +407,7 @@ class TorchPolicy(Policy):
                 yield samples.slice(i, j)
 
         train_batch = None
-        for minibatch in minibatches(postprocessed_batch, 2048):
+        for minibatch in minibatches(postprocessed_batch, 1024):
             # Get batch ready for RNNs, if applicable.
             pad_batch_to_sequences_of_same_size(
                 minibatch,
@@ -417,7 +417,7 @@ class TorchPolicy(Policy):
             train_batch = self._lazy_tensor_dict(minibatch)
 
             loss_out = force_list(
-                self._loss(self, self.model, self.dist_class, train_batch, True))
+                self._loss(self, self.model, self.dist_class, train_batch, False))
             # assert len(loss_out) == len(self._optimizers)
             # assert not any(torch.isnan(l) for l in loss_out)
 
@@ -430,7 +430,7 @@ class TorchPolicy(Policy):
                 tu.sync_grads(self.model.parameters())
                 opt.step()
 # 
-        for minibatch in minibatches(postprocessed_batch, 2048):
+        for minibatch in minibatches(postprocessed_batch, 1024):
             # Get batch ready for RNNs, if applicable.
             pad_batch_to_sequences_of_same_size(
                 minibatch,
