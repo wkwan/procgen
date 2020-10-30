@@ -404,7 +404,6 @@ class TorchPolicy(Policy):
             random.shuffle(slices)
 
             for i, j in slices:
-                print("slice", i, j)
                 yield samples.slice(i, j)
 
         train_batch = None
@@ -416,7 +415,6 @@ class TorchPolicy(Policy):
                 shuffle=False,
                 batch_divisibility_req=self.batch_divisibility_req)
             train_batch = self._lazy_tensor_dict(minibatch)
-            print("do the loss for policy")
             loss_out = force_list(
                 self._loss(self, self.model, self.dist_class, train_batch, True))
             # assert len(loss_out) == len(self._optimizers)
@@ -440,7 +438,6 @@ class TorchPolicy(Policy):
                 batch_divisibility_req=self.batch_divisibility_req)
 
             train_batch = self._lazy_tensor_dict(minibatch)
-            print("do the loss for value")
             loss_out = force_list(
                 self._loss(self, self.model, self.dist_class, train_batch, False))
 
