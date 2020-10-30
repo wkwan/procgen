@@ -243,6 +243,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
                     vpredtrue = model.value_function()
 
+                    print("v pred aux", vpredaux)
+                    print("value targs", mb[Postprocessing.VALUE_TARGETS])
 
                     vf_aux = 0.5 * th.mean(th.pow(vpredaux - mb[Postprocessing.VALUE_TARGETS]), 2.0)
                     vf_true = 0.5 * th.mean(th.pow(vpredtrue - mb[Postprocessing.VALUE_TARGETS]), 2.0)
