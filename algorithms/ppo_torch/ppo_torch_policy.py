@@ -173,6 +173,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, is_policy_loss):
 
     # print("PPO SURROGATE LOSS EXTRA is policy loss", is_policy_loss)
     action_dist = None
+    state = None
     if is_policy_loss:
         print("forward policy")
         logits, state = model.from_batch(train_batch)
@@ -187,6 +188,7 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, is_policy_loss):
 
     mask = None
     if state:
+        print("have state")
         max_seq_len = torch.max(train_batch["seq_lens"])
         mask = sequence_mask(train_batch["seq_lens"], max_seq_len)
         mask = torch.reshape(mask, [-1])
