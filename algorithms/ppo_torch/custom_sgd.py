@@ -156,6 +156,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
         for i in range(num_sgd_iter):
             iter_extra_fetches = defaultdict(list)
+            print("do policy value phase")
             #pass the whole batch to the worker, then let it break it down into minibatches
             batch_fetches = (local_worker.learn_on_batch(
                 MultiAgentBatch({
