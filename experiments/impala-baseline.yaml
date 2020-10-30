@@ -235,11 +235,11 @@ procgen-ppg:
         ################################################
         ################################################
         # Number of CPUs to allocate per worker.
-        num_cpus_per_worker: 0.874
+        num_cpus_per_worker: 0.875
         # Number of GPUs to allocate per worker. This can be fractional. This is
         # usually needed only if your env itself requires a GPU (i.e., it is a
         # GPU-intensive video game), or model inference is unusually expensive.
-        num_gpus_per_worker: 0.1
+        num_gpus_per_worker: 0.0875
         # Number of CPUs to allocate for the trainer. Note: this only takes effect
         # when running in Tune. Otherwise, the trainer runs in the main program.
         num_cpus_for_driver: 1
