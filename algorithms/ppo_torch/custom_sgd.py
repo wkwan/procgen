@@ -206,7 +206,9 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 print("calculate presleep")
                 seg_buf.append(mb)
 
+            print("before concat samples again", len(seg_buf))
             replay_batch = SampleBatch.concat_samples(seg_buf)
+            print("before clearnin")
             seg_buf.clear()
 
             # #compute presleep outputs for replay buffer (what does this mean?)
