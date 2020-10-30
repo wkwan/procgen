@@ -157,8 +157,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
         for i in range(num_sgd_iter):
             iter_extra_fetches = defaultdict(list)
-            #get minibatch
-
             #pass the whole batch to the worker, then let it break it down into minibatches
             batch_fetches = (local_worker.learn_on_batch(
                 MultiAgentBatch({
@@ -168,52 +166,18 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
                 iter_extra_fetches[k].append(v)
 
-
-            # for minibatch in minibatches(batch, sgd_minibatch_size):
-            #     #compute losses and do backprop            
-            #     print("minibatch shape", minibatch.data["dones"].shape)    
-            #     batch_fetches = (local_worker.learn_on_batch(
-            #         MultiAgentBatch({
-            #             policy_id: minibatch
-            #         }, minibatch.count)))[policy_id]
-
-            #     # print("batch fetches", policy_id, batch_fetches)
-
-            #     for k, v in batch_fetches.get(LEARNER_STATS_KEY, {}).items():
-            #         iter_extra_fetches[k].append(v)
-
             logger.debug("{} {}".format(i, averaged(iter_extra_fetches)))
 
         fetches[policy_id] = averaged(iter_extra_fetches)
     
         nepochs += 1
-        if nepochs % 2 == 0:
+        if nepochs % 16 == 0:
             print("do auxiliary phase")
             def forward(seg):
                 logits, state = model.forward(seg, None, None)
                 return logits, state      
 
             REPLAY_MB_SIZE = 512
-
-            # seg_buf.clear()
-            # #TODO: this needs to be properly saved
-            # for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
-            #     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
-            #     mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
-            #     logits, state = model.forward(mb, None, None)
-            #     mb["oldpd"] = logits
-            #     print("calculate presleep")
-            #     seg_buf.append(mb)
-            #     print("done appending mb to seg buf again", len(seg_buf))
-
-            # print("before concat samples again", len(seg_buf))
-            # # replay_batch.clear()
-            # for policy_batch in replay_batch.policy_batches:
-            #     print("clear a policy batch")
-            #     policy_batch.data.clear()
-            # replay_batch = SampleBatch.concat_samples(seg_buf)
-            # print("before seg clearning")
-            # seg_buf.clear()
 
             # #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
@@ -226,25 +190,18 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             replay_batch = SampleBatch.concat_samples(seg_buf)
             seg_buf.clear()
             #train on replay buffer
-            for i in range(1):
-                print("before make aux mbs")
-                
+            for i in range(16):                
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
-                    print("make an aux mb")
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     mb["obs"] = th.from_numpy(mb["obs"]).to(th.cuda.current_device())
 
                     logits, vpredaux = model.forward_aux(mb)
 
                     oldpd = dist_class(th.from_numpy(mb['oldpd']).to(th.cuda.current_device()))
-                    print("the old logits from presleep", mb['oldpd'])
                     pd = dist_class(logits, model)
                     pol_distance = oldpd.kl(pd).mean()
 
                     vpredtrue = model.value_function()
-
-                    print("v pred aux", vpredaux)
-                    print("value targs", mb[Postprocessing.VALUE_TARGETS])
 
                     vtarg = th.from_numpy(mb[Postprocessing.VALUE_TARGETS]).to(th.cuda.current_device())
                     vf_aux = 0.5 * th.mean(th.pow(vpredaux - vtarg, 2.0))
