@@ -150,9 +150,8 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         x = self.hidden_fc(x)
         x = nn.functional.relu(x)
         logits = self.logits_fc(x)
-        if self._value is None:
-            value = self.value_fc(x.detach()) #detach during policy phase only
-            self._value = value.squeeze(1)
+        value = self.value_fc(x.detach()) #detach during policy phase only
+        self._value = value.squeeze(1)
         return logits, state
 
     def forward_value(self, input_dict):
