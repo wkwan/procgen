@@ -189,7 +189,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             replay_batch = SampleBatch.concat_samples(seg_buf)
             seg_buf.clear()
             #train on replay buffer
-            for i in range(8):    
+            for i in range(12):    
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     pad_batch_to_sequences_of_same_size(mb,
