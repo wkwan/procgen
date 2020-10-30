@@ -139,7 +139,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
     # print("samples batch policy batches", samples.policy_batches['default_policy']['dones'].shape)
     
     fetches = {}
-
+    print("do minibatch sgd")
     for policy_id, policy in policies.items():
         model = policy.model
 
