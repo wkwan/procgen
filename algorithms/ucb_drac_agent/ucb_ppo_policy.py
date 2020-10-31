@@ -954,7 +954,6 @@ DEFAULT_CONFIG = with_common_config({
 })
 
 def choose_optimizer(policy, config):
-    print("choose the optimizer")
     return torch.optim.Adam(policy.model.parameters(), lr=config["lr"], eps=1e-5)
 
 PPOTorchPolicy = build_torch_policy(
