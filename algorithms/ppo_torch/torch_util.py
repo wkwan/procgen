@@ -287,13 +287,11 @@ def sync_grads(
     if dist.get_world_size(group) == 1:
         return
     grads = [p.grad for p in params if p.grad is not None]
-    print("grads", grads)
     flatgrad = flatten_tensors(grads, dtype=dtype, buf=sync_buffer)
     if grad_weight != 1.0:
         flatgrad.mul_(grad_weight)
     all_mean_(flatgrad, group=group)
     unflatten_to(flatgrad, grads)
-    print("grads after", grads)
 
 def _numpy_allmean(comm, x):
     out = np.zeros_like(x)
