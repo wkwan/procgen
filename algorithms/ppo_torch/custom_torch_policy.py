@@ -266,7 +266,7 @@ class TorchPolicy(Policy):
             opt.zero_grad()
             loss.backward()
             #do we need to sync grads here?
-            tu.sync_grads(self.model.parameters())
+            # tu.sync_grads(self.model.parameters())
             opt.step()
 
 
@@ -426,7 +426,7 @@ class TorchPolicy(Policy):
                 pi_loss = loss_out[i]
                 # print("train on pi loss", pi_loss)
                 self.backprop(grad_info, opt, pi_loss, False)
-                tu.sync_grads(self.model.parameters())
+                # tu.sync_grads(self.model.parameters())
                 opt.step()
 # 
         for minibatch in minibatches(postprocessed_batch, 1024):
@@ -446,7 +446,7 @@ class TorchPolicy(Policy):
                 vf_loss = loss_out[i]
                 # print("train on vf loss", vf_loss)
                 self.backprop(grad_info, opt, vf_loss, False)
-                tu.sync_grads(self.model.parameters())
+                # tu.sync_grads(self.model.parameters())
                 opt.step()
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
