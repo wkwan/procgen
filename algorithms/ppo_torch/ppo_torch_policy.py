@@ -174,9 +174,8 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, is_policy_loss=Tr
     # print("PPO SURROGATE LOSS EXTRA is policy loss", is_policy_loss)
 
     logits, state = model.from_batch(train_batch)
-    action_dist = None
-    if is_policy_loss:
-        action_dist = dist_class(logits, model)
+    action_dist = dist_class(logits, model)
+
 
     # action_dist = None
     # state = None
