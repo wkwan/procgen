@@ -429,7 +429,7 @@ class TorchPolicy(Policy):
                 # tu.sync_grads(self.model.parameters())
                 opt.step()
 # 
-        for i in range(3):
+        for vtrain_i in range(3):
             for minibatch in minibatches(postprocessed_batch, 1024):
                 # Get batch ready for RNNs, if applicable.
                 pad_batch_to_sequences_of_same_size(
