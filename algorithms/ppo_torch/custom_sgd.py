@@ -168,7 +168,6 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 seg.data["oldpd"] = logits.cpu().numpy()
 
             replay_batch = SampleBatch.concat_samples(seg_buf)
-            seg_buf.clear()
             #train on replay buffer
             for i in range(8):   
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
@@ -192,8 +191,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     vf_true = 0.5 * th.mean(th.pow(vpredtrue - vtarg, 2.0))
 
                     loss = pol_distance + vf_aux + vf_true
-                    # print("losses", pol_distance, vf_aux, vf_true, loss)
+                    print("losses", pol_distance, vf_aux, vf_true, loss)
 
                     policy.aux_learn(loss)
-
+            seg_buf.clear()
     return fetches
