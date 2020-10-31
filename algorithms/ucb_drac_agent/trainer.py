@@ -32,10 +32,10 @@ DEFAULT_CONFIG = with_common_config({
     "rollout_fragment_length": 256,
     # Number of timesteps collected for each SGD round. This defines the size
     # of each SGD epoch.
-    "train_batch_size": 16384,
+    "train_batch_size": 8192,
     # Total SGD batch size across all devices for SGD. This defines the
     # minibatch size within each epoch.
-    "sgd_minibatch_size": 2048,
+    "sgd_minibatch_size": 1024,
     # Whether to shuffle sequences in the batch when training (recommended).
     "shuffle_sequences": True,
     # Number of SGD iterations in each outer loop (i.e., number of epochs to
