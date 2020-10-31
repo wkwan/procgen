@@ -953,6 +953,10 @@ DEFAULT_CONFIG = with_common_config({
     "framework": "torch"
 })
 
+def choose_optimizer(policy, config):
+    print("choose the optimizer")
+    return torch.optim.Adam(policy.model.parameters(), lr=config["lr"], eps=1e-5)
+
 PPOTorchPolicy = build_torch_policy(
     name="PPOTorchPolicy",
     get_default_config=lambda: DEFAULT_CONFIG,
@@ -962,6 +966,7 @@ PPOTorchPolicy = build_torch_policy(
     extra_action_out_fn=vf_preds_fetches,
     postprocess_fn=postprocess_ppo_gae,
     extra_grad_process_fn=apply_grad_clipping,
+    optimizer_fn=choose_optimizer,
     before_init=setup_config,
     after_init=setup_mixins,
     mixins=[LearningRateSchedule, EntropyCoeffSchedule, KLCoeffMixin, ValueNetworkMixin])
