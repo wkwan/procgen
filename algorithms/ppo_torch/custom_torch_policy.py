@@ -429,25 +429,26 @@ class TorchPolicy(Policy):
                 # tu.sync_grads(self.model.parameters())
                 opt.step()
 # 
-        for minibatch in minibatches(postprocessed_batch, 1024):
-            # Get batch ready for RNNs, if applicable.
-            pad_batch_to_sequences_of_same_size(
-                minibatch,
-                max_seq_len=self.max_seq_len,
-                shuffle=False,
-                batch_divisibility_req=self.batch_divisibility_req)
+        for i in range(3):
+            for minibatch in minibatches(postprocessed_batch, 1024):
+                # Get batch ready for RNNs, if applicable.
+                pad_batch_to_sequences_of_same_size(
+                    minibatch,
+                    max_seq_len=self.max_seq_len,
+                    shuffle=False,
+                    batch_divisibility_req=self.batch_divisibility_req)
 
-            train_batch = self._lazy_tensor_dict(minibatch)
-            loss_out = force_list(
-                self._loss(self, self.model, self.dist_class, train_batch, False))
+                train_batch = self._lazy_tensor_dict(minibatch)
+                loss_out = force_list(
+                    self._loss(self, self.model, self.dist_class, train_batch, False))
 
-            for i, opt in enumerate(self._optimizers):
-                opt.zero_grad()
-                vf_loss = loss_out[i]
-                # print("train on vf loss", vf_loss)
-                self.backprop(grad_info, opt, vf_loss, False)
-                # tu.sync_grads(self.model.parameters())
-                opt.step()
+                for i, opt in enumerate(self._optimizers):
+                    opt.zero_grad()
+                    vf_loss = loss_out[i]
+                    # print("train on vf loss", vf_loss)
+                    self.backprop(grad_info, opt, vf_loss, False)
+                    # tu.sync_grads(self.model.parameters())
+                    opt.step()
 
         grad_info["allreduce_latency"] /= len(self._optimizers)
         grad_info.update(self.extra_grad_info(train_batch)) #is it ok just to update this with the last minibatch?
