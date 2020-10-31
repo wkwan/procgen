@@ -149,11 +149,11 @@ class PPOLoss:
                 self.mean_vf_loss = reduce_mean_valid(vf_loss)
                 print("clipped vf loss", self.mean_vf_loss)
                 # print("compute mean vf loss", value_fn.shape, value_targets.shape, vf_preds.shape)
-                print('vf preds', vf_preds)
-                print('value fn', value_fn)
-                print('value targets', value_targets)
-                self.mean_vf_loss = vf_loss_coeff * reduce_mean_valid(torch.pow(value_fn - value_targets, 2.0))
-                print("simple vf loss", self.mean_vf_loss)
+                # print('vf preds', vf_preds)
+                # print('value fn', value_fn)
+                # print('value targets', value_targets)
+                # self.mean_vf_loss = vf_loss_coeff * reduce_mean_valid(torch.pow(value_fn - value_targets, 2.0))
+                # print("simple vf loss", self.mean_vf_loss)
                 # loss = reduce_mean_valid(
                 #     -surrogate_loss + cur_kl_coeff * action_kl +
                 #     vf_loss_coeff * vf_loss - entropy_coeff * curr_entropy)
@@ -241,6 +241,7 @@ def kl_and_loss_stats(policy, train_batch):
 
 def vf_preds_fetches(policy, input_dict, state_batches, model, action_dist):
     """Adds value function outputs to experience train_batches."""
+    print("add vf fetches")
     return {
         SampleBatch.VF_PREDS: policy.model.value_function(),
     }
