@@ -140,8 +140,8 @@ class PPOLoss:
             self.loss = -entropy_coeff * self.mean_entropy + self.mean_policy_loss
         else:
             if use_gae:
-                print("vf preds", vf_preds)
-                print("value fn", value_fn)
+                # print("vf preds", vf_preds)
+                # print("value fn", value_fn)
                 vf_loss1 = torch.pow(value_fn - value_targets, 2.0)
                 vf_clipped = vf_preds + torch.clamp(value_fn - vf_preds,
                                                     -vf_clip_param, vf_clip_param)
@@ -242,7 +242,6 @@ def kl_and_loss_stats(policy, train_batch):
 
 def vf_preds_fetches(policy, input_dict, state_batches, model, action_dist):
     """Adds value function outputs to experience train_batches."""
-    print("add vf fetches", policy.model.value_function())
     return {
         SampleBatch.VF_PREDS: policy.model.value_function(),
     }
