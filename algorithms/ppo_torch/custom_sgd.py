@@ -156,7 +156,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         if nepochs % 16 == 0:
             # print("do auxiliary phase")
             def forward(seg):
-                logits, state = model.forward(seg, None, None)
+                logits, state = model.from_batch(seg)
                 return logits, state      
 
             REPLAY_MB_SIZE = 1024
