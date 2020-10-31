@@ -141,13 +141,17 @@ class PPOLoss:
         else:
             if use_gae:
                 
-                # vf_loss1 = torch.pow(value_fn - value_targets, 2.0)
-                # vf_clipped = vf_preds + torch.clamp(value_fn - vf_preds,
-                #                                     -vf_clip_param, vf_clip_param)
-                # vf_loss2 = torch.pow(vf_clipped - value_targets, 2.0)
-                # vf_loss = torch.max(vf_loss1, vf_loss2)
-                # self.mean_vf_loss = reduce_mean_valid(vf_loss)
+                vf_loss1 = torch.pow(value_fn - value_targets, 2.0)
+                vf_clipped = vf_preds + torch.clamp(value_fn - vf_preds,
+                                                    -vf_clip_param, vf_clip_param)
+                vf_loss2 = torch.pow(vf_clipped - value_targets, 2.0)
+                vf_loss = torch.max(vf_loss1, vf_loss2)
+                self.mean_vf_loss = reduce_mean_valid(vf_loss)
+                print("clipped vf loss", self.mean_vf_loss)
                 # print("compute mean vf loss", value_fn.shape, value_targets.shape, vf_preds.shape)
+                print('vf preds', vf_preds)
+                print('value fn', value_fn)
+                print('value targets', value_targets)
                 self.mean_vf_loss = vf_loss_coeff * reduce_mean_valid(torch.pow(value_fn - value_targets, 2.0))
 
                 # loss = reduce_mean_valid(
