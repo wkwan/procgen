@@ -153,7 +153,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         fetches[policy_id] = averaged(iter_extra_fetches)
     
         nepochs += 1
-        if nepochs % 2 == 0:
+        if nepochs % 16 == 0:
             # print("do auxiliary phase")
             def forward(seg):
                 logits, state = model.from_batch(seg)
@@ -188,8 +188,8 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                     print("aux phase", vpredtrue, mb[SampleBatch.VF_PREDS])
                     vtarg = th.from_numpy(mb[Postprocessing.VALUE_TARGETS]).to(th.cuda.current_device())
                     vf_aux = 0.5 * th.mean(th.pow(vpredaux - vtarg, 2.0))
-                    vf_true = 0.5 * th.mean(th.pow(vpredtrue - vtarg, 2.0))
-
+                    # vf_true = 0.5 * th.mean(th.pow(vpredtrue - vtarg, 2.0))
+                    vf_true = 0.5 * th.mean(mb[SampleBatch.VF_PREDS])
                     loss = pol_distance + vf_aux + vf_true
                     print("losses", pol_distance, vf_aux, vf_true, loss)
 
