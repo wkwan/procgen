@@ -111,6 +111,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
             batch[field] = standardized(batch[field])
 
         for i in range(num_sgd_iter):
+            print("sgd iter", i)
             iter_extra_fetches = defaultdict(list)
             for minibatch in minibatches(batch, sgd_minibatch_size):
                 batch_fetches = (local_worker.learn_on_batch(
