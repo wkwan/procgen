@@ -159,7 +159,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 logits, state = model.from_batch(seg)
                 return logits, state      
 
-            REPLAY_MB_SIZE = 1024
+            REPLAY_MB_SIZE = 512
             # #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 np_data = {}
@@ -169,7 +169,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
             replay_batch = SampleBatch.concat_samples(seg_buf)
             #train on replay buffer
-            for i in range(8):   
+            for i in range(3):   
                 for mb in minibatches(replay_batch, REPLAY_MB_SIZE):
                     # mb = tree_map(lambda x: x.to(tu.dev()), mb)
                     pad_batch_to_sequences_of_same_size(mb,
