@@ -424,7 +424,7 @@ class TorchPolicy(Policy):
             for i, opt in enumerate(self._optimizers):
                 opt.zero_grad()
                 pi_loss = loss_out[i]
-                # print("train on pi loss", pi_loss)
+                print("train on pi loss", pi_loss)
                 self.backprop(grad_info, opt, pi_loss, False)
                 tu.sync_grads(self.model.parameters())
                 opt.step()
@@ -444,7 +444,7 @@ class TorchPolicy(Policy):
             for i, opt in enumerate(self._optimizers):
                 opt.zero_grad()
                 vf_loss = loss_out[i]
-                # print("train on vf loss", vf_loss)
+                print("train on vf loss", vf_loss)
                 self.backprop(grad_info, opt, vf_loss, False)
                 tu.sync_grads(self.model.parameters())
                 opt.step()

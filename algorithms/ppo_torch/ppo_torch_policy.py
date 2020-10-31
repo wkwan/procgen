@@ -169,20 +169,22 @@ class PPOLoss:
         # self.loss = loss
 
 
-def ppo_surrogate_loss(policy, model, dist_class, train_batch, is_policy_loss):
+def ppo_surrogate_loss(policy, model, dist_class, train_batch, is_policy_loss=True):
 
     # print("PPO SURROGATE LOSS EXTRA is policy loss", is_policy_loss)
-    action_dist = None
-    state = None
-    if is_policy_loss:
-        logits, state = model.from_batch(train_batch)
-        action_dist = dist_class(logits, model)
-    else:
-        model.forward_value(train_batch)
-    # print("action dist in surrogate loss fn", action_dist)
-    # train_batch['oldpd'] = action_dist
-    # print("state", len(state), state)
-    # print("the old pd we just put in", train_batch['oldpd'])
+
+    logits, state = model.from_batch(train_batch)
+    action_dist = dist_class(logits, model)
+    # action_dist = None
+    # state = None
+    # if is_policy_loss:
+    #     print("is policy loss")
+    #     logits, state = model.from_batch(train_batch)
+    #     action_dist = dist_class(logits, model)
+    # else:
+    #     print("is value loss")
+    #     model.forward_value(train_batch)
+
 
     mask = None
     if state:
