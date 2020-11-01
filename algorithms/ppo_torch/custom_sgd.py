@@ -159,7 +159,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 logits, state = model.from_batch(seg)
                 return logits, state      
 
-            REPLAY_MB_SIZE = 512
+            REPLAY_MB_SIZE = 256
             # #compute presleep outputs for replay buffer (what does this mean?)
             for seg in seg_buf:
                 np_data = {}
