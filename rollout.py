@@ -18,7 +18,7 @@ try:
     from ray.rllib.evaluation.episode import _flatten_action
 except Exception:
     # For newer ray versions
-    from ray.rllib.utils.space_utils import flatten_to_single_ndarray as _flatten_action
+    from ray.rllib.utils.spaces.space_utils import flatten_to_single_ndarray as _flatten_action
 
 from ray.rllib.evaluation.worker_set import WorkerSet
 from ray.rllib.policy.sample_batch import DEFAULT_POLICY_ID
