@@ -12,7 +12,6 @@ import torch as th
 import torch.distributed as dist
 import torch.distributions as dis
 import torch.nn.functional as F
-from . import logger
 from torch import nn
 from . import tree_util
 import socket
