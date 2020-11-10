@@ -11,6 +11,8 @@ from ray.rllib.utils.explained_variance import explained_variance
 from ray.rllib.utils.torch_ops import sequence_mask
 from ray.rllib.utils import try_import_torch
 
+from .ppg_torch import DEFAULT_CONFIG
+
 torch, nn = try_import_torch()
 
 logger = logging.getLogger(__name__)
@@ -244,7 +246,7 @@ def choose_optimizer(policy, config):
 
 PPGTorchPolicy = build_torch_policy(
     name="PPGTorchPolicy",
-    get_default_config=lambda: ray.rllib.agents.ppo.ppo.DEFAULT_CONFIG,
+    get_default_config=lambda: DEFAULT_CONFIG,
     loss_fn=ppo_surrogate_loss,
     stats_fn=kl_and_loss_stats,
     extra_action_out_fn=vf_preds_fetches,

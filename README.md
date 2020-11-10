@@ -2,12 +2,29 @@
 
 # Overview
 
-For this competition, I focused on making large changes to the learning algorithm to improve generalization and sample efficiency on the ProcGen benchmark, instead of tweaking the CNN architecture or tuning hyperparameters. I thought this was the fastest way for me to get better at reinforcement learning, even though it meant ignoring the simple and small optimizations that could've increase my score.
+For this competition, I focused on making large changes to the learning algorithm to improve generalization and sample efficiency on the ProcGen benchmark, instead of tweaking the CNN architecture or tuning hyperparameters. I thought this was the fastest way for me to get better at reinforcement learning, even though it meant ignoring the simple and small optimizations that could've increased my score.
 
-My first approach was to add data augmentation on top of the RLLib PPO implementation, since the competition restricts the agent to 8M frames of training on each game. Looking at the results from this paper, [Automatic Data Augmentation for Generalization in Deep Reinforcement Learning](https://arxiv.org/pdf/2006.12862.pdf), it seems that different ProcGen games work best with different data augmentations (although crop usually works best), so I followed the authors' approach and implemented the Upper Confidence Bounds algorithm to automatically choose 1 of 8 data augmentations (crop, grayscale, random convolution, color jitter, cutout color, cutout, rotate, and flip) during training. I also changed the loss function according to the authors' approach. Intuitively, we want to 
+## Approach 1: Automatic Data Augmentation
 
-Code can be found in the [ucbfinal branch](https://github.com/wkwan/procgen-competition/tree/ucbfinal).
+**Code is in the [ucbfinal branch](https://github.com/wkwan/procgen-competition/tree/ucbfinal).**
 
+My first idea was to add data augmentation on top of the RLLib PPO implementation, since the competition restricts the agent to 8M frames of training on each game. Looking at the results from this paper, [Automatic Data Augmentation for Generalization in Deep Reinforcement Learning](https://arxiv.org/pdf/2006.12862.pdf), it seems that different ProcGen games work best with different data augmentations (although crop usually works best), so I followed the authors' approach and implemented the Upper Confidence Bounds algorithm to automatically choose 1 of 8 data augmentations (crop, grayscale, random convolution, color jitter, cutout color, cutout, rotate, and flip) during training. I also changed the loss function according to the authors' approach. The idea is to add two regularization terms (one for the policy function, and the other for the value function), so that the policy and value functions produce similar results with and without the data augmentation.
+
+My implementation resulted in similar submission scores as the default PPO implementation. However, the number of stochastic gradient descent iterations was reduced from 3 to 2 to allow for more training time on the augmented frames, and the training would still hit the 2 hour training time limit on the test servers before finishing 8M frames, so I think there would be minor improvements over default PPO if I improved efficiency and tweaked hyperparameters. But I wanted to focus on making bigger changes to the learning algorithm than simply adding data augmentation, so I scrapped this approach.
+
+## Approach 2: Phasic Policy Gradient
+
+**Code is in the default [ppg branch](https://github.com/wkwan/procgen-competition).**
+
+Two weeks before the deadline, I found OpenAI's new [Phasic Policy Gradient](https://arxiv.org/pdf/2009.04416.pdf) paper for improving generalization and sample efficiency on the ProcGen games. Their models were trained on 100M timesteps for each game and looking at their results, most games only had minor improvements in the first 8M frames. However, I thought this was an important paper so I wanted to implement it myself and see if I could make further improvements to the sample efficiency.
+
+The main problem I encountered were sudden drops in the mean reward during training time.
+
+I found that reducing the number of auxiliary phases reduced these drops.
+
+I then added more iterations of value loss training during the policy phase to make up for the reduced value function training by reducing the auxiliary phases.
+
+This was as far as I got before the competition deadline. The performance was worse than default PPO, and I believe the key issue is to fix are the sudden performance drops during training.
 
 # Setup
 
@@ -54,11 +71,12 @@ Your model and checkpoints will be saved in ~/ray_results/procgen-ppg
 
 # Rollout
 
-Uncomment these environment variables in [run.sh](run.sh) and set your saved model and the number of episodes you want to rollout:
+Uncomment and modify these environment variables in [run.sh](run.sh):
 
 ```
-  # export CHECKPOINT=
   # export EPISODES=5
+  # replace with your own checkpoint path
+  # export CHECKPOINT=~/ray_results/procgen-ppg/PPG_procgen_env_wrapper_0_2020-11-10_18-16-19qlw86nzo/checkpoint_447/checkpoint-447
 ```
 
 To rollout the agent:
