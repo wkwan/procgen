@@ -12,21 +12,10 @@ An example integration of the random agent is shown here :
 - https://github.com/AIcrowd/neurips2020-procgen-starter-kit/tree/master/algorithms/custom_random_agent
 """
 
-
-def _import_custom_random_agent():
-    from .custom_random_agent.custom_random_agent import CustomRandomAgent
-    return CustomRandomAgent
-
-def _import_random_policy():
-    from .random_policy.trainer import RandomPolicyTrainer
-    return RandomPolicyTrainer
-
-def _ppo_open():
-    from .ppo_torch.ppo_torch import PPOTrainer
-    return PPOTrainer
+def _ppg():
+    from .ppg_torch.ppg_torch import PPGTrainer
+    return PPGTrainer
 
 CUSTOM_ALGORITHMS = {
-    "custom/CustomRandomAgent": _import_custom_random_agent,
-    "RandomPolicy": _import_random_policy,
-    "PPOOpen": _ppo_open
+    "PPG": _ppg
 }

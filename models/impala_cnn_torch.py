@@ -9,7 +9,6 @@ import math
 class ResidualBlock(nn.Module):
     def __init__(self, channels, scale):
         super().__init__()
-        # print("residual block scale", scale)
         self.conv0 = nn.Conv2d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1)
         self.conv0.weight.data *= scale / self.conv0.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
         self.conv0.bias.data *= 0
@@ -34,7 +33,6 @@ class ConvSequence(nn.Module):
         self._out_channels = out_channels
         self.conv = nn.Conv2d(in_channels=self._input_shape[0], out_channels=self._out_channels, kernel_size=3, padding=1)
         scale = 1 / math.sqrt(3)
-        # print("first conv seq scale", scale)
 
         self.conv.weight.data *= 1 / self.conv.weight.norm(dim=(1, 2, 3), p=2, keepdim=True)
         self.conv.bias.data *= 0
@@ -87,12 +85,7 @@ def NormedLinear(*args, scale=1.0, dtype=torch.float32, **kwargs):
     nn.Linear but with normalized fan-in init
     """
     dtype = parse_dtype(dtype)
-    if dtype == torch.float32:
-        out = nn.Linear(*args, **kwargs)
-    elif dtype == torch.float16:
-        out = LinearF16(*args, **kwargs)
-    else:
-        raise ValueError(dtype)
+    out = nn.Linear(*args, **kwargs)
     out.weight.data *= scale / out.weight.norm(dim=1, p=2, keepdim=True)
     if kwargs.get("bias", True):
         out.bias.data *= 0
@@ -154,19 +147,6 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         self._value = value.squeeze(1)
         return logits, state
 
-    # def forward_value(self, input_dict):
-    #     x = input_dict["obs"].float()
-    #     x = x / 255.0  # scale to 0-1
-    #     x = x.permute(0, 3, 1, 2)  # NHWC => NCHW
-    #     for conv_seq in self.conv_seqs:
-    #         x = conv_seq(x)
-    #     x = torch.flatten(x, start_dim=1)
-    #     x = nn.functional.relu(x)
-    #     x = self.hidden_fc(x)
-    #     x = nn.functional.relu(x)
-    #     value = self.value_fc(x.detach()) #detach during policy phase only
-    #     self._value = value.squeeze(1)
-
     def forward_aux(self, input_dict):
         x = input_dict["obs"].float()
         x = x / 255.0  # scale to 0-1
@@ -186,8 +166,6 @@ class ImpalaCNN(TorchModelV2, nn.Module):
     def value_function(self):
         # assert self._value is not None, "must call forward() first"
         return self._value
-
-
 
 
 ModelCatalog.register_custom_model("impala_cnn_torch", ImpalaCNN)
