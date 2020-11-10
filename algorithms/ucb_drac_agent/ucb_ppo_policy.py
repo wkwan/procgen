@@ -6,18 +6,15 @@ from ray.rllib.agents.ppo.ppo_tf_policy import postprocess_ppo_gae, \
     setup_config
 from ray.rllib.evaluation.postprocessing import Postprocessing
 from ray.rllib.policy.sample_batch import SampleBatch
-from .torch_policy import EntropyCoeffSchedule, LearningRateSchedule
-from .torch_policy_template import build_torch_policy
 from ray.rllib.utils.explained_variance import explained_variance
 from ray.rllib.utils.torch_ops import sequence_mask
 from ray.rllib.utils import try_import_torch
-from torchvision.utils import save_image
-import imageio
+from ray.rllib.agents import with_common_config
 
 torch, nn = try_import_torch()
 torch.autograd.set_detect_anomaly(True)
-logger = logging.getLogger(__name__)
-
+from torchvision.utils import save_image
+import imageio
 import numpy as np
 import torch
 import torch.nn as nn
@@ -25,10 +22,11 @@ import numbers
 import random
 import time
 import kornia 
-
-from ray.rllib.agents import with_common_config
-
 from collections import deque
+
+from .torch_policy import EntropyCoeffSchedule, LearningRateSchedule
+from .torch_policy_template import build_torch_policy
+from .trainer import DEFAULT_CONFIG
 
 
 class Grayscale(object):
@@ -809,7 +807,6 @@ def kl_and_loss_stats(policy, train_batch):
         "entropy_coeff": policy.entropy_coeff,
     }
 
-
 def vf_preds_fetches(policy, input_dict, state_batches, model, action_dist):
     """Adds value function outputs to experience train_batches."""
     return {
@@ -861,71 +858,6 @@ def setup_mixins(policy, obs_space, action_space, config):
     EntropyCoeffSchedule.__init__(policy, config["entropy_coeff"],
                                   config["entropy_coeff_schedule"])
     LearningRateSchedule.__init__(policy, config["lr"], config["lr_schedule"])
-
-
-# yapf: disable
-# __sphinx_doc_begin__
-DEFAULT_CONFIG = with_common_config({
-    # Should use a critic as a baseline (otherwise don't use value baseline;
-    # required for using GAE).
-    "use_critic": True,
-    # If true, use the Generalized Advantage Estimator (GAE)
-    # with a value function, see https://arxiv.org/pdf/1506.02438.pdf.
-    "use_gae": True,
-    # The GAE(lambda) parameter.
-    "gamma": 0.999,
-    "lambda": 0.95,
-    # Initial coefficient for KL divergence.
-    "kl_coeff": 0.0,
-    # Size of batches collected from each worker.
-    "rollout_fragment_length": 256,
-    # Number of timesteps collected for each SGD round. This defines the size
-    # of each SGD epoch.
-    "train_batch_size": 16384,
-    # Total SGD batch size across all devices for SGD. This defines the
-    # minibatch size within each epoch.
-    "sgd_minibatch_size": 2048,
-    # Whether to shuffle sequences in the batch when training (recommended).
-    "shuffle_sequences": True,
-    # Number of SGD iterations in each outer loop (i.e., number of epochs to
-    # execute per train batch).
-    "num_sgd_iter": 3,
-    # Stepsize of SGD.
-    "lr": 5e-4,
-    # Learning rate schedule.
-    "lr_schedule": None,
-    # Share layers for value function. If you set this to True, it's important
-    # to tune vf_loss_coeff.
-    "vf_share_layers": True,
-    # Coefficient of the value function loss. IMPORTANT: you must tune this if
-    # you set vf_share_layers: True.
-    "vf_loss_coeff": 0.5,
-    # Coefficient of the entropy regularizer.
-    "entropy_coeff": 0.01,
-    # Decay schedule for the entropy regularizer.
-    "entropy_coeff_schedule": None,
-    # PPO clip parameter.
-    "clip_param": 0.2,
-    # Clip param for the value function. Note that this is sensitive to the
-    # scale of the rewards. If your expected V is large, increase this.
-    "vf_clip_param": 0.2,
-    # If specified, clip the global norm of gradients by this amount.
-    "grad_clip": 0.5,
-    # Target value for KL divergence.
-    "kl_target": 0.01,
-    # Whether to rollout "complete_episodes" or "truncate_episodes".
-    "batch_mode": "truncate_episodes",
-    # Which observation filter to apply to the observation.
-    "observation_filter": "NoFilter",
-    # Uses the sync samples optimizer instead of the multi-gpu one. This is
-    # usually slower, but you might want to try it if you run into issues with
-    # the default optimizer.
-    "simple_optimizer": False,
-    # Whether to fake GPUs (using CPUs).
-    # Set this to True for debugging on non-GPU machines (set `num_gpus` > 0).
-    "_fake_gpus": False,
-    "framework": "torch"
-})
 
 def choose_optimizer(policy, config):
     return torch.optim.Adam(policy.model.parameters(), lr=config["lr"], eps=1e-5)
