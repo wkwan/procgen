@@ -20,6 +20,9 @@ if [[ -z $AICROWD_IS_GRADING ]]; then
   export RAY_CPUS=8
   export RAY_STORE_MEMORY=30000000000
 
+  # export CHECKPOINT=
+  # export EPISODES=5
+  
   # Cleaning output directory between multiple runs
   rm -rf ${OUTPUTS_DIR}
   mkdir ${OUTPUTS_DIR}
