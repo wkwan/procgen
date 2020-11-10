@@ -85,10 +85,8 @@ class Cutout(object):
         self.h1 = np.random.randint(self.box_min, self.box_max, batch_size)
         
     def do_augmentation(self, imgs):
-        # imgs = imgs.transpose(0,3,1,2)
         imgs = imgs.permute(0,3,1,2)
         n, c, h, w = imgs.shape
-        # print("imgs shape", imgs.shape)
         self.batch_size = n
         self.change_randomization_params_all()
         # cutouts = torch.empty((n, c, h, w), dtype=imgs.dtype, device=imgs.device)
@@ -728,9 +726,6 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
     logits, state = model.from_batch(train_batch)
     action_dist = dist_class(logits, model)
     
-    # print("action probs", action_dist.logp(action_dist.sample())) #something is wrong with this
-    # print("logits from actual", logits)
-
     mask = None
     if state:
         max_seq_len = torch.max(train_batch["seq_lens"])
@@ -757,36 +752,17 @@ def ppo_surrogate_loss(policy, model, dist_class, train_batch, update_train_batc
         vf_loss_coeff=policy.config["vf_loss_coeff"],
         use_gae=policy.config["use_gae"]
     )
-    # print("policy loss", policy.loss_obj.loss)
-
-    # print("sample actions log p", train_batch[SampleBatch.ACTION_LOGP])
-    # aug_train_batch = train_batch
 
     current_aug_func = aug_list[ucb_aug_id]
 
     prev_value_function_result = model.value_function()
     
-    # aug_train_batch[SampleBatch.CUR_OBS] = current_aug_func.do_augmentation(aug_train_batch[SampleBatch.CUR_OBS]).cuda()
-    # aug_train_batch[SampleBatch.PREV_ACTIONS] = aug_train_batch[SampleBatch.ACTIONS]
-    # aug_train_batch[SampleBatch.PREV_REWARDS] = aug_train_batch[SampleBatch.PREV_REWARDS]
-
     aug_logits, aug_state = model.forward({"obs": current_aug_func.do_augmentation(train_batch[SampleBatch.CUR_OBS]).cuda()}, None, None)
     aug_action_dist = dist_class(aug_logits, model)
-    # aug_train_batch[SampleBatch.ACTION_DIST_INPUTS] = aug_actions_sample
-    # print("sample aug actions log p", aug_train_batch[SampleBatch.ACTION_LOGP])
-    # print("aug logits", aug_logits)
-
-    # print("aug action sample", aug_actions_sample)
-    # action_loss_aug = - torch.mean(aug_logits)
     action_loss_aug = - torch.mean(aug_action_dist.logp(aug_action_dist.sample())) #try the original logits to see if good result
 
-    # print("action_loss_aug", action_loss_aug)
     value_loss_aug = 0.5 * (prev_value_function_result - model.value_function()).pow(2).mean()
-    # print("value loss aug", value_loss_aug)
     regularized_loss = policy.loss_obj.loss + 0.1 * (value_loss_aug + action_loss_aug) 
-    # print("policy loss", policy.loss_obj.loss)
-    # print("aug loss", 0.1 * (value_loss_aug + action_loss_aug))
-    # print("regularized loss", regularized_loss)
     return regularized_loss
 
 def update_ucb_values(rollout_reward_mean):
@@ -806,17 +782,15 @@ def update_ucb_values(rollout_reward_mean):
     num_action[ucb_aug_id] += 1
     return_action[ucb_aug_id].append(rollout_reward_mean)
 
-    # print(return_action)
     qval_action[ucb_aug_id] = np.mean(return_action[ucb_aug_id])
 
     # select aug
     for i in range(num_aug_types):
         expl_action[i] = ucb_exploration_coef * np.sqrt(np.log(total_num) / num_action[i])
         ucb_action[i] = qval_action[i] + expl_action[i]
-    # print(ucb_action)
     ucb_aug_id = np.argmax(ucb_action)
 
-    # print("select the aug", ucb_aug_id)
+    print("Select the aug", ucb_aug_id)
 
 
 def kl_and_loss_stats(policy, train_batch):

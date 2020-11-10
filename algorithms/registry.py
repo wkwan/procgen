@@ -9,17 +9,11 @@ An example integration of the random agent is shown here :
 - https://github.com/AIcrowd/neurips2020-procgen-starter-kit/tree/master/algorithms/custom_random_agent
 """
 
-
-def _import_custom_random_agent():
-    from .custom_random_agent.custom_random_agent import CustomRandomAgent
-    return CustomRandomAgent
-
 def _import_ucb_drac_agent():
     from .ucb_drac_agent.trainer import UcbDracTrainer
     return UcbDracTrainer
 
 
 CUSTOM_ALGORITHMS = {
-    "custom/CustomRandomAgent": _import_custom_random_agent,
     "UcbDracAgent": _import_ucb_drac_agent
 }

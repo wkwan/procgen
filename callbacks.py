@@ -62,7 +62,6 @@ class CustomCallbacks(DefaultCallbacks):
     def on_episode_end(self, worker: RolloutWorker, base_env: BaseEnv,
                        policies: Dict[str, Policy],
                        episode: MultiAgentEpisode, **kwargs):
-        # print("an episode is done")
         """Runs when an episode is done.
         Args:
             worker (RolloutWorker): Reference to the current rollout worker.
@@ -134,5 +133,4 @@ class CustomCallbacks(DefaultCallbacks):
         # print(" Timesteps Throughput : {} ts/sec".format(TBD))
         # print("=============================================================")
         if 'episode_reward_mean' in result:
-            # print("ON TRAIN RESULT", result['episode_reward_mean'])
             trainer._policy._update_ucb_values(result['episode_reward_mean'])
