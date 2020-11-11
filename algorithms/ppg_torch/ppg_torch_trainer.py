@@ -1,6 +1,5 @@
 import logging
 
-from ray.rllib.agents import with_common_config
 from .ppg_torch_policy import PPGTorchPolicy, DEFAULT_CONFIG
 
 from ray.rllib.agents.trainer_template import build_trainer
