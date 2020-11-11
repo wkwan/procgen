@@ -13,7 +13,7 @@ An example integration of the random agent is shown here :
 """
 
 def _ppg():
-    from .ppg_torch.ppg_torch import PPGTrainer
+    from .ppg_torch.ppg_torch_trainer import PPGTrainer
     return PPGTrainer
 
 CUSTOM_ALGORITHMS = {

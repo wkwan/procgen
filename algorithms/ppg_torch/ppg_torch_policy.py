@@ -11,7 +11,7 @@ from ray.rllib.utils.explained_variance import explained_variance
 from ray.rllib.utils.torch_ops import sequence_mask
 from ray.rllib.utils import try_import_torch
 
-from .ppg_torch.ppg_torch import get_default_config
+from .ppg_torch.ppg_torch_trainer import get_default_config
 
 torch, nn = try_import_torch()
 
