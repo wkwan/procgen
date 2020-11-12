@@ -2,9 +2,9 @@
 
 # Overview
 
-For this competition, I focused on making large changes to the learning algorithm to improve generalization and sample efficiency on the ProcGen benchmark, instead of tweaking the CNN architecture or tuning hyperparameters. I thought this was the fastest way for me to get better at reinforcement learning, even though it meant ignoring the simple and small optimizations that could've increased my score.
+For this competition, I focused on making large changes to the learning algorithm to improve generalization and sample efficiency on the ProcGen benchmark, instead of tweaking the CNN architecture or tuning hyperparameters. I thought this was the fastest way for me to get better at reinforcement learning, even though it meant ignoring simple and small optimizations that could've increased my score.
 
-For reference, here's how standard PPO performs in the BigFish environment. For this PPO agent, the only changes I made from the starter code were switching Tensorflow to PyTorch and changing the epsilon hyperparameter in the Adam Optimizer (RLLib doesn't use the same value as OpenAI Baselines, and it performed better when I changed it to the OpenAI Baselines value).
+For reference, here's how standard PPO performs on the BigFish environment. For this PPO agent, the only changes I made from the starter code were switching Tensorflow to PyTorch and changing the epsilon hyperparameter in the Adam Optimizer (RLLib doesn't use the same value as OpenAI Baselines, and it performed better when I changed it to the OpenAI Baselines value).
 
 ![ppo](ppo-bigfish.png)
 
@@ -26,9 +26,9 @@ It performed even better after reducing the minibatch size from 1024 to 256, and
 
 **Code is in the default [ppg branch](https://github.com/wkwan/procgen-competition).**
 
-After reading OpenAI's new [Phasic Policy Gradient](https://arxiv.org/pdf/2009.04416.pdf), I wanted to implement it myself to understand it better and see if I could make further improvements to the sample efficiency. Their models were trained on 100M timesteps for each game and looking at their results, most games only had minor improvements in the first 8M frames. I didn't use data augmentation because I thought the replay buffer in PPG might be a good substitute. 
+After reading OpenAI's new [Phasic Policy Gradient](https://arxiv.org/pdf/2009.04416.pdf) paper, I wanted to implement it myself to understand it better and see if I could make further improvements to the sample efficiency. Their agents were trained on 100M timesteps for each game and looking at their results, most games only had minor improvements in the first 8M frames. I didn't use data augmentation because I thought the replay buffer in PPG might be a good substitute. 
 
-The main problem I encountered were sudden drops in the mean reward during training. I think there's a bug in my auxiliary phase implementation, since OpenAI's paper shows stable training, but I haven't found the bug (yet!). It might also be because I implemented the detached variant of PPG for simplicity, instead of the dual variant.
+The main problem I encountered were the sudden drops in the mean reward during training, so I think there's a bug in my auxiliary phase implementation, since this is the biggest difference from PPO and OpenAI's paper shows stable training. It might also be because I implemented the detached variant of PPG for simplicity, instead of the dual variant.
 
 ![ppg-better](ppg-lessauxmoreval-bigfish.png)
 
