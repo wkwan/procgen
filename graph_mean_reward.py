@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-filename = "progress-morevallessauxbigfish.csv"
+filename = "progress-aux32mb512.csv"
 
 with open(filename) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
