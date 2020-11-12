@@ -4,9 +4,9 @@
 
 For this competition, I focused on making large changes to the learning algorithm to improve generalization and sample efficiency on the ProcGen benchmark, instead of tweaking the CNN architecture or tuning hyperparameters. I thought this was the fastest way for me to get better at reinforcement learning, even though it meant ignoring the simple and small optimizations that could've increased my score.
 
-For reference, here is how standard PPO performs in the BigFish environment. I'll use the BigFish environment for all subsequent graphs. For this PPO agent, the only changes I made from the starter code were switching Tensorflow to PyTorch and changing the epsilon hyperparameter in the Adam Optimizer (RLLib doesn't use the same value as OpenAI Baselines, and it performed better when I changed it to the OpenAI Baselines value).
+For reference, here's how standard PPO performs in the BigFish environment. For this PPO agent, the only changes I made from the starter code were switching Tensorflow to PyTorch and changing the epsilon hyperparameter in the Adam Optimizer (RLLib doesn't use the same value as OpenAI Baselines, and it performed better when I changed it to the OpenAI Baselines value).
 
-![PPO](ppo-bigfish.png)
+![ppo](ppo-bigfish.png)
 
 ## Approach 1: Automatic Data Augmentation
 
@@ -14,26 +14,25 @@ For reference, here is how standard PPO performs in the BigFish environment. I'l
 
 My first idea was to add data augmentation on top of the RLLib PPO implementation, since the competition restricts the agent to 8M frames of training on each game. Looking at the results from this paper, [Automatic Data Augmentation for Generalization in Deep Reinforcement Learning](https://arxiv.org/pdf/2006.12862.pdf), it seems that different ProcGen games work best with different data augmentations (although crop usually works best), so I followed the authors' approach and implemented the Upper Confidence Bounds algorithm to automatically choose 1 of 8 data augmentations (crop, grayscale, random convolution, color jitter, cutout color, cutout, rotate, and flip) during training. I also changed the loss function according to the authors' approach. The idea is to add two regularization terms (one for the policy function, and the other for the value function), so that the policy and value functions produce similar results with and without the data augmentation.
 
-My implementation initially performed worse than PPO:
+My implementation initially performed slightly better than PPO on BigFish.
 
+![ucb](ucb-bigfish.png)
 
+It performed even better after reducing the minibatch size from 1024 to 256, and reducing the number of SGD iterations from 3 to 2. I think reducing the minibatch helped because it gave the UCB algorithm more iterations to meta-learn the optimal data augmentation. However, on the official test servers, the smaller minibatches makes it hit the 2 hour training time quota after about 6M frames, even after reducing the number of SGD iterations.
 
-
-However, the number of stochastic gradient descent iterations was reduced from 3 to 2 to allow for more training time on the augmented frames, and the training would still hit the 2 hour training time limit on the test servers before finishing 8M frames, so I think there would be minor improvements over default PPO if I improved efficiency and tweaked hyperparameters. But I wanted to focus on making bigger changes to the learning algorithm than simply adding data augmentation, so I scrapped this approach.
+![ucb-smallermb](ucb-smallermblesssgd-bigfish.png)
 
 ## Approach 2: Phasic Policy Gradient
 
 **Code is in the default [ppg branch](https://github.com/wkwan/procgen-competition).**
 
-Two weeks before the deadline, I found OpenAI's new [Phasic Policy Gradient](https://arxiv.org/pdf/2009.04416.pdf) paper for improving generalization and sample efficiency on the ProcGen games. Their models were trained on 100M timesteps for each game and looking at their results, most games only had minor improvements in the first 8M frames. However, I thought this was an important paper so I wanted to implement it myself and see if I could make further improvements to the sample efficiency.
+After reading OpenAI's new [Phasic Policy Gradient](https://arxiv.org/pdf/2009.04416.pdf), I wanted to implement it myself to understand it better and see if I could make further improvements to the sample efficiency. Their models were trained on 100M timesteps for each game and looking at their results, most games only had minor improvements in the first 8M frames. I didn't use data augmentation because I thought the replay buffer in PPG might be a good substitute. 
 
-The main problem I encountered were sudden drops in the mean reward during training time.
+The main problem I encountered were sudden drops in the mean reward during training. I think there's a bug in my auxiliary phase implementation, since OpenAI's paper shows stable training, but I haven't found the bug (yet!). It might also be because I implemented the detached variant of PPG for simplicity, instead of the dual variant.
 
-I found that reducing the number of auxiliary phases reduced these drops.
+![ppg-better](ppg-lessauxmoreval-bigfish.png)
 
-I then added more iterations of value loss training during the policy phase to make up for the reduced value function training by reducing the auxiliary phases.
-
-This was as far as I got before the competition deadline. The performance was worse than default PPO, and I believe the key issue is to fix are the sudden performance drops during training.
+This was as far as I got before the competition deadline. The next step would be to continue debugging the auxiliary phase. I was also planning to try combining data augmentation with PPG after I got PPG performing above PPO. A third approach I would've liked to try is using an optical flow network on the last two frames to produce an additional input to the CNN at every frame, in order to teach the agent about the velocities of game entities. Intuitively, it can't learn velocities right now because each observation is a single frame (this might be enough in specific situations, like if the entity always moves at a constant speed and orientation of the entity precisely indicates direction). Velocity is important to the gameplay in most of the ProcGen games, and an optical flow network is more suited to velocity detection than basic framestacking.
 
 # Setup
 

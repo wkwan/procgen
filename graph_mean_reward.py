@@ -18,7 +18,7 @@ with open(filename) as csv_file:
         mean_reward.append(float(row[2]))
         timesteps_end.append(float(row[6]))
 
-    plt.title('PPO BigFish')
+    plt.title('PPO - BigFish')
     plt.xlabel('Training Timestep')
     plt.ylabel('Mean Reward')
     plt.plot(timesteps_end, mean_reward)
