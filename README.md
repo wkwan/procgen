@@ -3,7 +3,7 @@
 
 # Overview
 
-For this competition, I focused on making large changes to the learning algorithm to improve generalization and sample efficiency on the ProcGen benchmark, instead of tweaking the CNN architecture or tuning hyperparameters. I thought this was the fastest way for me to get better at reinforcement learning, even though it meant ignoring simple and small optimizations that could've increased my score.
+I focused on making large changes to the learning algorithm to improve generalization and sample efficiency on the ProcGen benchmark, instead of tweaking the CNN architecture or tuning hyperparameters. I thought this was the fastest way for me to get better at reinforcement learning, even though it meant ignoring simple and small optimizations that could've increased my score.
 
 For reference, here's how standard PPO performs on the BigFish environment. For this PPO agent, the only changes I made from the starter code were switching Tensorflow to PyTorch and changing the epsilon hyperparameter in the Adam Optimizer (RLLib doesn't use the same value as OpenAI Baselines, and it performed better when I changed it to the OpenAI Baselines value).
 
