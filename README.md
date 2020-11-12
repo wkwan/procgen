@@ -1,4 +1,5 @@
-### Original Competition Starter Code: https://github.com/AIcrowd/neurips2020-procgen-starter-kit
+### Competition Starter Code: https://github.com/AIcrowd/neurips2020-procgen-starter-kit
+### Competition Rules: https://www.aicrowd.com/challenges/neurips-2020-procgen-competition
 
 # Overview
 
