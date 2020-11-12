@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-filename = "progress-aux32mb512.csv"
+filename = "progress-adamepsbigfish.csv"
 
 with open(filename) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -18,6 +18,7 @@ with open(filename) as csv_file:
         mean_reward.append(float(row[2]))
         timesteps_end.append(float(row[6]))
 
+    plt.title('PPO BigFish')
     plt.xlabel('Training Timestep')
     plt.ylabel('Mean Reward')
     plt.plot(timesteps_end, mean_reward)

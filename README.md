@@ -4,13 +4,22 @@
 
 For this competition, I focused on making large changes to the learning algorithm to improve generalization and sample efficiency on the ProcGen benchmark, instead of tweaking the CNN architecture or tuning hyperparameters. I thought this was the fastest way for me to get better at reinforcement learning, even though it meant ignoring the simple and small optimizations that could've increased my score.
 
+For reference, here is how standard PPO performs in the BigFish environment. I'll use the BigFish environment for all subsequent graphs. For this PPO agent, the only changes I made from the starter code were switching Tensorflow to PyTorch and changing the epsilon hyperparameter in the Adam Optimizer (RLLib doesn't use the same value as OpenAI Baselines, and it performed better when I changed it to the OpenAI Baselines value).
+
+![PPO](ppo-bigfish.png)
+
 ## Approach 1: Automatic Data Augmentation
 
 **Code is in the [ucbfinal branch](https://github.com/wkwan/procgen-competition/tree/ucbfinal).**
 
 My first idea was to add data augmentation on top of the RLLib PPO implementation, since the competition restricts the agent to 8M frames of training on each game. Looking at the results from this paper, [Automatic Data Augmentation for Generalization in Deep Reinforcement Learning](https://arxiv.org/pdf/2006.12862.pdf), it seems that different ProcGen games work best with different data augmentations (although crop usually works best), so I followed the authors' approach and implemented the Upper Confidence Bounds algorithm to automatically choose 1 of 8 data augmentations (crop, grayscale, random convolution, color jitter, cutout color, cutout, rotate, and flip) during training. I also changed the loss function according to the authors' approach. The idea is to add two regularization terms (one for the policy function, and the other for the value function), so that the policy and value functions produce similar results with and without the data augmentation.
 
-My implementation resulted in similar submission scores as the default PPO implementation. However, the number of stochastic gradient descent iterations was reduced from 3 to 2 to allow for more training time on the augmented frames, and the training would still hit the 2 hour training time limit on the test servers before finishing 8M frames, so I think there would be minor improvements over default PPO if I improved efficiency and tweaked hyperparameters. But I wanted to focus on making bigger changes to the learning algorithm than simply adding data augmentation, so I scrapped this approach.
+My implementation initially performed worse than PPO:
+
+
+
+
+However, the number of stochastic gradient descent iterations was reduced from 3 to 2 to allow for more training time on the augmented frames, and the training would still hit the 2 hour training time limit on the test servers before finishing 8M frames, so I think there would be minor improvements over default PPO if I improved efficiency and tweaked hyperparameters. But I wanted to focus on making bigger changes to the learning algorithm than simply adding data augmentation, so I scrapped this approach.
 
 ## Approach 2: Phasic Policy Gradient
 
