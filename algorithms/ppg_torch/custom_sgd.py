@@ -146,7 +146,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
         fetches[policy_id] = averaged(iter_extra_fetches)
     
         nepochs += 1
-        if nepochs % 32 == 0:
+        if nepochs % 16 == 0:
             def forward(seg):
                 logits, state = model.from_batch(seg)
                 return logits, state      
