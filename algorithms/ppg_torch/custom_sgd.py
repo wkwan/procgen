@@ -132,7 +132,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
 
         for i in range(num_sgd_iter):
             iter_extra_fetches = defaultdict(list)
-            #pass the whole batch to the worker, then let it break it down into minibatches
+            #pass the whole batch to the worker, then let it break it down into minibatches so we can handle policy and value function training separately
             batch_fetches = (local_worker.learn_on_batch(
                 MultiAgentBatch({
                     policy_id: batch
@@ -152,7 +152,7 @@ def do_minibatch_sgd(samples, policies, local_worker, num_sgd_iter,
                 return logits, state      
 
             REPLAY_MB_SIZE = 512
-            # #compute presleep outputs for replay buffer (what does this mean?)
+            # #compute the probability distributions on the replay buffer before replay buffer training
             for seg in seg_buf:
                 np_data = {}
                 np_data["obs"] = th.from_numpy(seg.data["obs"]).to(th.cuda.current_device())

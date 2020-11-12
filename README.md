@@ -10,7 +10,10 @@ For reference, here's how standard PPO performs on the BigFish environment. For 
 
 ## Approach 1: Automatic Data Augmentation
 
-**Code is in the [ucbfinal branch](https://github.com/wkwan/procgen-competition/tree/ucbfinal).**
+**Code is in the [ucbfinal branch](https://github.com/wkwan/procgen-competition/tree/ucbfinal).** 
+
+**Key changes implemented in:**
+[algorithms/ucb_drac_agent/ucb_ppo_policy.py](https://github.com/wkwan/procgen/blob/ucbfinal/algorithms/ucb_drac_agent/ucb_ppo_policy.py) 
 
 My first idea was to add data augmentation on top of the RLLib PPO implementation, since the competition restricts the agent to 8M frames of training on each game. Looking at the results from this paper, [Automatic Data Augmentation for Generalization in Deep Reinforcement Learning](https://arxiv.org/pdf/2006.12862.pdf), it seems that different ProcGen games work best with different data augmentations (although crop usually works best), so I followed the authors' approach and implemented the Upper Confidence Bounds algorithm to automatically choose 1 of 8 data augmentations (crop, grayscale, random convolution, color jitter, cutout color, cutout, rotate, and flip) during training. I also changed the loss function according to the authors' approach. The idea is to add two regularization terms (one for the policy function, and the other for the value function), so that the policy and value functions produce similar results with and without the data augmentation.
 
@@ -24,7 +27,14 @@ It performed even better after reducing the minibatch size from 1024 to 256, and
 
 ## Approach 2: Phasic Policy Gradient
 
-**Code is in the default [ppg branch](https://github.com/wkwan/procgen-competition).**
+**Code is in the default [ppg branch](https://github.com/wkwan/procgen-competition).** 
+
+**Key changes implemented in:**   
+[algorithms/ppg_torch/custom_postprocessing.py](https://github.com/wkwan/procgen/blob/ppg/algorithms/ppg_torch/custom_postprocessing.py)  
+[algorithms/ppg_torch/custom_sgd.py](https://github.com/wkwan/procgen/blob/ppg/algorithms/ppg_torch/custom_sgd.py)  
+[algorithms/ppg_torch/custom_torch_policy.py](https://github.com/wkwan/procgen/blob/ppg/algorithms/ppg_torch/custom_torch_policy.py)  
+[algorithms/ppg_torch/ppg_torch_policy.py](https://github.com/wkwan/procgen/blob/ppg/algorithms/ppg_torch/ppg_torch_policy.py)  
+[models/impala_cnn_torch.py](https://github.com/wkwan/procgen/blob/ppg/models/impala_cnn_torch.py)
 
 After reading OpenAI's new [Phasic Policy Gradient](https://arxiv.org/pdf/2009.04416.pdf) paper, I wanted to implement it myself to understand it better and see if I could make further improvements to the sample efficiency. Their agents were trained on 100M timesteps for each game and looking at their results, most games only had minor improvements in the first 8M frames. I didn't use data augmentation because I thought the replay buffer in PPG might be a good substitute. 
 
@@ -66,7 +76,7 @@ Change these environment variables in [run.sh](run.sh) depending on your availab
 
 To change the ProcGen game environment, change this line in [experiments/ppg.yaml](experiments/ppg.yaml):
 ```
-env_name: coinrun
+env_name: bigfish
 ```
 
 To start training:

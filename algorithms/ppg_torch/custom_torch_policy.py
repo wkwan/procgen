@@ -297,6 +297,7 @@ class TorchPolicy(Policy):
             for i, j in slices:
                 yield samples.slice(i, j)
 
+        #train policy function
         train_batch = None
         for minibatch in minibatches(postprocessed_batch, 1024):
             # Get batch ready for RNNs, if applicable.
@@ -309,13 +310,13 @@ class TorchPolicy(Policy):
             loss_out = force_list(
                 self._loss(self, self.model, self.dist_class, train_batch, True))
 
-            # Loop through all optimizers.
             for i, opt in enumerate(self._optimizers):
                 opt.zero_grad()
                 pi_loss = loss_out[i]
                 self.backprop(grad_info, opt, pi_loss, False)
-                opt.step()
-# 
+                opt.step() 
+
+        #train value function 
         for vtrain_i in range(3):
             for minibatch in minibatches(postprocessed_batch, 1024):
                 # Get batch ready for RNNs, if applicable.
